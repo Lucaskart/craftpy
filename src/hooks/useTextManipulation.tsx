@@ -56,7 +56,41 @@ function useTextManipulation() {
     }
   }
 
+  function encontrar_variaveis_e_tipos_do_construtor(classe: string){
+    const padrao = /\b__init__\b\s*\(.*?\):/;
+    const match = classe.match(padrao);
 
+    const variaveis_e_tipos = [];
+
+    if (match) {
+      const construtor = match[0];
+      const parametros = construtor.match(/\b(\w+)\s*:\s*(\w+)\b/g);
+
+      if (parametros != null){
+        for (const param of parametros) {
+          const [variavel, tipo] = param.split(':').map(item => item.trim());
+          variaveis_e_tipos.push([variavel, tipo]);
+        }
+      }
+    }
+    return variaveis_e_tipos;
+  }
+
+  function encontrar_heranca(classe: string): string[] | null {
+    const padrao = /\bclass\s+(\w+)\s*\((.*?)\):/;
+    const match = classe.match(padrao);
+
+    if (match) {
+        let heranca = match[2].trim();
+        if (heranca) {
+            return heranca.split(',').map(classe => classe.trim());
+        } else {
+            return [];
+        }
+    } else {
+        return null;
+    }
+  }
 
   // Função para alterar o texto
   const setTextManipulated = (newText) => {
@@ -69,6 +103,16 @@ function useTextManipulation() {
       var class_name = identificar_nome_da_classe(splitClass[i])
       if (class_name) {
         console.log(class_name);
+      }
+
+      var variables = encontrar_variaveis_e_tipos_do_construtor(splitClass[i])
+      if (variables) {
+        console.log(variables);
+      }
+
+      var herancas = encontrar_heranca(splitClass[i])
+      if (herancas) {
+        console.log(herancas);
       }
 
       var cl = {
