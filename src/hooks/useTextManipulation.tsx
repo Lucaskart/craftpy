@@ -45,6 +45,15 @@ function useTextManipulation() {
     return splitCode;
   }
 
+  interface ClassInfo {
+    name: string[];
+    attributes: [string, string][];
+    methods: string[];
+    inheritance: string[] | null;
+    association: [string, string][];
+    composition: [string, string][];
+  }
+
   function identificar_nome_da_classe(classe: string): string {
     const padrao = /\bclass\s+(\w+)\b/;
     const match = classe.match(padrao);
@@ -148,17 +157,8 @@ function useTextManipulation() {
     return nomes_metodos;
   }
 
-  interface ClassInfo {
-    name: string[];
-    attributes: [string, string][];
-    methods: string[];
-    inheritance: string[] | null;
-    association: [string, string][];
-    composition: [string, string][];
-  }
-
   function generate_dot_code(class_info: Record<string, ClassInfo>): string {
-    let dot_code = 'digraph ClassDiagram {\n';
+    let dot_code = "";
     for (const [name, info] of Object.entries(class_info)) {
       dot_code += addClass_and_attributes_and_methods(
         name, info.attributes, info.methods);
@@ -181,7 +181,6 @@ function useTextManipulation() {
         }
       }
     }
-    dot_code += "}\n";
     return dot_code;
   }
 
@@ -221,37 +220,39 @@ function useTextManipulation() {
     console.log(splitClass);
     // Para cada classe, extrair as informações
     for (var i in splitClass) {
-      var class_name = identificar_nome_da_classe(splitClass[i])
+      if (splitClass[i].slice(0, 5) == "class") {
+        var class_name = identificar_nome_da_classe(splitClass[i])
 
-      var variables = encontrar_variaveis_e_tipos_do_construtor(splitClass[i])
+        var variables = encontrar_variaveis_e_tipos_do_construtor(splitClass[i])
 
-      var inheritances = encontrar_heranca(splitClass[i])
+        var inheritances = encontrar_heranca(splitClass[i])
 
-      var associations = identificar_associacoes(splitClass[i])
+        var associations = identificar_associacoes(splitClass[i])
 
-      var objects = encontrar_criacao_objetos(splitClass[i])
+        var objects = encontrar_criacao_objetos(splitClass[i])
 
-      var methods = identificar_nomes_metodos(splitClass[i])
+        var methods = identificar_nomes_metodos(splitClass[i])
 
-      var cl = {
-        name: class_name
-      }
+        var cl = {
+          name: class_name
+        }
 
-      var class_info = {};
-      class_info[class_name] = {
+        var class_info = {};
+        class_info[class_name] = {
           attributes: variables,
           methods: methods,
           inheritance: inheritances,
           association: associations,
           composition: objects
-      };
+        };
 
-      var dotcode = generate_dot_code(class_info);
+        var dotcode = generate_dot_code(class_info);
 
-      userList = dotcode
-
-
+        userList = userList + " " + dotcode
+      }
     }
+
+    userList = "digraph ClassDiagram {\n" + userList + "}\n";
 
     setText(userList); // Exemplo: Convertendo texto para maiúsculas
   };
