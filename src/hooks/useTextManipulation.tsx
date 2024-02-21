@@ -92,8 +92,129 @@ function useTextManipulation() {
     }
   }
 
+  function identificar_associacoes(classe: string): [string, string][] {
+    const padrao = /\b__init__\b\s*\(.*?\):/;
+    const match = classe.match(padrao);
+
+    const associacoes: [string, string][] = [];
+
+    if (match) {
+      const construtor = match[0];
+      const parametros = construtor.match(/\b(\w+)\s*:\s*(\w+)\b/g);
+
+      if (parametros) {
+        for (const param of parametros) {
+          const [variavel, tipo] = param.split(':').map(item => item.trim());
+          if (tipo[0] === tipo[0].toUpperCase()) {
+            associacoes.push([variavel, tipo]);
+          }
+        }
+      }
+    }
+    return associacoes;
+  }
+
+  function encontrar_criacao_objetos(classe: string): [string, string][] {
+    const padrao_construtor = /\bdef\s+__init__\b.*?:\s*\n((?:\s+.*\n)*)/;
+    const match_construtor = classe.match(padrao_construtor);
+
+    const criacoes_objetos: [string, string][] = [];
+
+    if (match_construtor) {
+      const linhas_construtor = match_construtor[1].trim().split('\n');
+      for (const linha of linhas_construtor) {
+        const match_objeto = linha.trim().match(
+          /self\.(\w+)\s*=\s*(\w+)\(.*\)/);
+        if (match_objeto) {
+          const atributo = match_objeto[1];
+          const classe_objeto = match_objeto[2];
+          criacoes_objetos.push([atributo, classe_objeto]);
+        }
+      }
+    }
+
+    return criacoes_objetos;
+  }
+
+  function identificar_nomes_metodos(classe: string): string[] {
+    const padrao_metodos = /\bdef\s+((?!__init__)\w+)\b/g;
+    const nomes_metodos = [];
+    let match;
+
+    while ((match = padrao_metodos.exec(classe)) !== null) {
+      nomes_metodos.push(match[1]);
+    }
+
+    return nomes_metodos;
+  }
+
+  interface ClassInfo {
+    name: string[];
+    attributes: [string, string][];
+    methods: string[];
+    inheritance: string[] | null;
+    association: [string, string][];
+    composition: [string, string][];
+  }
+
+  function generate_dot_code(class_info: Record<string, ClassInfo>): string {
+    let dot_code = 'digraph ClassDiagram {\n';
+    for (const [name, info] of Object.entries(class_info)) {
+      dot_code += addClass_and_attributes_and_methods(
+        name, info.attributes, info.methods);
+
+      if (info.inheritance) {
+        for (const inher of info.inheritance) {
+          dot_code += addinheritance(name, inher);
+        }
+      }
+
+      if (info.association) {
+        for (const assoc of info.association) {
+          dot_code += addAssociation(name, assoc[1]);
+        }
+      }
+
+      if (info.composition) {
+        for (const comp of info.composition) {
+          dot_code += addComposition(name, comp[1]);
+        }
+      }
+    }
+    dot_code += "}\n";
+    return dot_code;
+  }
+
+  function addAssociation(class1: string, class2: string): string {
+    return `${class1} -> ${class2} [arrowtail=none, dir=back]\n`;
+  }
+
+  function addinheritance(superclasse: string, subclasse: string): string {
+    return `${superclasse} -> ${subclasse} [arrowtail=onormal, dir=back]\n`;
+  }
+
+  function addComposition(class1: string, class2: string): string {
+    return `${class1} -> ${class2} [arrowtail=diamond, dir=back]\n`;
+  }
+
+  function addClass_and_attributes_and_methods(class_name, attributes, methods) {
+    let attrs = "";
+    for (const [attribute, type] of attributes) {
+        attrs += `+ ${attribute}:${type}\\l`;
+    }
+
+    let meth = "";
+    for (const method of methods) {
+        meth += `+ ${method}()\\l`;
+    }
+
+    const class_code = `${class_name} [label="{{ ${class_name} | ${attrs} | ${meth} }}", shape=record]\n`;
+    return class_code;
+  }
+
+
   // Função para alterar o texto
-  const setTextManipulated = (newText) => {
+  const setTextManipulated = (newText: string) => {
     var userList = ""
 
     var splitClass = splitClasses(newText)
@@ -101,33 +222,36 @@ function useTextManipulation() {
     // Para cada classe, extrair as informações
     for (var i in splitClass) {
       var class_name = identificar_nome_da_classe(splitClass[i])
-      if (class_name) {
-        console.log(class_name);
-      }
 
       var variables = encontrar_variaveis_e_tipos_do_construtor(splitClass[i])
-      if (variables) {
-        console.log(variables);
-      }
 
-      var herancas = encontrar_heranca(splitClass[i])
-      if (herancas) {
-        console.log(herancas);
-      }
+      var inheritances = encontrar_heranca(splitClass[i])
+
+      var associations = identificar_associacoes(splitClass[i])
+
+      var objects = encontrar_criacao_objetos(splitClass[i])
+
+      var methods = identificar_nomes_metodos(splitClass[i])
 
       var cl = {
         name: class_name
       }
 
+      var class_info = {};
+      class_info[class_name] = {
+          attributes: variables,
+          methods: methods,
+          inheritance: inheritances,
+          association: associations,
+          composition: objects
+      };
 
+      var dotcode = generate_dot_code(class_info);
 
-      userList = userList + " " + class_name
+      userList = dotcode
 
 
     }
-
-
-
 
     setText(userList); // Exemplo: Convertendo texto para maiúsculas
   };
