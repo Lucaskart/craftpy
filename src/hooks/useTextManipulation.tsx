@@ -198,7 +198,7 @@ function useTextManipulation(): [string, (newText: string) => void] {
       meth += `+ ${method}()\\l`;
     }
 
-    const class_code = `${class_name} [label="{{ ${class_name} | ${attrs} | ${meth} }}", shape=record]\n`;
+    const class_code = `${class_name} [label="{ {${class_name}} | {${attrs}} | {${meth}} }", shape=record] \n`;
     return class_code;
   }
 
@@ -231,7 +231,7 @@ function useTextManipulation(): [string, (newText: string) => void] {
       }
     }
 
-    userList = "digraph ClassDiagram {\n" + userList + "}\n";
+    userList = "digraph ClassDiagram {graph[rankdir=\"TB\"] node[shape=record,style=filled,fillcolor=gray95] edge[dir=back, arrowtail=empty]\n" + userList + "}\n";
 
     setText(userList);
   };
