@@ -1,6 +1,5 @@
 import React from 'react';
 import useTextManipulation from '../hooks/useTextManipulation';
-import { Graphviz } from 'graphviz-react';
 
 function TextManipulation() {
   const codeText = `
@@ -57,7 +56,6 @@ def __init__(self, academicTitle: str):
             <h2 className="text-lg font-semibold">Texto Manipulado:</h2>
             <p className="mt-2">{manipulatedText}</p>
           </div>
-          {manipulatedText != "" && <Graphviz dot={manipulatedText} />}
         </div>
       </div>
     </div>
