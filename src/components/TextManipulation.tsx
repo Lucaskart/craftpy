@@ -25,9 +25,9 @@ def __init__(self, academicTitle: str):
     self.academicTitle = academicTitle
   `;
   const [inputText, setInputText] = React.useState(codeText);
-  const [manipulatedText, setManipulatedText] = useTextManipulation('');
+  const [manipulatedText, setManipulatedText] = useTextManipulation();
 
-  const handleInputChange = (event) => {
+  const handleInputChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
     setInputText(event.target.value);
   };
 

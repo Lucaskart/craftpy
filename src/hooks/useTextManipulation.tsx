@@ -1,22 +1,17 @@
 import { useState } from 'react';
 
 // Hook personalizado para manipulação de texto
-function useTextManipulation() {
-  const [text, setText] = useState('');
+function useTextManipulation(): [string, (newText: string) => void] {
+  const [text, setText] = useState<string>('');
 
   const splitClasses = (code: string): string[] => {
-    // Usando regex para encontrar as definições de classe com ou sem herança
-    const classPattern: RegExp = new RegExp(
-      /class\s+(\w+)\s*(\((.*?)\))?:\s*(.*?)\s*(?=class|\Z)/, 'gs');
-    const classMatches: RegExpExecArray[] = [...code.matchAll(classPattern)];
+    const classPattern: RegExp = /class\s+(\w+)\s*(\((.*?)\))?:\s*(.*?)\s*(?=class|\Z)/gs;
+    const classMatches: RegExpExecArray[] = Array.from(code.matchAll(classPattern), match => match as RegExpExecArray);
 
-    // Lista para armazenar as partes divididas do código
+
     const splitCode: string[] = [];
-
-    // Índice de início da próxima classe
     let startIndex: number = 0;
 
-    // Dividindo o código em partes com base nas definições de classe
     for (const match of classMatches) {
       const className: string = match[1];
       const inheritance: string = match[3];
@@ -24,10 +19,8 @@ function useTextManipulation() {
       const classStart: number = match.index!;
       const classEnd: number = classStart + match[0].length;
 
-      // Adicionando parte do código antes da definição da classe atual
       splitCode.push(code.substring(startIndex, classStart));
 
-      // Construindo a definição da classe atual
       let classDefinition: string = `class ${className}`;
       if (inheritance) {
         classDefinition += `(${inheritance})`;
@@ -35,18 +28,16 @@ function useTextManipulation() {
       classDefinition += `:\n${classContent}\n`;
       splitCode.push(classDefinition);
 
-      // Atualizando o índice de início para a próxima iteração
       startIndex = classEnd;
     }
 
-    // Adicionando a parte final do código após a última classe
     splitCode.push(code.substring(startIndex));
 
     return splitCode;
   }
 
   interface ClassInfo {
-    name: string[];
+    name?: string;
     attributes: [string, string][];
     methods: string[];
     inheritance: string[] | null;
@@ -65,17 +56,17 @@ function useTextManipulation() {
     }
   }
 
-  function encontrar_variaveis_e_tipos_do_construtor(classe: string){
+  function encontrar_variaveis_e_tipos_do_construtor(classe: string): [string, string][] {
     const padrao = /\b__init__\b\s*\(.*?\):/;
     const match = classe.match(padrao);
 
-    const variaveis_e_tipos = [];
+    const variaveis_e_tipos: [string, string][] = [];
 
     if (match) {
       const construtor = match[0];
       const parametros = construtor.match(/\b(\w+)\s*:\s*(\w+)\b/g);
 
-      if (parametros != null){
+      if (parametros != null) {
         for (const param of parametros) {
           const [variavel, tipo] = param.split(':').map(item => item.trim());
           variaveis_e_tipos.push([variavel, tipo]);
@@ -90,14 +81,14 @@ function useTextManipulation() {
     const match = classe.match(padrao);
 
     if (match) {
-        let heranca = match[2].trim();
-        if (heranca) {
-            return heranca.split(',').map(classe => classe.trim());
-        } else {
-            return [];
-        }
+      let heranca = match[2].trim();
+      if (heranca) {
+        return heranca.split(',').map(classe => classe.trim());
+      } else {
+        return [];
+      }
     } else {
-        return null;
+      return null;
     }
   }
 
@@ -147,7 +138,7 @@ function useTextManipulation() {
 
   function identificar_nomes_metodos(classe: string): string[] {
     const padrao_metodos = /\bdef\s+((?!__init__)\w+)\b/g;
-    const nomes_metodos = [];
+    const nomes_metodos: string[] = [];
     let match;
 
     while ((match = padrao_metodos.exec(classe)) !== null) {
@@ -196,15 +187,15 @@ function useTextManipulation() {
     return `${class1} -> ${class2} [arrowtail=diamond, dir=back]\n`;
   }
 
-  function addClass_and_attributes_and_methods(class_name, attributes, methods) {
+  function addClass_and_attributes_and_methods(class_name: string, attributes: [string, string][], methods: string[]): string {
     let attrs = "";
     for (const [attribute, type] of attributes) {
-        attrs += `+ ${attribute}:${type}\\l`;
+      attrs += `+ ${attribute}:${type}\\l`;
     }
 
     let meth = "";
     for (const method of methods) {
-        meth += `+ ${method}()\\l`;
+      meth += `+ ${method}()\\l`;
     }
 
     const class_code = `${class_name} [label="{{ ${class_name} | ${attrs} | ${meth} }}", shape=record]\n`;
@@ -213,31 +204,19 @@ function useTextManipulation() {
 
 
   // Função para alterar o texto
-  const setTextManipulated = (newText: string) => {
-    var userList = ""
+  const setTextManipulated = (newText: string): void => {
+    let userList = "";
 
-    var splitClass = splitClasses(newText)
-    console.log(splitClass);
-    // Para cada classe, extrair as informações
-    for (var i in splitClass) {
-      if (splitClass[i].slice(0, 5) == "class") {
-        var class_name = identificar_nome_da_classe(splitClass[i])
-
-        var variables = encontrar_variaveis_e_tipos_do_construtor(splitClass[i])
-
-        var inheritances = encontrar_heranca(splitClass[i])
-
-        var associations = identificar_associacoes(splitClass[i])
-
-        var objects = encontrar_criacao_objetos(splitClass[i])
-
-        var methods = identificar_nomes_metodos(splitClass[i])
-
-        var cl = {
-          name: class_name
-        }
-
-        var class_info = {};
+    const splitClass = splitClasses(newText);
+    for (const i in splitClass) {
+      if (splitClass[i].slice(0, 5) === "class") {
+        const class_name = identificar_nome_da_classe(splitClass[i]);
+        const variables = encontrar_variaveis_e_tipos_do_construtor(splitClass[i]);
+        const inheritances = encontrar_heranca(splitClass[i]);
+        const associations = identificar_associacoes(splitClass[i]);
+        const objects = encontrar_criacao_objetos(splitClass[i]);
+        const methods = identificar_nomes_metodos(splitClass[i]);
+        const class_info: Record<string, ClassInfo> = {};
         class_info[class_name] = {
           attributes: variables,
           methods: methods,
@@ -246,7 +225,7 @@ function useTextManipulation() {
           composition: objects
         };
 
-        var dotcode = generate_dot_code(class_info);
+        const dotcode = generate_dot_code(class_info);
 
         userList = userList + " " + dotcode
       }
@@ -254,7 +233,7 @@ function useTextManipulation() {
 
     userList = "digraph ClassDiagram {\n" + userList + "}\n";
 
-    setText(userList); // Exemplo: Convertendo texto para maiúsculas
+    setText(userList);
   };
 
   return [text, setTextManipulated];
