@@ -1,6 +1,5 @@
 import DiagramGenerator from "./components/DiagramGenerator";
 import NavigationBar from "./components/NavigationBar";
-import TextManipulation from "./components/TextManipulation";
 import { Grid, Flex } from '@radix-ui/themes';
 
 function App() {

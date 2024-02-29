@@ -33,14 +33,14 @@ def __init__(self, academicTitle: str):
     const [logtext, setLogtext] = React.useState("Textarea for logs.");
 
     const handleError = (errorMessage: string) => {
-        let line = errorMessage.replace(/.*error in line ([0–9]*) .*\n/, '$1');
+        //let line = errorMessage.replace(/.*error in line ([0–9]*) .*\n/, '$1');
         setLogtext(errorMessage);
     }
 
     const handleButtonClick = () => {
         setManipulatedText(code);
     };
-    const onChange = React.useCallback((val, viewUpdate) => {
+    const onChange = React.useCallback((val: React.SetStateAction<string>) => {
         console.log('val:', val);
         setCode(val);
     }, []);

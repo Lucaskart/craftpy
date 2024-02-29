@@ -1,5 +1,4 @@
-import React from 'react';
-import { Box, Container, Grid, Flex, Button } from '@radix-ui/themes';
+import { Box, Grid, Flex, Button } from '@radix-ui/themes';
 import { CodeIcon, DownloadIcon, GearIcon, QuestionMarkIcon, ReaderIcon } from '@radix-ui/react-icons'
 
 function NavigationBar() {
