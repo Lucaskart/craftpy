@@ -14,11 +14,6 @@ function App() {
         <DiagramGenerator />
       </Flex>
     </Grid>
-    //<div className="flex justify-center items-center h-screen w-screen">
-      //<div className="">
-        //<TextManipulation />
-      //</div>
-    //</div>
   );
 }
 
