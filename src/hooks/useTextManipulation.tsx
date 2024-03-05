@@ -156,7 +156,7 @@ function useTextManipulation(): [string, (newText: string) => void] {
 
       if (info.inheritance) {
         for (const inher of info.inheritance) {
-          dot_code += addinheritance(name, inher);
+          dot_code += addinheritance(inher, name);
         }
       }
 
