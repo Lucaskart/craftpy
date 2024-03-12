@@ -3,8 +3,35 @@ import { GitHubLogoIcon } from '@radix-ui/react-icons'
 import * as Separator from '@radix-ui/react-separator';
 import { Outlet, Link } from "react-router-dom";
 import '../styles/styles.css';
+import { useCallback, useEffect } from 'react';
 
 function NavigationBar() {
+
+    const handleKeyPress = useCallback((e: { shiftKey: any; key: string; }) => {
+
+        //Shift + A = Ajuda
+        if(e.shiftKey && e.key.toLowerCase() === "a") {
+            document.getElementById("ajuda")!.click();
+        } 
+
+        //Shift + E = Exemplos
+        if(e.shiftKey && e.key.toLowerCase() === "e") {
+            document.getElementById("exemplos")!.click();
+        }
+
+        //Shift + P = Py2UML
+        if(e.shiftKey && e.key.toLowerCase() === "p") {
+            document.getElementById("home")!.click();
+        } 
+    }, []);
+    
+    useEffect(() => {
+        document.addEventListener('keydown', handleKeyPress);
+
+        return () => {
+            document.removeEventListener('keydown', handleKeyPress);
+        };
+    }, [handleKeyPress]);
 
     return (
         <Box position="sticky" top="0" width="100%">
@@ -21,22 +48,22 @@ function NavigationBar() {
                         }}
                     />
                 </Flex>
-                <Flex gap="3" justify="end" align={'center'} mr="5">
-                    <Link to="/py2uml/" className="MenuLink">Py2UML</Link>
+                <Flex gap="3" justify="end" align="center" mr="5">
+                    <Link id="home" to="/py2uml/" className="MenuLink">Py2UML</Link>
                     <Separator.Root
                         className="SeparatorRoot"
                         decorative
                         orientation="vertical"
                         style={{ margin: '0 15px' }}
                     />
-                    <Link to="/examples" className="MenuLink">Exemplos</Link>
+                    <Link id="exemplos" to="/py2uml/examples" className="MenuLink">Exemplos</Link>
                     <Separator.Root
                         className="SeparatorRoot"
                         decorative
                         orientation="vertical"
                         style={{ margin: '0 15px' }}
                     />
-                    <Link to="/py2uml/help" className="MenuLink">Ajuda</Link>
+                    <Link id="ajuda" to="/py2uml/help" className="MenuLink">Ajuda</Link>
                     <Separator.Root
                         className="SeparatorRoot"
                         decorative
