@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useEffect, useCallback } from "react";
 import useTextManipulation from '../hooks/useTextManipulation';
 import { Graphviz } from 'graphviz-react';
 import CodeMirror from '@uiw/react-codemirror';
 import { javascript } from '@codemirror/lang-javascript';
 import { Box, Button, Grid, Flex, Heading, TextArea } from '@radix-ui/themes';
-import { CodeIcon, DownloadIcon, GearIcon, QuestionMarkIcon, ReaderIcon } from '@radix-ui/react-icons'
+import { CodeIcon, DownloadIcon, GearIcon } from '@radix-ui/react-icons'
 import html2canvas from 'html2canvas';
 
 //Commit for deploy.
@@ -102,7 +102,7 @@ class Teacher(Doctor):
     const [code, setCode] = React.useState(codeText);
     const [manipulatedText, setManipulatedText] = useTextManipulation();
 
-    const [logtext, setLogtext] = React.useState("Textarea for logs.");
+    const [logtext, setLogtext] = React.useState("");
 
     const handleError = (errorMessage: string) => {
         //let line = errorMessage.replace(/.*error in line ([0–9]*) .*\n/, '$1');
@@ -110,8 +110,38 @@ class Teacher(Doctor):
     }
 
     const handleButtonClick = () => {
-        setManipulatedText(code);
+        if (code != ""){
+            setManipulatedText(code);
+        } else {
+            setLogtext("No code identified in the code field.")
+        }
     };
+
+    const handleKeyPress = useCallback((e: { shiftKey: any; key: string; }) => {
+        //Shift + S = Salvar Código
+        if(e.shiftKey && e.key.toLowerCase() === "s") {
+            handleDownloadCode();
+        } 
+
+        //Shift + D = Salvar Imagem/Diagrama
+        if(e.shiftKey && e.key.toLowerCase() === "d") {
+            handleDownloadImage();
+        } 
+
+        //Shift + Enter = Compilar
+        if(e.shiftKey && e.key === "Enter") {
+            handleButtonClick();
+        } 
+    }, []);
+    
+    useEffect(() => {
+        document.addEventListener('keydown', handleKeyPress);
+
+        return () => {
+            document.removeEventListener('keydown', handleKeyPress);
+        };
+    }, [handleKeyPress]);
+
     const onChange = React.useCallback((val: React.SetStateAction<string>) => {
         console.log('val:', val);
         setCode(val);
@@ -143,14 +173,11 @@ class Teacher(Doctor):
 
     return (
         <Flex direction="column" gap="3">
-            <Box position="sticky" style={{ background: 'var(--gray-a2)', borderRadius: 'var(--radius-3)' }} p="3" width="100%">
+            <Box position="static" p="3" width="100%">
                 <Grid columns="3" gap="3">
                     <Flex gap="3" justify="start">
                         <Button size="2" onClick={handleDownloadCode}>
                             <CodeIcon width="16" height="16" /> Salvar Código
-                        </Button>
-                        <Button size="2" onClick={handleDownloadImage}>
-                            <DownloadIcon width="16" height="16" /> Salvar Diagrama
                         </Button>
                     </Flex>
                     <Flex gap="1" justify="center">
@@ -159,11 +186,8 @@ class Teacher(Doctor):
                         </Button>
                     </Flex>
                     <Flex gap="3" justify="end">
-                        <Button size="2">
-                            <ReaderIcon width="16" height="16" /> Exemplos
-                        </Button>
-                        <Button size="2">
-                            <QuestionMarkIcon width="16" height="16" /> Ajuda
+                        <Button size="2" onClick={handleDownloadImage}>
+                            <DownloadIcon width="16" height="16" /> Salvar Diagrama
                         </Button>
                     </Flex>
                 </Grid>
