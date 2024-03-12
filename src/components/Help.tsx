@@ -1,14 +1,14 @@
 import { Box, Card, Flex, Grid, Heading, Kbd, Text } from '@radix-ui/themes';
 
 function Help() {
-    // TBD
+
     return (
         <Grid columns="3" p="3">
             <Flex gap="3">
             </Flex>
             <Flex direction="column" gap="3" justify="center" align="center">
                 <Heading mb="2" size="7">Comandos</Heading>
-                <Text>A seguir segue uma lista de comandos para auxiliar no uso de Py2UML.</Text>
+                <Text>A seguir temos uma lista de comandos para auxiliar no uso de Py2UML.</Text>
                 <Card style={{ maxWidth: 600 }}>
                     <Flex gap="3" align="center">
                         <Box>

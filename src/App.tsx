@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import NavigationBar from "./components/NavigationBar";
 import DiagramGenerator from "./components/DiagramGenerator";
 import Help from './components/Help';
+import Examples from './components/Examples';
 
 function App() {
 
@@ -15,6 +16,7 @@ function App() {
           <Route path="/py2uml" element={<NavigationBar />}>
             <Route index element={<DiagramGenerator />} />
             <Route path="/py2uml/help" element={<Help />} />
+            <Route path="/py2uml/examples" element={<Examples />} />
           </Route>
         </Routes>
       </BrowserRouter>

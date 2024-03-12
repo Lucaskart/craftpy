@@ -143,7 +143,6 @@ class Teacher(Doctor):
     }, [handleKeyPress]);
 
     const onChange = React.useCallback((val: React.SetStateAction<string>) => {
-        console.log('val:', val);
         setCode(val);
     }, []);
 
