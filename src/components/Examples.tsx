@@ -75,6 +75,8 @@ class ExamReport:
         return void
 
 class Doctor:
+    address = Address(street = "Main", number = 32)
+          
     def __init__(self, name:str, numberCRM:str):
         self.name = name
         self.numberCRM = numberCRM
@@ -92,6 +94,11 @@ class Resident(Doctor):
 class Teacher(Doctor):
     def __init__(self, academicTitle:str):
         self.academicTitle = academicTitle
+
+class Address():
+  def __init__(self, street:str, number:int):
+        self.street = street
+        self.number = number
 `;
 
     return (

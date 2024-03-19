@@ -41,7 +41,8 @@ function useTextManipulation(): [string, (newText: string) => void] {
     attributes: [string, string][];
     methods: string[];
     inheritance: string[] | null;
-    association: [string, string][];
+    association: string[];
+    aggregation: [string, string][];
     composition: [string, string][];
   }
 
@@ -92,11 +93,11 @@ function useTextManipulation(): [string, (newText: string) => void] {
     }
   }
 
-  function identificar_associacoes(classe: string): [string, string][] {
+  function identificar_agregacoes(classe: string): [string, string][] {
     const padrao = /\b__init__\b\s*\(.*?\):/;
     const match = classe.match(padrao);
 
-    const associacoes: [string, string][] = [];
+    const agregacoes: [string, string][] = [];
 
     if (match) {
       const construtor = match[0];
@@ -106,12 +107,26 @@ function useTextManipulation(): [string, (newText: string) => void] {
         for (const param of parametros) {
           const [variavel, tipo] = param.split(':').map(item => item.trim());
           if (tipo[0] === tipo[0].toUpperCase()) {
-            associacoes.push([variavel, tipo]);
+            agregacoes.push([variavel, tipo]);
           }
         }
       }
     }
-    return associacoes;
+    return agregacoes;
+  }
+
+  function identificar_associacoes(variable: string): string[] {
+    const padrao_metodos = /\s(\w+)\s*=\s(\w+)\(([\S\s]+?)\)/g;
+    const nomes_asc: string[] = [];
+    let match;
+
+
+    while ((match = padrao_metodos.exec(variable)) !== null) {
+      console.log(match[2])
+      nomes_asc.push(match[2]);
+    }
+
+    return nomes_asc;
   }
 
   function encontrar_criacao_objetos(classe: string): [string, string][] {
@@ -160,9 +175,16 @@ function useTextManipulation(): [string, (newText: string) => void] {
         }
       }
 
+      if (info.aggregation) {
+        for (const agg of info.aggregation) {
+          dot_code += addAggregation(name, agg[1]);
+        }
+      }
+
       if (info.association) {
         for (const assoc of info.association) {
-          dot_code += addAssociation(name, assoc[1]);
+          console.log(assoc);
+          dot_code += addAssociation(name, assoc);
         }
       }
 
@@ -179,12 +201,16 @@ function useTextManipulation(): [string, (newText: string) => void] {
     return `${class1} -> ${class2} [arrowtail=none, dir=back]\n`;
   }
 
+  function addAggregation(class1: string, class2: string): string {
+    return `${class1} -> ${class2} [arrowtail=odiamond, dir=back, taillabel="+ ${class2.toLowerCase()}", labeldistance=2]\n`;
+  }
+
   function addinheritance(superclasse: string, subclasse: string): string {
     return `${superclasse} -> ${subclasse} [arrowtail=onormal, dir=back]\n`;
   }
 
   function addComposition(class1: string, class2: string): string {
-    return `${class1} -> ${class2} [arrowtail=diamond, dir=back]\n`;
+    return `${class1} -> ${class2} [arrowtail=diamond, dir=back, taillabel="+ ${class2.toLowerCase()}", labeldistance=2]\n`;
   }
 
   function addClass_and_attributes_and_methods(class_name: string, attributes: [string, string][], methods: string[]): string {
@@ -214,6 +240,7 @@ function useTextManipulation(): [string, (newText: string) => void] {
         const variables = encontrar_variaveis_e_tipos_do_construtor(splitClass[i]);
         const inheritances = encontrar_heranca(splitClass[i]);
         const associations = identificar_associacoes(splitClass[i]);
+        const aggregations = identificar_agregacoes(splitClass[i]);
         const objects = encontrar_criacao_objetos(splitClass[i]);
         const methods = identificar_nomes_metodos(splitClass[i]);
         const class_info: Record<string, ClassInfo> = {};
@@ -222,6 +249,7 @@ function useTextManipulation(): [string, (newText: string) => void] {
           methods: methods,
           inheritance: inheritances,
           association: associations,
+          aggregation: aggregations,
           composition: objects
         };
 
