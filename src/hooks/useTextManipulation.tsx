@@ -1,8 +1,35 @@
 import { useState } from 'react';
 
+interface ClassInfo {
+  name?: string;
+  attributes: [string, string][];
+  methods: string[];
+  inheritance: string[] | null;
+  association: string[];
+  aggregation: [string, string][];
+  composition: [string, string][];
+}
+
 // Hook personalizado para manipulação de texto
 function useTextManipulation(): [string, (newText: string) => void] {
   const [text, setText] = useState<string>('');
+
+  function removerComentariosPython(codigoPython: string) {
+    // Expressão regular para remover comentários de uma linha
+    const regexComentariosUmaLinha = /#.*$/gm;
+
+    // Expressão regular para remover comentários de várias linhas (docstrings)
+    const regexDocstrings = /'''[\s\S]*?'''|"""[\s\S]*?"""/gm;
+
+    // Remover comentários de uma linha
+    codigoPython = codigoPython.replace(regexComentariosUmaLinha, '');
+
+    // Remover docstrings (comentários de várias linhas)
+    codigoPython = codigoPython.replace(regexDocstrings, '');
+
+    return codigoPython;
+  }
+
 
   const splitClasses = (code: string): string[] => {
     const classPattern: RegExp = /class\s+(\w+)\s*(\((.*?)\))?:\s*(.*?)\s*(?=class|\Z)/gs;
@@ -36,33 +63,29 @@ function useTextManipulation(): [string, (newText: string) => void] {
     return splitCode;
   }
 
-  interface ClassInfo {
-    name?: string;
-    attributes: [string, string][];
-    methods: string[];
-    inheritance: string[] | null;
-    association: string[];
-    aggregation: [string, string][];
-    composition: [string, string][];
-  }
-
   function identificar_nome_da_classe(classe: string): string {
     const padrao = /\bclass\s+(\w+)\b/;
     const match = classe.match(padrao);
 
     if (match) {
+      console.log(match[1])
       return match[1];
     } else {
       return '';
     }
   }
+  /* ATRIBUTOS */
+  function encontrar_atributos(classe: string): [string, string][] {
+    const attributes: [string, string][] = [];
 
-  function encontrar_variaveis_e_tipos_do_construtor(classe: string): [string, string][] {
-    // Identificação das variáveis na assinatura do construtor
+    const atributosClasse = encontrarAtributosClasse(classe);
+
+    console.log(atributosClasse);
+    /* // Identificação das variáveis na assinatura do construtor
     const padrao = /\b__init__\b\s*\(.*?\):/;
     const match = classe.match(padrao);
 
-    const variaveis_e_tipos: [string, string][] = [];
+    
 
     if (match) {
       const construtor = match[0];
@@ -104,11 +127,36 @@ function useTextManipulation(): [string, (newText: string) => void] {
     //Identificação das variáveis privadas declaradas (existente na assinatura do construtor)
     // Lembrar de implementar!
 
+ */
 
-
-    return variaveis_e_tipos;
+    return attributes;
   }
 
+  function encontrarAtributosClasse(classeString: string) {
+    const regex = /class\s+\w+\s*:\s*\n((?:\s*(?!def|#)[^\s]+:\s*[^\n]+\s*=\s*[^\n]+\s*\n)*)/g;
+    const matches = regex.exec(classeString);
+
+    if (!matches || matches.length < 2) {
+      return [];
+    }
+
+    const atributosClasse = matches[1];
+    const atributosRegex = /\s+(?!#)([^\s]+):\s*([^\n]+)\s*=\s*([^\n]+)\s*\n/g;
+    let atributos = [];
+    let atributo;
+
+    while ((atributo = atributosRegex.exec(atributosClasse)) !== null) {
+      atributos.push({
+        nome: atributo[1].trim(),
+        tipo: atributo[2].trim()
+      });
+    }
+
+    return atributos;
+  }
+
+
+  /* ********************************* */
   function encontrar_heranca(classe: string): string[] | null {
     const padrao = /\bclass\s+(\w+)\s*\((.*?)\):/;
     const match = classe.match(padrao);
@@ -254,7 +302,7 @@ function useTextManipulation(): [string, (newText: string) => void] {
       } else {
         attrs += `+ ${attribute}:${type}\\l`;
       }
-      
+
     }
 
     let meth = "";
@@ -270,12 +318,13 @@ function useTextManipulation(): [string, (newText: string) => void] {
   // Função para alterar o texto
   const setTextManipulated = (newText: string): void => {
     let userList = "";
-
-    const splitClass = splitClasses(newText);
+    const code = removerComentariosPython(newText)
+    const splitClass = splitClasses(code);
     for (const i in splitClass) {
       if (splitClass[i].slice(0, 5) === "class") {
+        //console.log(splitClass[i])
         const class_name = identificar_nome_da_classe(splitClass[i]);
-        const variables = encontrar_variaveis_e_tipos_do_construtor(splitClass[i]);
+        const variables = encontrar_atributos(splitClass[i]);
         const inheritances = encontrar_heranca(splitClass[i]);
         const associations = identificar_associacoes(splitClass[i]);
         const aggregations = identificar_agregacoes(splitClass[i]);
