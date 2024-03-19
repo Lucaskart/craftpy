@@ -58,6 +58,7 @@ function useTextManipulation(): [string, (newText: string) => void] {
   }
 
   function encontrar_variaveis_e_tipos_do_construtor(classe: string): [string, string][] {
+    // Identificação das variáveis na assinatura do construtor
     const padrao = /\b__init__\b\s*\(.*?\):/;
     const match = classe.match(padrao);
 
@@ -74,6 +75,37 @@ function useTextManipulation(): [string, (newText: string) => void] {
         }
       }
     }
+
+    //Identificação das variáveis privadas dento do construtor (existente na assinatura do construtor)
+    const padrao_construtor = /\bdef\s+__init__\b.*?:\s*\n((?:\s+.*\n)*)/;
+    const match_construtor = classe.match(padrao_construtor);
+
+    if (match_construtor) {
+      const linhas_construtor = match_construtor[1].trim().split('\n');
+      for (const linha of linhas_construtor) {
+
+        const regex = /self\.__(\w+)/;
+        const matches = linha.trim().match(regex);
+
+        if (matches) {
+          const varPrivate = matches[1]
+          
+          // Se a variável detectada existir na assinatura do construtor é feita a atualização da variável com o "__" 
+          for (let i = 0; i < variaveis_e_tipos.length; i++) {
+            if (variaveis_e_tipos[i][0] === varPrivate) {
+              variaveis_e_tipos[i][0] = "__"+varPrivate
+              break;
+            } 
+          }
+        }
+      }
+    }
+
+    //Identificação das variáveis privadas declaradas (existente na assinatura do construtor)
+    // Lembrar de implementar!
+
+
+
     return variaveis_e_tipos;
   }
 
@@ -216,7 +248,13 @@ function useTextManipulation(): [string, (newText: string) => void] {
   function addClass_and_attributes_and_methods(class_name: string, attributes: [string, string][], methods: string[]): string {
     let attrs = "";
     for (const [attribute, type] of attributes) {
-      attrs += `+ ${attribute}:${type}\\l`;
+
+      if (attribute.substring(0, 2) === "__") {
+        attrs += `- ${attribute}:${type}\\l`;
+      } else {
+        attrs += `+ ${attribute}:${type}\\l`;
+      }
+      
     }
 
     let meth = "";
