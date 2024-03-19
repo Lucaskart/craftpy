@@ -39,22 +39,39 @@ function useTextManipulation(): [string, (newText: string) => void] {
     // Array para armazenar os objetos de classe
     const classes = [];
 
+    // Expressão regular para encontrar definições de função dentro do conteúdo da classe
+    const functionPattern = /def\s+(\w+)\s*\((.*?)\):([\s\S]*?)(?=\s*def|\s*class|\s*$)/gs;
+
     // Dividindo o código em partes com base nas definições de classe
     for (const match of classMatches) {
       const className = match[1];
       const inheritance = match[3];
       const classContent = match[4];
 
+      // Encontrando todas as funções dentro do conteúdo da classe
+      const functions = [];
+      let functionMatch;
+      while ((functionMatch = functionPattern.exec(classContent)) !== null) {
+        const functionName = functionMatch[1];
+        const functionParams = functionMatch[2];
+        const functionContent = functionMatch[3].trim();
+        functions.push({ name: functionName, params: functionParams, content: functionContent });
+      }
+
       // Construindo o objeto da classe
       const classObj = {
         name: className,
         inheritance: inheritance ? inheritance : null,
-        content: classContent.trim()
+        content: classContent.trim(),
+        functions: functions
       };
 
       // Adicionando o objeto da classe ao array
       classes.push(classObj);
     }
+
+
+    console.log(classes);
 
     return classes;
   }
