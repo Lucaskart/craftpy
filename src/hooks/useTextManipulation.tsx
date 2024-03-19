@@ -31,242 +31,34 @@ function useTextManipulation(): [string, (newText: string) => void] {
   }
 
 
-  const splitClasses = (code: string): string[] => {
-    const classPattern: RegExp = /class\s+(\w+)\s*(\((.*?)\))?:\s*(.*?)\s*(?=class|\Z)/gs;
-    const classMatches: RegExpExecArray[] = Array.from(code.matchAll(classPattern), match => match as RegExpExecArray);
+  const splitClasses = (code: string) => {
+    // Usando regex para encontrar as definições de classe com ou sem herança
+    const classPattern = /class\s+(\w+)\s*(\((.*?)\))?:\s*(.*?)\s*(?=class|$)/gs;
+    const classMatches = [...code.matchAll(classPattern)];
 
+    // Array para armazenar os objetos de classe
+    const classes = [];
 
-    const splitCode: string[] = [];
-    let startIndex: number = 0;
-
+    // Dividindo o código em partes com base nas definições de classe
     for (const match of classMatches) {
-      const className: string = match[1];
-      const inheritance: string = match[3];
-      const classContent: string = match[4];
-      const classStart: number = match.index!;
-      const classEnd: number = classStart + match[0].length;
+      const className = match[1];
+      const inheritance = match[3];
+      const classContent = match[4];
 
-      splitCode.push(code.substring(startIndex, classStart));
+      // Construindo o objeto da classe
+      const classObj = {
+        name: className,
+        inheritance: inheritance ? inheritance : null,
+        content: classContent.trim()
+      };
 
-      let classDefinition: string = `class ${className}`;
-      if (inheritance) {
-        classDefinition += `(${inheritance})`;
-      }
-      classDefinition += `:\n${classContent}\n`;
-      splitCode.push(classDefinition);
-
-      startIndex = classEnd;
+      // Adicionando o objeto da classe ao array
+      classes.push(classObj);
     }
 
-    splitCode.push(code.substring(startIndex));
-
-    return splitCode;
+    return classes;
   }
 
-  function identificar_nome_da_classe(classe: string): string {
-    const padrao = /\bclass\s+(\w+)\b/;
-    const match = classe.match(padrao);
-
-    if (match) {
-      console.log(match[1])
-      return match[1];
-    } else {
-      return '';
-    }
-  }
-  /* *********** ATRIBUTOS *************** */
-  function encontrar_atributos(classe: string): [string, string][] {
-    const attributes: [string, string][] = [];
-
-    const atributosClasse = encontrarAtributosClasse(classe);
-
-    console.log(atributosClasse);
-  
-    return attributes;
-  }
-
-  function encontrarAtributosClasse(classeString: string) {
-    const regex = /class\s+\w+\s*:\s*\n((?:\s*(?!def|#)[^\s]+:\s*[^\n]+\s*=\s*[^\n]+\s*\n)*)/g;
-    const matches = regex.exec(classeString);
-
-    if (!matches || matches.length < 2) {
-      return [];
-    }
-
-    const atributosClasse = matches[1];
-    const atributosRegex = /\s+(?!#)([^\s]+):\s*([^\n]+)\s*=\s*([^\n]+)\s*\n/g;
-    let atributos = [];
-    let atributo;
-
-    while ((atributo = atributosRegex.exec(atributosClasse)) !== null) {
-      atributos.push({
-        nome: atributo[1].trim().substring(0, 2) === "__"? atributo[1].replace("__",""):atributo[1],
-        tipo: atributo[2].trim(),
-        modificador: atributo[1].trim().substring(0, 2) === "__"? "-":"+"
-      });
-    }
-
-    return atributos;
-  }
-
-
-  /* ********************************* */
-  function encontrar_heranca(classe: string): string[] | null {
-    const padrao = /\bclass\s+(\w+)\s*\((.*?)\):/;
-    const match = classe.match(padrao);
-
-    if (match) {
-      let heranca = match[2].trim();
-      if (heranca) {
-        return heranca.split(',').map(classe => classe.trim());
-      } else {
-        return [];
-      }
-    } else {
-      return null;
-    }
-  }
-
-  function identificar_agregacoes(classe: string): [string, string][] {
-    const padrao = /\b__init__\b\s*\(.*?\):/;
-    const match = classe.match(padrao);
-
-    const agregacoes: [string, string][] = [];
-
-    if (match) {
-      const construtor = match[0];
-      const parametros = construtor.match(/\b(\w+)\s*:\s*(\w+)\b/g);
-
-      if (parametros) {
-        for (const param of parametros) {
-          const [variavel, tipo] = param.split(':').map(item => item.trim());
-          if (tipo[0] === tipo[0].toUpperCase()) {
-            agregacoes.push([variavel, tipo]);
-          }
-        }
-      }
-    }
-    return agregacoes;
-  }
-
-  function identificar_associacoes(variable: string): string[] {
-    const padrao_metodos = /\s(\w+)\s*=\s(\w+)\(([\S\s]+?)\)/g;
-    const nomes_asc: string[] = [];
-    let match;
-
-
-    while ((match = padrao_metodos.exec(variable)) !== null) {
-      console.log(match[2])
-      nomes_asc.push(match[2]);
-    }
-
-    return nomes_asc;
-  }
-
-  function encontrar_criacao_objetos(classe: string): [string, string][] {
-    const padrao_construtor = /\bdef\s+__init__\b.*?:\s*\n((?:\s+.*\n)*)/;
-    const match_construtor = classe.match(padrao_construtor);
-
-    const criacoes_objetos: [string, string][] = [];
-
-    if (match_construtor) {
-      const linhas_construtor = match_construtor[1].trim().split('\n');
-      for (const linha of linhas_construtor) {
-        const match_objeto = linha.trim().match(
-          /self\.(\w+)\s*=\s*(\w+)\(.*\)/);
-        if (match_objeto) {
-          const atributo = match_objeto[1];
-          const classe_objeto = match_objeto[2];
-          criacoes_objetos.push([atributo, classe_objeto]);
-        }
-      }
-    }
-
-    return criacoes_objetos;
-  }
-
-  function identificar_nomes_metodos(classe: string): string[] {
-    const padrao_metodos = /\bdef\s+((?!__init__)\w+)\b/g;
-    const nomes_metodos: string[] = [];
-    let match;
-
-    while ((match = padrao_metodos.exec(classe)) !== null) {
-      nomes_metodos.push(match[1]);
-    }
-
-    return nomes_metodos;
-  }
-
-  function generate_dot_code(class_info: Record<string, ClassInfo>): string {
-    let dot_code = "";
-    for (const [name, info] of Object.entries(class_info)) {
-      dot_code += addClass_and_attributes_and_methods(
-        name, info.attributes, info.methods);
-
-      if (info.inheritance) {
-        for (const inher of info.inheritance) {
-          dot_code += addinheritance(inher, name);
-        }
-      }
-
-      if (info.aggregation) {
-        for (const agg of info.aggregation) {
-          dot_code += addAggregation(name, agg[1]);
-        }
-      }
-
-      if (info.association) {
-        for (const assoc of info.association) {
-          console.log(assoc);
-          dot_code += addAssociation(name, assoc);
-        }
-      }
-
-      if (info.composition) {
-        for (const comp of info.composition) {
-          dot_code += addComposition(name, comp[1]);
-        }
-      }
-    }
-    return dot_code;
-  }
-
-  function addAssociation(class1: string, class2: string): string {
-    return `${class1} -> ${class2} [arrowtail=none, dir=back]\n`;
-  }
-
-  function addAggregation(class1: string, class2: string): string {
-    return `${class1} -> ${class2} [arrowtail=odiamond, dir=back, taillabel="+ ${class2.toLowerCase()}", labeldistance=2]\n`;
-  }
-
-  function addinheritance(superclasse: string, subclasse: string): string {
-    return `${superclasse} -> ${subclasse} [arrowtail=onormal, dir=back]\n`;
-  }
-
-  function addComposition(class1: string, class2: string): string {
-    return `${class1} -> ${class2} [arrowtail=diamond, dir=back, taillabel="+ ${class2.toLowerCase()}", labeldistance=2]\n`;
-  }
-
-  function addClass_and_attributes_and_methods(class_name: string, attributes: [string, string][], methods: string[]): string {
-    let attrs = "";
-    for (const [attribute, type] of attributes) {
-
-      if (attribute.substring(0, 2) === "__") {
-        attrs += `- ${attribute}:${type}\\l`;
-      } else {
-        attrs += `+ ${attribute}:${type}\\l`;
-      }
-
-    }
-
-    let meth = "";
-    for (const method of methods) {
-      meth += `+ ${method}()\\l`;
-    }
-
-    const class_code = `${class_name} [label="{ {${class_name}} | {${attrs}} | {${meth}} }", shape=record] \n`;
-    return class_code;
-  }
 
 
   // Função para alterar o texto
@@ -274,7 +66,7 @@ function useTextManipulation(): [string, (newText: string) => void] {
     let userList = "";
     const code = removerComentariosPython(newText)
     const splitClass = splitClasses(code);
-    for (const i in splitClass) {
+    /* for (const i in splitClass) {
       if (splitClass[i].slice(0, 5) === "class") {
         //console.log(splitClass[i])
         const class_name = identificar_nome_da_classe(splitClass[i]);
@@ -298,7 +90,7 @@ function useTextManipulation(): [string, (newText: string) => void] {
 
         userList = userList + " " + dotcode
       }
-    }
+    } */
 
     userList = "digraph ClassDiagram {graph[rankdir=\"TB\"] node[shape=record,style=filled,fillcolor=gray95] edge[dir=back, arrowtail=empty]\n" + userList + "}\n";
 
