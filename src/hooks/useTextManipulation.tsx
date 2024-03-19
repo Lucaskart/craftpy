@@ -74,61 +74,14 @@ function useTextManipulation(): [string, (newText: string) => void] {
       return '';
     }
   }
-  /* ATRIBUTOS */
+  /* *********** ATRIBUTOS *************** */
   function encontrar_atributos(classe: string): [string, string][] {
     const attributes: [string, string][] = [];
 
     const atributosClasse = encontrarAtributosClasse(classe);
 
     console.log(atributosClasse);
-    /* // Identificação das variáveis na assinatura do construtor
-    const padrao = /\b__init__\b\s*\(.*?\):/;
-    const match = classe.match(padrao);
-
-    
-
-    if (match) {
-      const construtor = match[0];
-      const parametros = construtor.match(/\b(\w+)\s*:\s*(\w+)\b/g);
-
-      if (parametros != null) {
-        for (const param of parametros) {
-          const [variavel, tipo] = param.split(':').map(item => item.trim());
-          variaveis_e_tipos.push([variavel, tipo]);
-        }
-      }
-    }
-
-    //Identificação das variáveis privadas dento do construtor (existente na assinatura do construtor)
-    const padrao_construtor = /\bdef\s+__init__\b.*?:\s*\n((?:\s+.*\n)*)/;
-    const match_construtor = classe.match(padrao_construtor);
-
-    if (match_construtor) {
-      const linhas_construtor = match_construtor[1].trim().split('\n');
-      for (const linha of linhas_construtor) {
-
-        const regex = /self\.__(\w+)/;
-        const matches = linha.trim().match(regex);
-
-        if (matches) {
-          const varPrivate = matches[1]
-          
-          // Se a variável detectada existir na assinatura do construtor é feita a atualização da variável com o "__" 
-          for (let i = 0; i < variaveis_e_tipos.length; i++) {
-            if (variaveis_e_tipos[i][0] === varPrivate) {
-              variaveis_e_tipos[i][0] = "__"+varPrivate
-              break;
-            } 
-          }
-        }
-      }
-    }
-
-    //Identificação das variáveis privadas declaradas (existente na assinatura do construtor)
-    // Lembrar de implementar!
-
- */
-
+  
     return attributes;
   }
 
@@ -147,8 +100,9 @@ function useTextManipulation(): [string, (newText: string) => void] {
 
     while ((atributo = atributosRegex.exec(atributosClasse)) !== null) {
       atributos.push({
-        nome: atributo[1].trim(),
-        tipo: atributo[2].trim()
+        nome: atributo[1].trim().substring(0, 2) === "__"? atributo[1].replace("__",""):atributo[1],
+        tipo: atributo[2].trim(),
+        modificador: atributo[1].trim().substring(0, 2) === "__"? "-":"+"
       });
     }
 
