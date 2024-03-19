@@ -86,24 +86,102 @@ function useTextManipulation(): [string, (newText: string) => void] {
     return classes;
   }
 
-  function generate_dot_code(class_info: Record<string, ClassInfo>): string {
-    let dot_code = "";
-    /* for (const [name, info] of Object.entries(class_info)) {
-      dot_code += addClass_and_attributes_and_methods(
-        name, info.attributes, info.methods);
+  function draw_class(classe: Class): string {
+    let attrs = "";
+    let meth = "";
+    classe.functions.forEach((func) => {
+      if (func.name == "__init__") { // construtor
 
-    } */
+        // extrai as variáveis parâmetros
+        const parametros_match = func.params.match(/\b(\w+)\s*:\s*(\w+)\b/g);
+        const parametros: { nome: string; tipo: string; }[] = [];
+        if (parametros_match != null) {
+          for (const param of parametros_match) {
+            const [variavel, tipo] = param.split(':').map(item => item.trim());
+            const v = {
+              nome: variavel,
+              tipo: tipo,
+            };
+            parametros.push(v);
+          }
+        }
+
+        // Expressão regular para extrair as variáveis internas do contrutor, seus tipos (se fornecidos) e atribuições
+        const regex = /self\.(\w+)(?::(\w+))?\s*=\s*(.+)$/gm;
+        let match;
+        const internas: { nome: string; tipo: string; atribuicao: string; }[] = [];
+
+        while ((match = regex.exec(func.content)) !== null) {
+          const p = {
+            nome: match[1],
+            tipo: match[2] || 'None',
+            atribuicao: match[3].trim()
+          };
+          internas.push(p);
+        }
+
+        //obs.: o nome das variáveis que serão mostrados no diagrama serão as variáveis de dentro do construtor
+
+        // atualiza o tipo com base nos parâmetros
+        internas.forEach((v) => {
+          parametros.forEach((p) => {
+            if (v.atribuicao == p.nome) {
+              v.tipo = p.tipo
+            }
+          })
+        })
+
+        // deleta as variáveis objetos
+        internas.forEach((_v, index) => {
+          if (_v.tipo[0] === _v.tipo[0].toUpperCase()) {
+            internas.splice(index, 1);
+          }
+        });
+
+        // construção do dot code para as variáveis
+        internas.forEach((variavel) => {
+          if (variavel.nome.substring(0, 2) === "__") {
+            attrs += `- ${variavel.nome.replace("__", "")}:${variavel.tipo}\\l`;
+          } else {
+            attrs += `+ ${variavel.nome}:${variavel.tipo}\\l`;
+          }
+        })
+
+      } else { //demais funções
+        if (func.name.substring(0, 2) === "__") {
+          meth += `- ${func.name.replace("__", "")}()\\l`;
+        } else {
+          meth += `+ ${func.name}()\\l`;
+        }
+      }
+    });
+
+    const class_code = `${classe.name} [label="{ {${classe.name}} | {${attrs}} | {${meth}} }", shape=record] \n`;
+    return class_code;
+  }
+
+  function generate_dot_code(classes: Class[]): string {
+    let dot_code = "";
+    classes.forEach((classe) => {
+
+      // desenha a classe, seus atributos e métodos
+      dot_code += draw_class(classe)
+
+    });
+
     return dot_code;
   }
 
 
   // Função para alterar o texto
   const setTextManipulated = (newText: string): void => {
-    let userList = "";
     const code = removerComentariosPython(newText)
     const classes: Class[] = splitClasses(code);
+    console.log(classes);
 
-    classes.forEach((classe, index) => {
+
+    /* classes.forEach((classe, index) => {
+  
       console.log(`Classe ${index + 1}:`);
       console.log(`Nome: ${classe.name}`);
       console.log(`Herança: ${classe.inheritance ? classe.inheritance : 'Nenhuma'}`);
@@ -113,9 +191,10 @@ function useTextManipulation(): [string, (newText: string) => void] {
         console.log(func.content);
       });
       console.log(`Conteúdo:\n${classe.content}\n`);
-    });
+    }); */
+    const dotcode = generate_dot_code(classes);
 
-    userList = "digraph ClassDiagram {graph[rankdir=\"TB\"] node[shape=record,style=filled,fillcolor=gray95] edge[dir=back, arrowtail=empty]\n" + userList + "}\n";
+    let userList = "digraph ClassDiagram {graph[rankdir=\"TB\"] node[shape=record,style=filled,fillcolor=gray95] edge[dir=back, arrowtail=empty]\n" + dotcode + "}\n";
 
     setText(userList);
   };
