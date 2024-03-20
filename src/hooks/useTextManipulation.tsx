@@ -169,9 +169,25 @@ function useTextManipulation(): [string, (newText: string) => void] {
     if (parametros_match != null) {
       for (const param of parametros_match) {
         const [variavel, tipo] = param.split(':').map(item => item.trim());
-          if (tipo[0] === tipo[0].toUpperCase()) {
-            dot_code += `${classe.name} -> ${tipo} [arrowtail=odiamond, dir=back, taillabel="+ ${variavel}", labeldistance=2]\n`;
-          }
+        if (tipo[0] === tipo[0].toUpperCase()) {
+          dot_code += `${classe.name} -> ${tipo} [arrowtail=odiamond, dir=back, taillabel="+ ${variavel}", labeldistance=2]\n`;
+        }
+      }
+    }
+    return dot_code;
+  }
+
+  function draw_composition(classe: Class): string {
+    let dot_code = "";
+
+    const linhas_construtor = classe.functions[0].content.trim().split('\n');
+    for (const linha of linhas_construtor) {
+      const match_objeto = linha.trim().match(
+        /self\.(\w+)\s*=\s*(\w+)\(.*\)/);
+      if (match_objeto) {
+        const atributo = match_objeto[1];
+        const classe_objeto = match_objeto[2];
+        dot_code += `${classe.name} -> ${classe_objeto} [arrowtail=diamond, dir=back, taillabel="+ ${atributo}", labeldistance=2]\n`;
       }
     }
     return dot_code;
@@ -189,6 +205,9 @@ function useTextManipulation(): [string, (newText: string) => void] {
 
       //desenha as agregações
       dot_code += draw_aggregation(classe)
+
+      // desenha as composições
+      dot_code += draw_composition(classe)
 
     });
 
