@@ -162,6 +162,21 @@ function useTextManipulation(): [string, (newText: string) => void] {
     return dot_code;
   }
 
+  function draw_aggregation(classe: Class): string {
+    let dot_code = "";
+    const func = classe.functions[0]
+    const parametros_match = func.params.match(/\b(\w+)\s*:\s*(\w+)\b/g);
+    if (parametros_match != null) {
+      for (const param of parametros_match) {
+        const [variavel, tipo] = param.split(':').map(item => item.trim());
+          if (tipo[0] === tipo[0].toUpperCase()) {
+            dot_code += `${classe.name} -> ${tipo} [arrowtail=odiamond, dir=back, taillabel="+ ${variavel}", labeldistance=2]\n`;
+          }
+      }
+    }
+    return dot_code;
+  }
+
   function generate_dot_code(classes: Class[]): string {
     let dot_code = "";
     classes.forEach((classe) => {
@@ -171,6 +186,9 @@ function useTextManipulation(): [string, (newText: string) => void] {
 
       //desenha o relacionamento de herança
       dot_code += draw_inheritance(classe)
+
+      //desenha as agregações
+      dot_code += draw_aggregation(classe)
 
     });
 
