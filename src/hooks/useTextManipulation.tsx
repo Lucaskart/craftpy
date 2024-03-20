@@ -1,15 +1,5 @@
 import { useState } from 'react';
 
-interface ClassInfo {
-  name?: string;
-  attributes?: [string, string][];
-  methods?: string[];
-  inheritance?: string[] | null;
-  association?: string[];
-  aggregation?: [string, string][];
-  composition?: [string, string][];
-}
-
 interface Class {
   name: string;
   inheritance: string | null;
@@ -160,12 +150,27 @@ function useTextManipulation(): [string, (newText: string) => void] {
     return class_code;
   }
 
+  function draw_inheritance(classe: Class): string {
+    let dot_code = "";
+    if (classe.inheritance) {
+      const superClasses = classe.inheritance.split(',')
+      console.log(superClasses);
+      for (var i = 0; i < superClasses.length; i++) {
+        dot_code += `${superClasses[i].trim()} -> ${classe.name} [arrowtail=onormal, dir=back]\n`;
+      }
+    }
+    return dot_code;
+  }
+
   function generate_dot_code(classes: Class[]): string {
     let dot_code = "";
     classes.forEach((classe) => {
 
       // desenha a classe, seus atributos e métodos
       dot_code += draw_class(classe)
+
+      //desenha o relacionamento de herança
+      dot_code += draw_inheritance(classe)
 
     });
 
