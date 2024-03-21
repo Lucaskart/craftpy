@@ -199,7 +199,7 @@ function useTextManipulation(): [string, (newText: string) => void] {
 
       let match;
       while ((match = regex.exec(linha)) !== null) {
-        const nome = match[1];
+        //const nome = match[1];
         const tipo = match[2] || null;
         const atribuicao = match[3] !== undefined ? match[3].trim() : null;
 
@@ -232,9 +232,9 @@ function useTextManipulation(): [string, (newText: string) => void] {
 
     let match;
     while ((match = regex.exec(textoSemFuncoes)) !== null) {
-      const nome = match[1];
+      //const nome = match[1];
       const tipo = match[2] || null;
-      const atribuicao = match[3] !== undefined ? match[3].trim() : null;
+      //const atribuicao = match[3] !== undefined ? match[3].trim() : null;
 
       if (tipo && tipo[0] === tipo[0].toUpperCase()) {
         dot_code += `${classe.name} -> ${tipo} [arrowtail=none, dir=back]\n`;
