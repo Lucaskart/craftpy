@@ -33,17 +33,16 @@ function useTextManipulation(): [string, (newText: string) => void] {
     return codigoPython;
   }
 
-
   const splitClasses = (code: string): Class[] => {
     // Usando regex para encontrar as definições de classe com ou sem herança
-    const classPattern = /class\s+(\w+)\s*(\((.*?)\))?:\s*(.*?)\s*(?=class|$)/gs;
+    const classPattern = /(?<!\w)class\b\s+(\w+)\s*(\((.*?)\))?:\s*(.*?)\s*(?=class\b|$)/gs;
     const classMatches = [...code.matchAll(classPattern)];
 
     // Array para armazenar os objetos de classe
     const classes: Class[] = [];
 
     // Expressão regular para encontrar definições de função dentro do conteúdo da classe
-    const functionPattern = /def\s+(\w+)\s*\((.*?)\):([\s\S]*?)(?=\s*def|\s*class|\s*$)/gs;
+    const functionPattern = /.*?def\s+(\w+)\s*\((.*?)\):([\s\S]*?)(?=\s*(?!.*\bclass[\w\d])def|\s*$)/gs;
 
     // Dividindo o código em partes com base nas definições de classe
     for (const match of classMatches) {
@@ -56,8 +55,8 @@ function useTextManipulation(): [string, (newText: string) => void] {
       let functionMatch;
       while ((functionMatch = functionPattern.exec(classContent)) !== null) {
         const functionName = functionMatch[1];
-        const functionParams = functionMatch[2];
-        const functionContent = functionMatch[3].trim();
+        const functionParams = functionMatch[2].replace(/ /g, "");
+        const functionContent = functionMatch[3].trim().replace(/ /g, "");
         functions.push({ name: functionName, params: functionParams, content: functionContent });
       }
 
@@ -154,7 +153,6 @@ function useTextManipulation(): [string, (newText: string) => void] {
     let dot_code = "";
     if (classe.inheritance) {
       const superClasses = classe.inheritance.split(',')
-      console.log(superClasses);
       for (var i = 0; i < superClasses.length; i++) {
         dot_code += `${superClasses[i].trim()} -> ${classe.name} [arrowtail=onormal, dir=back]\n`;
       }
@@ -193,6 +191,29 @@ function useTextManipulation(): [string, (newText: string) => void] {
     return dot_code;
   }
 
+  function draw_association(classe: Class): string {
+    let dot_code = "";
+
+    let regexFuncao = /def\s+\w+\s*\([^)]*\):\s*([\s\S]*?)(?=def|$)/g;
+    // Substituir todas as funções por uma string vazia
+    let textoSemFuncoes = classe.content.replace(regexFuncao, '');
+
+    const regex = /^\s*([a-zA-Z_]\w*)(?:\s*:\s*([a-zA-Z_]\w*))?(?:\s*=\s*(.*))?\s*$/gm;
+
+    let match;
+    while ((match = regex.exec(textoSemFuncoes)) !== null) {
+      const nome = match[1];
+      const tipo = match[2] || null;
+      const atribuicao = match[3] !== undefined ? match[3].trim() : null;
+
+      if (tipo && tipo[0] === tipo[0].toUpperCase()) {
+        dot_code += `${classe.name} -> ${tipo} [arrowtail=none, dir=back]\n`;
+        //variaveis.push({ nome, tipo, atribuicao });
+      }
+    }
+    return dot_code;
+  }
+
   function generate_dot_code(classes: Class[]): string {
     let dot_code = "";
     classes.forEach((classe) => {
@@ -209,6 +230,8 @@ function useTextManipulation(): [string, (newText: string) => void] {
       // desenha as composições
       dot_code += draw_composition(classe)
 
+      // desenha as associações simples
+      dot_code += draw_association(classe)
     });
 
     return dot_code;
@@ -219,21 +242,7 @@ function useTextManipulation(): [string, (newText: string) => void] {
   const setTextManipulated = (newText: string): void => {
     const code = removerComentariosPython(newText)
     const classes: Class[] = splitClasses(code);
-    console.log(classes);
 
-
-    /* classes.forEach((classe, index) => {
-  
-      console.log(`Classe ${index + 1}:`);
-      console.log(`Nome: ${classe.name}`);
-      console.log(`Herança: ${classe.inheritance ? classe.inheritance : 'Nenhuma'}`);
-      console.log(`Funções:`);
-      classe.functions.forEach((func, i) => {
-        console.log(`    ${i + 1}. ${func.name}(${func.params}):`);
-        console.log(func.content);
-      });
-      console.log(`Conteúdo:\n${classe.content}\n`);
-    }); */
     const dotcode = generate_dot_code(classes);
 
     let userList = "digraph ClassDiagram {graph[rankdir=\"TB\"] node[shape=record,style=filled,fillcolor=gray95] edge[dir=back, arrowtail=empty]\n" + dotcode + "}\n";
