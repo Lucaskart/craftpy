@@ -10,7 +10,10 @@ import html2canvas from 'html2canvas';
 //Commit for deploy.
 
 function DiagramGenerator() {
-    const codeText = `class Patient:
+    let codeText = `class Patient:
+    variavel_de_classe = 10
+    outra_variavel: int
+    terceira_variavel: str = "Exemplo"
     def __init__(self, id:int, examRequest:ExamRequest, name:str, sex:str, birth:date):
         self.id = id
         self.name = name
@@ -99,6 +102,34 @@ class Teacher(Doctor):
     def __init__(self, academicTitle:str):
         self.academicTitle = academicTitle
       `;
+
+    codeText = `
+class Person:
+    address: Address
+    def __init__(self, name: str, age: int):
+        self.name: str = name
+        self.age: int = age
+
+class Address:
+    def __init__(self, street: str, city: str):
+        self.street: str = street
+        self.city: str = city
+
+class Job:
+    def __init__(self, position: str, salary: float):
+        self.position: str = position
+        self.salary: float = salary
+
+# Herança: Student é uma subclasse de Person
+class Student(Person):
+    def __init__(self, name: str, age: int, school: str):
+        super().__init__(name, age)
+        self.school: str = school
+
+class ComposicaoClass:
+    def __init__(self):
+        self.person = Person("Fulano", 18)
+  `
     const [code, setCode] = React.useState(codeText);
     const [manipulatedText, setManipulatedText] = useTextManipulation();
 
@@ -110,7 +141,7 @@ class Teacher(Doctor):
     }
 
     const handleButtonClick = () => {
-        if (code != ""){
+        if (code != "") {
             setManipulatedText(code);
         } else {
             setLogtext("No code identified in the code field.")
@@ -119,21 +150,21 @@ class Teacher(Doctor):
 
     const handleKeyPress = useCallback((e: { shiftKey: any; key: string; }) => {
         //Shift + S = Salvar Código
-        if(e.shiftKey && e.key.toLowerCase() === "s") {
+        if (e.shiftKey && e.key.toLowerCase() === "s") {
             handleDownloadCode();
-        } 
+        }
 
         //Shift + D = Salvar Imagem/Diagrama
-        if(e.shiftKey && e.key.toLowerCase() === "d") {
+        if (e.shiftKey && e.key.toLowerCase() === "d") {
             handleDownloadImage();
-        } 
+        }
 
         //Shift + Enter = Compilar
-        if(e.shiftKey && e.key === "Enter") {
+        if (e.shiftKey && e.key === "Enter") {
             handleButtonClick();
-        } 
+        }
     }, []);
-    
+
     useEffect(() => {
         document.addEventListener('keydown', handleKeyPress);
 
@@ -148,9 +179,9 @@ class Teacher(Doctor):
 
     const handleDownloadImage = async () => {
         const element = document.getElementById('print')!,
-        canvas = await html2canvas(element),
-        data = canvas.toDataURL('image/jpg'),
-        link = document.createElement('a');
+            canvas = await html2canvas(element),
+            data = canvas.toDataURL('image/jpg'),
+            link = document.createElement('a');
 
         link.href = data;
         link.download = 'downloaded-image.jpg';

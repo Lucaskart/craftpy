@@ -177,17 +177,47 @@ function useTextManipulation(): [string, (newText: string) => void] {
 
   function draw_composition(classe: Class): string {
     let dot_code = "";
-
     const linhas_construtor = classe.functions[0].content.trim().split('\n');
-    for (const linha of linhas_construtor) {
-      const match_objeto = linha.trim().match(
-        /self\.(\w+)\s*=\s*(\w+)\(.*\)/);
-      if (match_objeto) {
-        const atributo = match_objeto[1];
-        const classe_objeto = match_objeto[2];
-        dot_code += `${classe.name} -> ${classe_objeto} [arrowtail=diamond, dir=back, taillabel="+ ${atributo}", labeldistance=2]\n`;
+
+    const codigoRegex = {
+      pattern: /^(?:\s*self\.)?[a-zA-Z_]\w*\s*=\s*(\w+)\s*\("([^"]+)",\s*(\d+)\)\s*$/,
+      extractClassName: function(line: string) {
+        const match = line.match(this.pattern);
+        if (match) {
+          const [, classe] = match;
+          return classe;
+        } else {
+          return null;
+        }
       }
+    };
+
+    for (const linha of linhas_construtor) {
+
+
+      const regex = /^\s*self\.([a-zA-Z_]\w*)(?:\s*:\s*([a-zA-Z_]\w*))?(?:\s*=\s*(.*))?\s*$/gm;
+
+      let match;
+      while ((match = regex.exec(linha)) !== null) {
+        const nome = match[1];
+        const tipo = match[2] || null;
+        const atribuicao = match[3] !== undefined ? match[3].trim() : null;
+
+        if (atribuicao && (atribuicao[0] === atribuicao[0].toUpperCase())) {
+          if (tipo) {
+            dot_code += `${classe.name} -> ${tipo} [arrowtail=diamond, dir=back, taillabel="+ ${tipo}", labeldistance=2]\n`;
+          } else {
+            const tipo = codigoRegex.extractClassName(match[0]);
+            dot_code += `${classe.name} -> ${tipo} [arrowtail=diamond, dir=back, taillabel="+ ${tipo}", labeldistance=2]\n`;
+            
+          }
+        }
+      }
+
+
     }
+
+
     return dot_code;
   }
 
