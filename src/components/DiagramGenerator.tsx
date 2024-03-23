@@ -2,7 +2,7 @@ import React, { useEffect, useCallback } from "react";
 import useTextManipulation from '../hooks/useTextManipulation';
 import { Graphviz } from 'graphviz-react';
 import CodeMirror from '@uiw/react-codemirror';
-import { javascript } from '@codemirror/lang-javascript';
+import { python } from '@codemirror/lang-python';
 import { Box, Button, Grid, Flex, Heading, TextArea } from '@radix-ui/themes';
 import { CodeIcon, DownloadIcon, GearIcon } from '@radix-ui/react-icons'
 import html2canvas from 'html2canvas';
@@ -231,7 +231,7 @@ class ComposicaoClass:
                                 height="520px"
                                 width="100%"
                                 theme="dark"
-                                extensions={[javascript({ jsx: true })]}
+                                extensions={[python()]}
                                 onChange={onChange}
                             />
                         </Box>

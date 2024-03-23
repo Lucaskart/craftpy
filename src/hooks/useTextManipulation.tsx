@@ -199,16 +199,16 @@ function useTextManipulation(): [string, (newText: string) => void] {
 
       let match;
       while ((match = regex.exec(linha)) !== null) {
-        //const nome = match[1];
+        const nome = match[1];
         const tipo = match[2] || null;
         const atribuicao = match[3] !== undefined ? match[3].trim() : null;
 
         if (atribuicao && (atribuicao[0] === atribuicao[0].toUpperCase())) {
           if (tipo) {
-            dot_code += `${classe.name} -> ${tipo} [arrowtail=diamond, dir=back, taillabel="+ ${tipo}", labeldistance=2]\n`;
+            dot_code += `${classe.name} -> ${tipo} [arrowtail=diamond, dir=back, taillabel="+ ${nome}", labeldistance=2]\n`;
           } else {
             const tipo = codigoRegex.extractClassName(match[0]);
-            dot_code += `${classe.name} -> ${tipo} [arrowtail=diamond, dir=back, taillabel="+ ${tipo}", labeldistance=2]\n`;
+            dot_code += `${classe.name} -> ${tipo} [arrowtail=diamond, dir=back, taillabel="+ ${nome}", labeldistance=2]\n`;
             
           }
         }
@@ -232,12 +232,12 @@ function useTextManipulation(): [string, (newText: string) => void] {
 
     let match;
     while ((match = regex.exec(textoSemFuncoes)) !== null) {
-      //const nome = match[1];
+      const nome = match[1] || null;
       const tipo = match[2] || null;
       //const atribuicao = match[3] !== undefined ? match[3].trim() : null;
 
       if (tipo && tipo[0] === tipo[0].toUpperCase()) {
-        dot_code += `${classe.name} -> ${tipo} [arrowtail=none, dir=back]\n`;
+        dot_code += `${classe.name} -> ${tipo} [arrowhead=vee, dir=forward, headlabel="+ ${nome}", labeldistance=2]\n`;
         //variaveis.push({ nome, tipo, atribuicao });
       }
     }
