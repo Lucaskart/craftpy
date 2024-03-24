@@ -199,16 +199,21 @@ function useTextManipulation(): [string, (newText: string) => void] {
 
       let match;
       while ((match = regex.exec(linha)) !== null) {
-        const nome = match[1];
+        var privacySymbol = "+";
+        var nome = match[1];
+        if (nome.substring(0, 2) === "__") {
+          nome = nome.replace("__", "");
+          privacySymbol = "-";
+        }
         const tipo = match[2] || null;
         const atribuicao = match[3] !== undefined ? match[3].trim() : null;
 
         if (atribuicao && (atribuicao[0] === atribuicao[0].toUpperCase())) {
           if (tipo) {
-            dot_code += `${classe.name} -> ${tipo} [arrowtail=diamond, dir=back, taillabel="+ ${nome}", labeldistance=2]\n`;
+            dot_code += `${classe.name} -> ${tipo} [arrowtail=diamond, dir=back, taillabel="${privacySymbol} ${nome}", labeldistance=2]\n`;
           } else {
             const tipo = codigoRegex.extractClassName(match[0]);
-            dot_code += `${classe.name} -> ${tipo} [arrowtail=diamond, dir=back, taillabel="+ ${nome}", labeldistance=2]\n`;
+            dot_code += `${classe.name} -> ${tipo} [arrowtail=diamond, dir=back, taillabel="${privacySymbol} ${nome}", labeldistance=2]\n`;
             
           }
         }
@@ -232,12 +237,17 @@ function useTextManipulation(): [string, (newText: string) => void] {
 
     let match;
     while ((match = regex.exec(textoSemFuncoes)) !== null) {
-      const nome = match[1] || null;
+      var privacySymbol = "+";
+      var nome = match[1];
+      if (nome.substring(0, 2) === "__") {
+        nome = nome.replace("__", "");
+        privacySymbol = "-";
+      }
       const tipo = match[2] || null;
       //const atribuicao = match[3] !== undefined ? match[3].trim() : null;
 
       if (tipo && tipo[0] === tipo[0].toUpperCase()) {
-        dot_code += `${classe.name} -> ${tipo} [arrowhead=vee, dir=forward, headlabel="+ ${nome}", labeldistance=2]\n`;
+        dot_code += `${classe.name} -> ${tipo} [arrowhead=vee, dir=forward, headlabel="${privacySymbol} ${nome}", labeldistance=2]\n`;
         //variaveis.push({ nome, tipo, atribuicao });
       }
     }
