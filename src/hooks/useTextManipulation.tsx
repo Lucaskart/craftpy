@@ -166,9 +166,14 @@ function useTextManipulation(): [string, (newText: string) => void] {
     const parametros_match = func.params.match(/\b(\w+)\s*:\s*(\w+)\b/g);
     if (parametros_match != null) {
       for (const param of parametros_match) {
-        const [variavel, tipo] = param.split(':').map(item => item.trim());
+        var [variavel, tipo] = param.split(':').map(item => item.trim());
+        var privacySymbol = "+";
+        if (variavel.substring(0, 2) === "__") {
+          variavel = variavel.replace("__", "");
+          privacySymbol = "-";
+        }
         if (tipo[0] === tipo[0].toUpperCase()) {
-          dot_code += `${classe.name} -> ${tipo} [arrowtail=odiamond, dir=back, taillabel="+ ${variavel}", labeldistance=2]\n`;
+          dot_code += `${classe.name} -> ${tipo} [arrowtail=odiamond, dir=back, taillabel="${privacySymbol} ${variavel}", labeldistance=2]\n`;
         }
       }
     }

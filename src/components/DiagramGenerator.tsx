@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from "react";
+import React from "react";
 import useTextManipulation from '../hooks/useTextManipulation';
 import { Graphviz } from 'graphviz-react';
 import CodeMirror from '@uiw/react-codemirror';
@@ -105,10 +105,11 @@ class Teacher(Doctor):
 
     codeText = `
 class Person:
-    address: Address
-    def __init__(self, name: str, age: int):
+    __address: Address
+    def __init__(self, name: str, age: int, __job: Job):
         self.name: str = name
         self.age: int = age
+        self.job: job = job
 
 class Address:
     def __init__(self, street: str, city: str):
@@ -117,7 +118,7 @@ class Address:
 
 class Job:
     def __init__(self, position: str, salary: float):
-        self.position: str = position
+        self.__position: str = position
         self.salary: float = salary
 
 # Herança: Student é uma subclasse de Person
@@ -128,7 +129,7 @@ class Student(Person):
 
 class ComposicaoClass:
     def __init__(self):
-        self.person = Person("Fulano", 18)
+        self.__person = Person("Fulano", 18)
   `
     const [code, setCode] = React.useState(codeText);
     const [manipulatedText, setManipulatedText] = useTextManipulation();
@@ -147,31 +148,6 @@ class ComposicaoClass:
             setLogtext("No code identified in the code field.")
         }
     };
-
-    const handleKeyPress = useCallback((e: { shiftKey: any; key: string; }) => {
-        //Shift + S = Salvar Código
-        if (e.shiftKey && e.key.toLowerCase() === "s") {
-            handleDownloadCode();
-        }
-
-        //Shift + D = Salvar Imagem/Diagrama
-        if (e.shiftKey && e.key.toLowerCase() === "d") {
-            handleDownloadImage();
-        }
-
-        //Shift + Enter = Compilar
-        if (e.shiftKey && e.key === "Enter") {
-            handleButtonClick();
-        }
-    }, []);
-
-    useEffect(() => {
-        document.addEventListener('keydown', handleKeyPress);
-
-        return () => {
-            document.removeEventListener('keydown', handleKeyPress);
-        };
-    }, [handleKeyPress]);
 
     const onChange = React.useCallback((val: React.SetStateAction<string>) => {
         setCode(val);
@@ -206,17 +182,17 @@ class ComposicaoClass:
             <Box position="static" p="3" width="100%">
                 <Grid columns="3" gap="3">
                     <Flex gap="3" justify="start">
-                        <Button size="2" onClick={handleDownloadCode}>
+                        <Button accessKey='1' size="2" onClick={handleDownloadCode}>
                             <CodeIcon width="16" height="16" /> Salvar Código
                         </Button>
                     </Flex>
                     <Flex gap="1" justify="center">
-                        <Button size="2" onClick={handleButtonClick}>
+                        <Button accessKey='2' size="2" onClick={handleButtonClick}>
                             <GearIcon width="16" height="16" /> Compilar
                         </Button>
                     </Flex>
                     <Flex gap="3" justify="end">
-                        <Button size="2" onClick={handleDownloadImage}>
+                        <Button accessKey='3' size="2" onClick={handleDownloadImage}>
                             <DownloadIcon width="16" height="16" /> Salvar Diagrama
                         </Button>
                     </Flex>
