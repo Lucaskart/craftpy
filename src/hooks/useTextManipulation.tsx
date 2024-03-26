@@ -103,7 +103,7 @@ function useTextManipulation(): [string, (newText: string) => void] {
         while ((match = regex.exec(func.content)) !== null) {
           const p = {
             nome: match[1],
-            tipo: match[2] || 'None',
+            tipo: match[2] || 'null',
             atribuicao: match[3].trim()
           };
           internas.push(p);
@@ -162,25 +162,65 @@ function useTextManipulation(): [string, (newText: string) => void] {
 
   function draw_aggregation(classe: Class): string {
     let dot_code = "";
-    const func = classe.functions[0]
-    const parametros_match = func.content.match(/^\s*self\.([a-zA-Z_]\w*)(?:\s*:\s*([a-zA-Z_]\w*))(?:\s*=\s*([a-zA-Z_]*))?\s*$/gm);
-    if (parametros_match != null) {
-      for (const param of parametros_match) {
-        var [variavelcheia, tipocheio] = param.split(':').map(item => item.trim());
-        var variavelsplit = variavelcheia.split('.'); 
-        var variavel = variavelsplit[1];
-        var tiposplit = tipocheio.split('='); 
-        var tipo = tiposplit[0];
-        var privacySymbol = "+";
-        if (variavel.substring(0, 2) === "__") {
-          variavel = variavel.replace("__", "");
-          privacySymbol = "-";
+
+    classe.functions.forEach((func) => {
+      if (func.name == "__init__") { // construtor
+
+        // extrai as variáveis parâmetros
+        const parametros_match = func.params.match(/\b(\w+)\s*:\s*(\w+)\b/g);
+        const parametros: { nome: string; tipo: string; }[] = [];
+        if (parametros_match != null) {
+          for (const param of parametros_match) {
+            const [variavel, tipo] = param.split(':').map(item => item.trim());
+            const v = {
+              nome: variavel,
+              tipo: tipo,
+            };
+            parametros.push(v);
+          }
         }
-        if (tipo[0] === tipo[0].toUpperCase()) {
-          dot_code += `${classe.name} -> ${tipo} [arrowtail=odiamond, dir=back, label="${privacySymbol} ${variavel}", labeldistance=2]\n`;
+
+        // Expressão regular para extrair as variáveis internas do contrutor, seus tipos (se fornecidos) e atribuições
+        const regex = /self\.(\w+)(?::(\w+))?\s*=\s*(.+)$/gm;
+        let match;
+        const internas: { nome: string; tipo: string; atribuicao: string; }[] = [];
+
+        while ((match = regex.exec(func.content)) !== null) {
+          const p = {
+            nome: match[1],
+            tipo: match[2] || 'null',
+            atribuicao: match[3].trim()
+          };
+          internas.push(p);
         }
+
+        //obs.: o nome das variáveis que serão mostrados no diagrama serão as variáveis de dentro do construtor
+
+        // atualiza o tipo com base nos parâmetros
+        internas.forEach((v) => {
+          parametros.forEach((p) => {
+            if (v.atribuicao == p.nome) {
+              v.tipo = p.tipo
+            }
+          })
+        })
+
+        // Mapeamento das variáveis objetos
+        internas.forEach((_v) => {
+          // Desenha apenas as variáveis associadas aos parâmetros e sem atribuição por Objeto
+          if (_v.tipo[0] === _v.tipo[0].toUpperCase() && _v.atribuicao[0] !== _v.atribuicao[0].toUpperCase()) {
+            //internas.splice(index, 1);
+            console.log(_v);
+            // construção do dot code para as variáveis
+            if (_v.nome.substring(0, 2) === "__") {
+              dot_code += `${classe.name} -> ${_v.tipo} [arrowtail=odiamond, dir=back, label="- ${_v.nome.replace("__", "")}", labeldistance=2]\n`;
+            } else {
+              dot_code += `${classe.name} -> ${_v.tipo} [arrowtail=odiamond, dir=back, label="+ ${_v.nome.replace("__", "")}", labeldistance=2]\n`;
+            }
+          }
+        });
       }
-    }
+    });
     return dot_code;
   }
 
@@ -190,7 +230,7 @@ function useTextManipulation(): [string, (newText: string) => void] {
 
     const codigoRegex = {
       pattern: /^(?:\s*self\.)?[a-zA-Z_]\w*\s*=\s*(\w+)\s*\("([^"]+)",\s*(\d+)\)\s*$/,
-      extractClassName: function(line: string) {
+      extractClassName: function (line: string) {
         const match = line.match(this.pattern);
         if (match) {
           const [, classe] = match;
@@ -224,15 +264,11 @@ function useTextManipulation(): [string, (newText: string) => void] {
           } else {
             const tipo = codigoRegex.extractClassName(match[0]);
             dot_code += `${classe.name} -> ${tipo} [arrowtail=diamond, dir=back, label="${privacySymbol} ${nome}", labeldistance=2]\n`;
-            
+
           }
         }
       }
-
-
     }
-
-
     return dot_code;
   }
 
@@ -255,7 +291,7 @@ function useTextManipulation(): [string, (newText: string) => void] {
         privacySymbol = "-";
       }
       const tipo = match[3] || null;
-      if (match[2] == "list["){
+      if (match[2] == "list[") {
         multiplicity = "*";
       }
       //const atribuicao = match[3] !== undefined ? match[3].trim() : null;
