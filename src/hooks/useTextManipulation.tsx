@@ -120,21 +120,16 @@ function useTextManipulation(): [string, (newText: string) => void] {
           })
         })
 
-        // deleta as variáveis objetos
-        internas.forEach((_v, index) => {
-          if (_v.tipo[0] === _v.tipo[0].toUpperCase()) {
-            internas.splice(index, 1);
+        // construção do dot code para as variáveis
+        internas.forEach((_v) => {
+          if (_v.tipo[0] != _v.tipo[0].toUpperCase() && _v.atribuicao[0] !== _v.atribuicao[0].toUpperCase()) {
+            if (_v.nome.substring(0, 2) === "__") {
+              attrs += `- ${_v.nome.replace("__", "")}:${_v.tipo}\\l`;
+            } else {
+              attrs += `+ ${_v.nome}:${_v.tipo}\\l`;
+            }
           }
         });
-
-        // construção do dot code para as variáveis
-        internas.forEach((variavel) => {
-          if (variavel.nome.substring(0, 2) === "__") {
-            attrs += `- ${variavel.nome.replace("__", "")}:${variavel.tipo}\\l`;
-          } else {
-            attrs += `+ ${variavel.nome}:${variavel.tipo}\\l`;
-          }
-        })
 
       } else { //demais funções
         if (func.name.substring(0, 2) === "__") {
@@ -209,8 +204,6 @@ function useTextManipulation(): [string, (newText: string) => void] {
         internas.forEach((_v) => {
           // Desenha apenas as variáveis associadas aos parâmetros e sem atribuição por Objeto
           if (_v.tipo[0] === _v.tipo[0].toUpperCase() && _v.atribuicao[0] !== _v.atribuicao[0].toUpperCase()) {
-            //internas.splice(index, 1);
-            console.log(_v);
             // construção do dot code para as variáveis
             if (_v.nome.substring(0, 2) === "__") {
               dot_code += `${classe.name} -> ${_v.tipo} [arrowtail=odiamond, dir=back, label="- ${_v.nome.replace("__", "")}", labeldistance=2]\n`;
