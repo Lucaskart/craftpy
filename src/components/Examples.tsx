@@ -6,11 +6,11 @@ function Examples() {
 
     const example1 = `class Patient:
     def __init__(self, id:int, examRequest:ExamRequest, name:str, sex:str, birth:date):
-        self.id = id
-        self.name = name
-        self.sex = sex
-        self.birth = birth
-        self.exameRequest = examRequest
+        self.id: int = id
+        self.name: str = name
+        self.sex: str = sex
+        self.birth: date = birth
+        self.exameRequest: ExamRequest = examRequest
         
     def calculateAge(void):
         return void
@@ -23,9 +23,9 @@ function Examples() {
 
 class Exam:
     def __init__(self, examName:str, examRequestList:ExamRequest, recommendation:str):
-        self.examName = examName
-        self.recommendation = recommendation
-        self.examRequestList = examRequestList
+        self.examName: str = examName
+        self.recommendation: str = recommendation
+        self.examRequestList: ExamRequest = examRequestList
     
     def keep(void):
         return void
@@ -34,13 +34,13 @@ class Exam:
         return void
     
 class ExamRequest:
-    def __init__(self, issueDateTime:date, dateRealization:date, dateTimeCancellation:date, orderStatus:str, PDFFile:str):
-        self.issueDateTime = issueDateTime
-        self.dateRealization = dateRealization
-        self.dateTimeCancellation = dateTimeCancellation
-        self.orderStatus = orderStatus
-        self.PDFFile = PDFFile
-        self.doctor = Doctor(name = "Joao", numberCRM = "1234")
+    def __init__(self, issueDateTime:date, dateRealization:date, dateTimeCancellation:date, orderStatus:str, pfdFile:str):
+        self.issueDateTime: date = issueDateTime
+        self.dateRealization: date = dateRealization
+        self.dateTimeCancellation: date = dateTimeCancellation
+        self.orderStatus: str = orderStatus
+        self.pfdFile: str = pfdFile
+        self.doctor: Doctor = Doctor(name = "Joao", numberCRM = "1234")
         
     def issue(void):
         return void
@@ -59,11 +59,11 @@ class ExamRequest:
     
 class ExamReport:
     def __init__(self, description:str, issueDate:str, examRequest:ExamRequest, statusReport:str):
-        self.description = description
-        self.issueDate = issueDate
-        self.statusReport = statusReport
-        self.examRequest = examRequest
-        self.doctor = Doctor(name = "Joao", numberCRM = "1234")
+        self.description: str = description
+        self.issueDate: str = issueDate
+        self.statusReport: str = statusReport
+        self.examRequest: ExamRequest = examRequest
+        self.doctor: Doctor = Doctor(name = "Joao", numberCRM = "1234")
 
     def issue(void):
         return void
@@ -75,11 +75,11 @@ class ExamReport:
         return void
 
 class Doctor:
-    address = Address(street = "Main", number = 32)
-          
+    address: Address = Address(street = "Main", number = 32)
+            
     def __init__(self, name:str, numberCRM:str):
-        self.name = name
-        self.numberCRM = numberCRM
+        self.name: str = name
+        self.numberCRM: str = numberCRM
     
     def issue(void):
         return void
@@ -89,16 +89,16 @@ class Doctor:
     
 class Resident(Doctor):
     def __init__(self, yearResidence:str):
-        self.yearResidence = yearResidence
+        self.yearResidence: str = yearResidence
 
 class Teacher(Doctor):
     def __init__(self, academicTitle:str):
-        self.academicTitle = academicTitle
+        self.academicTitle: str = academicTitle
 
 class Address():
-  def __init__(self, street:str, number:int):
-        self.street = street
-        self.number = number
+    def __init__(self, street:str, number:int):
+        self.street: str = street
+        self.number: int = number
 `;
 
     return (

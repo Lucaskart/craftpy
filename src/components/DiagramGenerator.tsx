@@ -10,106 +10,18 @@ import html2canvas from 'html2canvas';
 //Commit for deploy.
 
 function DiagramGenerator() {
-    let codeText = `class Patient:
-    variavel_de_classe = 10
-    outra_variavel: int
-    terceira_variavel: str = "Exemplo"
-    def __init__(self, id:int, examRequest:ExamRequest, name:str, sex:str, birth:date):
-        self.id = id
-        self.name = name
-        self.sex = sex
-        self.birth = birth
-        self.exameRequest = examRequest
-        
-    def calculateAge(void):
-        return void
-    
-    def keep(void):
-        return void
-
-    def select(void):
-        return void
-
-class Exam:
-    def __init__(self, examName:str, examRequestList:ExamRequest, recommendation:str):
-        self.examName = examName
-        self.recommendation = recommendation
-        self.examRequestList = examRequestList
-    
-    def keep(void):
-        return void
-
-    def select(void):
-        return void
-    
-class ExamRequest:
-    def __init__(self, issueDateTime:date, dateRealization:date, dateTimeCancellation:date, orderStatus:str, PDFFile:str):
-        self.issueDateTime = issueDateTime
-        self.dateRealization = dateRealization
-        self.dateTimeCancellation = dateTimeCancellation
-        self.orderStatus = orderStatus
-        self.PDFFile = PDFFile
-        self.doctor = Doctor(name = "Joao", numberCRM = "1234")
-        
-    def issue(void):
-        return void
-
-    def select(void):
-        return void
-
-    def registerExam(void):
-        return void
-
-    def cancelOrder(void):
-        return void
-
-    def viewPDF(void):
-        return void
-    
-class ExamReport:
-    def __init__(self, description:str, issueDate:str, examRequest:ExamRequest, statusReport:str):
-        self.description = description
-        self.issueDate = issueDate
-        self.statusReport = statusReport
-        self.examRequest = examRequest
-        self.doctor = Doctor(name = "Joao", numberCRM = "1234")
-
-    def issue(void):
-        return void
-
-    def select(void):
-        return void
-
-    def review(void):
-        return void
-
-class Doctor:
-    def __init__(self, name:str, numberCRM:str):
-        self.name = name
-        self.numberCRM = numberCRM
-    
-    def issue(void):
-        return void
-
-    def select(void):
-        return void
-    
-class Resident(Doctor):
-    def __init__(self, yearResidence:str):
-        self.yearResidence = yearResidence
-
-class Teacher(Doctor):
-    def __init__(self, academicTitle:str):
-        self.academicTitle = academicTitle
-      `;
-
-    codeText = `
+    let codeText = `
 class Person:
-    __address: Address
-    def __init__(self, name: str, age: int, __job: Job):
+    __bankacc: list[BankAccount] = list()
+    address: Address
+    def __init__(self, name: str, age: int, job: Job):
         self.name: str = name
         self.age: int = age
-        self.job: job = job
+        self.__job: Job = job
+
+class BankAccount:
+    def __init__(self, number:int):
+        self.number: int = number
 
 class Address:
     def __init__(self, street: str, city: str):
