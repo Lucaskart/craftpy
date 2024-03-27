@@ -104,7 +104,7 @@ function useTextManipulation(): [string, (newText: string) => void] {
           const p = {
             nome: match[1],
             tipo: match[2] || 'null',
-            atribuicao: match[3].trim()
+            atribuicao: match[3].trim() || 'null',
           };
           internas.push(p);
         }
@@ -122,7 +122,7 @@ function useTextManipulation(): [string, (newText: string) => void] {
 
         // construção do dot code para as variáveis
         internas.forEach((_v) => {
-          if (_v.tipo[0] != _v.tipo[0].toUpperCase() && _v.atribuicao[0] !== _v.atribuicao[0].toUpperCase()) {
+          if ((_v.tipo[0] != _v.tipo[0].toUpperCase() && _v.atribuicao[0] !== _v.atribuicao[0].toUpperCase()) || _v.tipo[0] != _v.tipo[0].toUpperCase()) {
             if (_v.nome.substring(0, 2) === "__") {
               attrs += `- ${_v.nome.replace("__", "")}:${_v.tipo}\\l`;
             } else {
@@ -220,44 +220,28 @@ function useTextManipulation(): [string, (newText: string) => void] {
   function draw_composition(classe: Class): string {
     let dot_code = "";
     const linhas_construtor = classe.functions[0].content.trim().split('\n');
-
-    const codigoRegex = {
-      pattern: /^(?:\s*self\.)?[a-zA-Z_]\w*\s*=\s*(\w+)\s*\("([^"]+)",\s*(\d+)\)\s*$/,
-      extractClassName: function (line: string) {
-        const match = line.match(this.pattern);
-        if (match) {
-          const [, classe] = match;
-          return classe;
-        } else {
-          return null;
-        }
-      }
-    };
+    // Regex para verificar se uma atribuição possui apenas números ou string
+    var regexOnlyNumber = /^("[^"]*"|'[^']*'|[\d]+)$/;
 
     for (const linha of linhas_construtor) {
-
-
-      const regex = /^\s*self\.([a-zA-Z_]\w*)(?:\s*:\s*([a-zA-Z_]\w*))?(?:\s*=\s*(.*))?\s*$/gm;
-
+      const regex = /self\.(\w+)(?::(\w+))?\s*=\s*([^\d\s].+)$/gm;
       let match;
       while ((match = regex.exec(linha)) !== null) {
-        var privacySymbol = "+";
-        var nome = match[1];
-        if (nome.substring(0, 2) === "__") {
-          nome = nome.replace("__", "");
-          privacySymbol = "-";
-        }
-        const tipo = match[2] || null;
-        const atribuicao = match[3] !== undefined ? match[3].trim() : null;
+        const p = {
+          nome: match[1],
+          tipo: match[2] || null,
+          atribuicao: match[3].trim() || 'null',
+        };
 
-        if (atribuicao && (atribuicao[0] === atribuicao[0].toUpperCase())) {
-          if (tipo) {
-            console.log(nome)
-            dot_code += `${classe.name} -> ${tipo} [arrowtail=diamond, dir=back, label="${privacySymbol} ${nome}", labeldistance=2]\n`;
+        if (p.atribuicao && (p.atribuicao[0] === p.atribuicao[0].toUpperCase()) && !regexOnlyNumber.test(p.atribuicao)) {
+          if (p.tipo) {
+            dot_code += `${classe.name} -> ${p.tipo} [arrowtail=diamond, dir=back, label="${p.nome.substring(0, 2) === "__" ? "-" : "+"} ${p.nome.replace("__", "")}", labeldistance=2]\n`;
           } else {
-            const tipo = codigoRegex.extractClassName(match[0]);
-            dot_code += `${classe.name} -> ${tipo} [arrowtail=diamond, dir=back, label="${privacySymbol} ${nome}", labeldistance=2]\n`;
-
+            const regex = /(\w+)\s*\(.*$/gm;
+            while ((match = regex.exec(p.atribuicao)) !== null) {
+              //console.log(match);
+              dot_code += `${classe.name} -> ${match[1]} [arrowtail=diamond, dir=back, label="${p.nome.substring(0, 2) === "__" ? "-" : "+"} ${p.nome.replace("__", "")}", labeldistance=2]\n`;
+            }
           }
         }
       }
