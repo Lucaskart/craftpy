@@ -18,6 +18,11 @@ class Person:
         self.name: str = name
         self.age: int = age
         self.__job: Job = job
+        self.var_const_tipo:int = 10
+        self.var_const_semtipo = 10
+        self.var_string_semtipo = "djafkdsljfdlkdsj"
+        self.var_string_tipo:str = "djafkdsljfdlkdsj"
+
 
 class BankAccount:
     def __init__(self, number:int):
@@ -42,6 +47,7 @@ class Student(Person):
 class ComposicaoClass:
     def __init__(self):
         self.__person = Person("Fulano", 18)
+        self.jobFulano:Job = Job()
   `
     const [code, setCode] = React.useState(codeText);
     const [manipulatedText, setManipulatedText] = useTextManipulation();
