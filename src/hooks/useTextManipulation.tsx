@@ -236,7 +236,9 @@ function useTextManipulation(): [string, (newText: string) => void] {
         } else { // desenha as agregações
           // Se não tiver atribuições começando com letra maiúscula
           if (attr.value && attr.value[0] !== attr.value[0].toUpperCase()) {
-            dot_content += `${classe.name} -> ${attr.type} [arrowtail=odiamond, dir=back, label="- ${attr.name}", labeldistance=2]\n`;
+            dot_content += `${classe.name} -> ${attr.type} [arrowtail=odiamond, dir=back, label="${attr.access} ${attr.name}", labeldistance=2]\n`;
+          } else { // desenha as composições
+            dot_content += `${classe.name} -> ${attr.type} [arrowtail=diamond, dir=back, label="${attr.access} ${attr.name}", labeldistance=2]\n`;
           }
         }
       })
