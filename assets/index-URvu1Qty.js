@@ -213,6 +213,14 @@ class AnotherClass(MyClass):
     @usecase
     def andar(self):
         self.posicao += 1
+    
+    @extends
+    def desgastePneu(self):
+        self.posicao += 1
+    
+    @include
+    def aumentarKM(self):
+        self.km +=1
 
 class Roda:
     def __init__(self, quantidade:int):
