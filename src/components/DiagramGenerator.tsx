@@ -23,10 +23,13 @@ class Person:
         self.var_string_semtipo = "djafkdsljfdlkdsj"
         self.var_string_tipo:str = "djafkdsljfdlkdsj"
 
-
 class BankAccount:
     def __init__(self, number:int):
         self.number: int = number
+    
+    @meu_decorator
+    def minha_funcao():
+        print("Minha função está sendo chamada")
 
 class Address:
     def __init__(self, street: str, city: str):
@@ -48,7 +51,44 @@ class ComposicaoClass:
     def __init__(self):
         self.__person = Person("Fulano", 18)
         self.jobFulano:Job = Job()
+class MyClass:
+    @classmethod
+    def my_method(cls, x):
+        print(x)
+
+    def __init__(self):
+        pass
+
+    def my_function(self, y):
+        print(y)
+    
+class AnotherClass(MyClass):
+    @staticmethod
+    def static_method(z):
+        print(z)
   `
+  codeText = `
+  class Carro(Automovel):
+    def __init__(self, marca:str, cor:str, roda:Roda):
+        self.marca = marca
+        self.cor:str = cor
+        self.roda:Roda = roda
+    
+    @usecase
+    def andar(self):
+        self.posicao += 1
+
+class Roda:
+    def __init__(self, quantidade:int):
+        self.quantidade: quantidade
+    
+    def desgaste(self):
+        pass
+
+class Automovel:
+    def __init__(self):
+        pass
+`;
     const [code, setCode] = React.useState(codeText);
     const [manipulatedText, setManipulatedText] = useTextManipulation();
 
