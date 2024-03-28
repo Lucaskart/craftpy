@@ -6,9 +6,19 @@ interface Class {
   inheritance: string | null;
   content: string;
   functions: Function[];
+  attributes?: Attribute[]
+
+}
+
+interface Attribute {
+  access: string,
+  name: string,
+  type: string,
+  value?: string
 }
 
 interface Function {
+  access: string,
   name: string;
   decorators: string[] | null;
   params: string;
@@ -18,6 +28,10 @@ interface Function {
 // Hook personalizado para manipulação de texto
 function useTextManipulation(): [string, (newText: string) => void] {
   const [text, setText] = useState<string>('');
+
+  function setTypeElement(name: string): string {
+    return name.substring(0, 2) === "__" ? "-" : "+"
+  }
 
   function removePythonComments(codigoPython: string) {
     // Expressão regular para remover comentários de uma linha
@@ -65,7 +79,13 @@ function useTextManipulation(): [string, (newText: string) => void] {
 
         //Extração dos decoradores
         const decorators = functionContentWithDecorator.match(/^@.*$/gm)
-        functions.push({ name: functionName, decorators: decorators, params: functionParams, content: functionContent });
+        functions.push({
+          access: setTypeElement(functionName),
+          name: functionName == "__init__" ? functionName : functionName.replace("__", ""),
+          decorators: decorators,
+          params: functionParams,
+          content: functionContent
+        });
       }
 
       // Construindo o objeto da classe
@@ -83,10 +103,12 @@ function useTextManipulation(): [string, (newText: string) => void] {
     return classes;
   }
 
-  function classDataExtraction(code: string): Class[] {
+  function getClassDataPythonCode(code: string): Class[] {
+
+    // Remove todos os tipos de comentários no código
     const codePython = removePythonComments(code)
 
-    // Array para armazenar as classes
+    // Extrai as informações básicas (que originam os relacionamentos)
     const classes: Class[] = extractPythonCodeInfo(codePython);
 
     console.log(classes);
@@ -98,6 +120,19 @@ function useTextManipulation(): [string, (newText: string) => void] {
   function drawClassDiagram(classes: Class[]): string {
     let dot_content = ""
 
+
+    classes.forEach((classe: Class) => {
+      let attrs = "";
+      let meth = "";
+
+      classe.functions.forEach((func) => {
+        if (func.name != "__init__") {
+          meth += `${func.access} ${func.name}()\\l`;
+        }
+      })
+      dot_content += `${classe.name} [label="{ {${classe.name}} | {${attrs}} | {${meth}} }", shape=record] \n`;
+    })
+
     let dot_code = "digraph ClassDiagram {graph[rankdir=\"TB\"] node[shape=record,style=filled,fillcolor=gray95] edge[dir=back, arrowtail=empty]\n" + dot_content + "}\n";
     return dot_code
   }
@@ -106,7 +141,7 @@ function useTextManipulation(): [string, (newText: string) => void] {
   const setTextManipulated = (codePython: string): void => {
 
     // Faz a extração dos dados das classes a partir de um código em Python
-    const classes: Class[] = classDataExtraction(codePython);
+    const classes: Class[] = getClassDataPythonCode(codePython);
 
     const dot_code = drawClassDiagram(classes);
     setText(dot_code);
