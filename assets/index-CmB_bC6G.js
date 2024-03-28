@@ -211,6 +211,7 @@ class AnotherClass(MyClass):
         self.roda:Roda = roda
     
     @usecase
+    @namedsadasdsadasdas
     def andar(self):
         self.posicao += 1
     
