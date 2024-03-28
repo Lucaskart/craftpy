@@ -1,5 +1,6 @@
 import { useState } from 'react';
 
+// Definindo interfaces em TypeScript
 interface Class {
   name: string;
   inheritance: string | null;
@@ -9,6 +10,7 @@ interface Class {
 
 interface Function {
   name: string;
+  decorators: string[] | null;
   params: string;
   content: string;
 }
@@ -17,7 +19,7 @@ interface Function {
 function useTextManipulation(): [string, (newText: string) => void] {
   const [text, setText] = useState<string>('');
 
-  function removerComentariosPython(codigoPython: string) {
+  function removePythonComments(codigoPython: string) {
     // Expressão regular para remover comentários de uma linha
     const regexComentariosUmaLinha = /#.*$/gm;
 
@@ -33,7 +35,7 @@ function useTextManipulation(): [string, (newText: string) => void] {
     return codigoPython;
   }
 
-  const splitClasses = (code: string): Class[] => {
+  const extractPythonCodeInfo = (code: string): Class[] => {
     // Usando regex para encontrar as definições de classe com ou sem herança
     const classPattern = /(?<!\w)class\b\s+(\w+)\s*(\((.*?)\))?:\s*(.*?)\s*(?=class\b|$)/gs;
     const classMatches = [...code.matchAll(classPattern)];
@@ -42,7 +44,9 @@ function useTextManipulation(): [string, (newText: string) => void] {
     const classes: Class[] = [];
 
     // Expressão regular para encontrar definições de função dentro do conteúdo da classe
-    const functionPattern = /.*?def\s+(\w+)\s*\((.*?)\):([\s\S]*?)(?=\s*(?!.*\bclass[\w\d])def|\s*$)/gs;
+    const functionPattern = /.*?def\s+(\w+)\s*\((.*?)\):([\s\S]*?)(?=\s*(?!.*\bclass[\w\d])@|def|\s*$)/gs;
+    //const functionPattern = /.*?(?:@\w+\s*)*def\s+(\w+)\s*\((.*?)\):([\s\S]*?)(?=\s*(?!.*\bclass[\w\d])def|\s*$)/gs
+
 
     // Dividindo o código em partes com base nas definições de classe
     for (const match of classMatches) {
@@ -57,7 +61,11 @@ function useTextManipulation(): [string, (newText: string) => void] {
         const functionName = functionMatch[1];
         const functionParams = functionMatch[2].replace(/ /g, "");
         const functionContent = functionMatch[3].trim().replace(/ /g, "");
-        functions.push({ name: functionName, params: functionParams, content: functionContent });
+        const functionContentWithDecorator = functionMatch[0].trim().replace(/ /g, "");
+
+        //Extração dos decoradores
+        const decorators = functionContentWithDecorator.match(/^@.*$/gm)
+        functions.push({ name: functionName, decorators: decorators, params: functionParams, content: functionContent });
       }
 
       // Construindo o objeto da classe
@@ -75,246 +83,33 @@ function useTextManipulation(): [string, (newText: string) => void] {
     return classes;
   }
 
-  function draw_class(classe: Class): string {
-    let attrs = "";
-    let meth = "";
-    classe.functions.forEach((func) => {
-      if (func.name == "__init__") { // construtor
+  function classDataExtraction(code: string): Class[] {
+    const codePython = removePythonComments(code)
 
-        // extrai as variáveis parâmetros
-        const parametros_match = func.params.match(/\b(\w+)\s*:\s*(\w+)\b/g);
-        const parametros: { nome: string; tipo: string; }[] = [];
-        if (parametros_match != null) {
-          for (const param of parametros_match) {
-            const [variavel, tipo] = param.split(':').map(item => item.trim());
-            const v = {
-              nome: variavel,
-              tipo: tipo,
-            };
-            parametros.push(v);
-          }
-        }
+    // Array para armazenar as classes
+    const classes: Class[] = extractPythonCodeInfo(codePython);
 
-        // Expressão regular para extrair as variáveis internas do contrutor, seus tipos (se fornecidos) e atribuições
-        const regex = /self\.(\w+)(?::(\w+))?\s*=\s*(.+)$/gm;
-        let match;
-        const internas: { nome: string; tipo: string; atribuicao: string; }[] = [];
+    console.log(classes);
 
-        while ((match = regex.exec(func.content)) !== null) {
-          const p = {
-            nome: match[1],
-            tipo: match[2] || 'null',
-            atribuicao: match[3].trim() || 'null',
-          };
-          internas.push(p);
-        }
 
-        //obs.: o nome das variáveis que serão mostrados no diagrama serão as variáveis de dentro do construtor
-
-        // atualiza o tipo com base nos parâmetros
-        internas.forEach((v) => {
-          parametros.forEach((p) => {
-            if (v.atribuicao == p.nome) {
-              v.tipo = p.tipo
-            }
-          })
-        })
-
-        // construção do dot code para as variáveis
-        internas.forEach((_v) => {
-          if ((_v.tipo[0] != _v.tipo[0].toUpperCase() && _v.atribuicao[0] !== _v.atribuicao[0].toUpperCase()) || _v.tipo[0] != _v.tipo[0].toUpperCase()) {
-            if (_v.nome.substring(0, 2) === "__") {
-              attrs += `- ${_v.nome.replace("__", "")}:${_v.tipo}\\l`;
-            } else {
-              attrs += `+ ${_v.nome}:${_v.tipo}\\l`;
-            }
-          }
-        });
-
-      } else { //demais funções
-        if (func.name.substring(0, 2) === "__") {
-          meth += `- ${func.name.replace("__", "")}()\\l`;
-        } else {
-          meth += `+ ${func.name}()\\l`;
-        }
-      }
-    });
-
-    const class_code = `${classe.name} [label="{ {${classe.name}} | {${attrs}} | {${meth}} }", shape=record] \n`;
-    return class_code;
+    return classes;
   }
 
-  function draw_inheritance(classe: Class): string {
-    let dot_code = "";
-    if (classe.inheritance) {
-      const superClasses = classe.inheritance.split(',')
-      for (var i = 0; i < superClasses.length; i++) {
-        dot_code += `${superClasses[i].trim()} -> ${classe.name} [arrowtail=onormal, dir=back]\n`;
-      }
-    }
-    return dot_code;
+  function drawClassDiagram(classes: Class[]): string {
+    let dot_content = ""
+
+    let dot_code = "digraph ClassDiagram {graph[rankdir=\"TB\"] node[shape=record,style=filled,fillcolor=gray95] edge[dir=back, arrowtail=empty]\n" + dot_content + "}\n";
+    return dot_code
   }
 
-  function draw_aggregation(classe: Class): string {
-    let dot_code = "";
+  // Função PRINCIPAL para alterar o texto
+  const setTextManipulated = (codePython: string): void => {
 
-    classe.functions.forEach((func) => {
-      if (func.name == "__init__") { // construtor
+    // Faz a extração dos dados das classes a partir de um código em Python
+    const classes: Class[] = classDataExtraction(codePython);
 
-        // extrai as variáveis parâmetros
-        const parametros_match = func.params.match(/\b(\w+)\s*:\s*(\w+)\b/g);
-        const parametros: { nome: string; tipo: string; }[] = [];
-        if (parametros_match != null) {
-          for (const param of parametros_match) {
-            const [variavel, tipo] = param.split(':').map(item => item.trim());
-            const v = {
-              nome: variavel,
-              tipo: tipo,
-            };
-            parametros.push(v);
-          }
-        }
-
-        // Expressão regular para extrair as variáveis internas do contrutor, seus tipos (se fornecidos) e atribuições
-        const regex = /self\.(\w+)(?::(\w+))?\s*=\s*(.+)$/gm;
-        let match;
-        const internas: { nome: string; tipo: string; atribuicao: string; }[] = [];
-
-        while ((match = regex.exec(func.content)) !== null) {
-          const p = {
-            nome: match[1],
-            tipo: match[2] || 'null',
-            atribuicao: match[3].trim()
-          };
-          internas.push(p);
-        }
-
-        //obs.: o nome das variáveis que serão mostrados no diagrama serão as variáveis de dentro do construtor
-
-        // atualiza o tipo com base nos parâmetros
-        internas.forEach((v) => {
-          parametros.forEach((p) => {
-            if (v.atribuicao == p.nome) {
-              v.tipo = p.tipo
-            }
-          })
-        })
-
-        // Mapeamento das variáveis objetos
-        internas.forEach((_v) => {
-          // Desenha apenas as variáveis associadas aos parâmetros e sem atribuição por Objeto
-          if (_v.tipo[0] === _v.tipo[0].toUpperCase() && _v.atribuicao[0] !== _v.atribuicao[0].toUpperCase()) {
-            // construção do dot code para as variáveis
-            if (_v.nome.substring(0, 2) === "__") {
-              dot_code += `${classe.name} -> ${_v.tipo} [arrowtail=odiamond, dir=back, label="- ${_v.nome.replace("__", "")}", labeldistance=2]\n`;
-            } else {
-              dot_code += `${classe.name} -> ${_v.tipo} [arrowtail=odiamond, dir=back, label="+ ${_v.nome.replace("__", "")}", labeldistance=2]\n`;
-            }
-          }
-        });
-      }
-    });
-    return dot_code;
-  }
-
-  function draw_composition(classe: Class): string {
-    let dot_code = "";
-    const linhas_construtor = classe.functions[0].content.trim().split('\n');
-    // Regex para verificar se uma atribuição possui apenas números ou string
-    var regexOnlyNumber = /^("[^"]*"|'[^']*'|[\d]+)$/;
-
-    for (const linha of linhas_construtor) {
-      const regex = /self\.(\w+)(?::(\w+))?\s*=\s*([^\d\s].+)$/gm;
-      let match;
-      while ((match = regex.exec(linha)) !== null) {
-        const p = {
-          nome: match[1],
-          tipo: match[2] || null,
-          atribuicao: match[3].trim() || 'null',
-        };
-
-        if (p.atribuicao && (p.atribuicao[0] === p.atribuicao[0].toUpperCase()) && !regexOnlyNumber.test(p.atribuicao)) {
-          if (p.tipo) {
-            dot_code += `${classe.name} -> ${p.tipo} [arrowtail=diamond, dir=back, label="${p.nome.substring(0, 2) === "__" ? "-" : "+"} ${p.nome.replace("__", "")}", labeldistance=2]\n`;
-          } else {
-            const regex = /(\w+)\s*\(.*$/gm;
-            while ((match = regex.exec(p.atribuicao)) !== null) {
-              //console.log(match);
-              dot_code += `${classe.name} -> ${match[1]} [arrowtail=diamond, dir=back, label="${p.nome.substring(0, 2) === "__" ? "-" : "+"} ${p.nome.replace("__", "")}", labeldistance=2]\n`;
-            }
-          }
-        }
-      }
-    }
-    return dot_code;
-  }
-
-  function draw_association(classe: Class): string {
-    let dot_code = "";
-
-    let regexFuncao = /def\s+\w+\s*\([^)]*\):\s*([\s\S]*?)(?=def|$)/g;
-    // Substituir todas as funções por uma string vazia
-    let textoSemFuncoes = classe.content.replace(regexFuncao, '');
-
-    const regex = /^\s*([a-zA-Z_]\w*)(?:\s*:\s*(list\[)?([a-zA-Z_]\w*)\]?)?(?:\s*=\s*(.*))?\s*$/gm;
-
-    let match;
-    while ((match = regex.exec(textoSemFuncoes)) !== null) {
-      var privacySymbol = "+";
-      var multiplicity = "1";
-      var nome = match[1];
-      if (nome.substring(0, 2) === "__") {
-        nome = nome.replace("__", "");
-        privacySymbol = "-";
-      }
-      const tipo = match[3] || null;
-      if (match[2] == "list[") {
-        multiplicity = "*";
-      }
-      //const atribuicao = match[3] !== undefined ? match[3].trim() : null;
-
-      if (tipo && tipo[0] === tipo[0].toUpperCase()) {
-        dot_code += `${classe.name} -> ${tipo} [arrowhead=vee, dir=forward, label="${privacySymbol} ${nome}", headlabel="${multiplicity}", labeldistance=1.5]\n`;
-        //variaveis.push({ nome, tipo, atribuicao });
-      }
-    }
-    return dot_code;
-  }
-
-  function generate_dot_code(classes: Class[]): string {
-    let dot_code = "";
-    classes.forEach((classe) => {
-
-      // desenha a classe, seus atributos e métodos
-      dot_code += draw_class(classe)
-
-      //desenha o relacionamento de herança
-      dot_code += draw_inheritance(classe)
-
-      //desenha as agregações
-      dot_code += draw_aggregation(classe)
-
-      // desenha as composições
-      dot_code += draw_composition(classe)
-
-      // desenha as associações simples
-      dot_code += draw_association(classe)
-    });
-
-    return dot_code;
-  }
-
-
-  // Função para alterar o texto
-  const setTextManipulated = (newText: string): void => {
-    const code = removerComentariosPython(newText)
-    const classes: Class[] = splitClasses(code);
-
-    const dotcode = generate_dot_code(classes);
-
-    let userList = "digraph ClassDiagram {graph[rankdir=\"TB\"] node[shape=record,style=filled,fillcolor=gray95] edge[dir=back, arrowtail=empty]\n" + dotcode + "}\n";
-
-    setText(userList);
+    const dot_code = drawClassDiagram(classes);
+    setText(dot_code);
   };
 
   return [text, setTextManipulated];
