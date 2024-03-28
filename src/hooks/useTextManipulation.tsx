@@ -187,7 +187,6 @@ function useTextManipulation(): [string, (newText: string) => void] {
 
   }
 
-
   function getClassDataPythonCode(code: string): Class[] {
 
     // Remove todos os tipos de comentários no código
@@ -202,6 +201,17 @@ function useTextManipulation(): [string, (newText: string) => void] {
 
 
     return classes;
+  }
+
+  function draw_inheritance(classe: Class): string {
+    let dot_code = "";
+    if (classe.inheritance) {
+      const superClasses = classe.inheritance.split(',')
+      for (var i = 0; i < superClasses.length; i++) {
+        dot_code += `${superClasses[i].trim()} -> ${classe.name} [arrowtail=onormal, dir=back]\n`;
+      }
+    }
+    return dot_code;
   }
 
   function drawClassDiagram(classes: Class[]): string {
@@ -227,6 +237,9 @@ function useTextManipulation(): [string, (newText: string) => void] {
       })
 
       dot_content += `${classe.name} [label="{ {${classe.name}} | {${attrs}} | {${meth}} }", shape=record] \n`;
+
+      //desenha o relacionamento de herança
+      dot_content += draw_inheritance(classe)
     })
 
     let dot_code = "digraph ClassDiagram {graph[rankdir=\"TB\"] node[shape=record,style=filled,fillcolor=gray95] edge[dir=back, arrowtail=empty]\n" + dot_content + "}\n";
@@ -240,7 +253,8 @@ function useTextManipulation(): [string, (newText: string) => void] {
     // Faz a extração dos dados das classes a partir de um código em Python
     const classes: Class[] = getClassDataPythonCode(codePython);
 
-    const dot_code = drawClassDiagram(classes);
+    let dot_code = drawClassDiagram(classes);
+    
     setText(dot_code);
   };
 
