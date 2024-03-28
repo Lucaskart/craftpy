@@ -214,6 +214,38 @@ function useTextManipulation(): [string, (newText: string) => void] {
     return dot_code;
   }
 
+  function draw_association(classe: Class): string {
+    let dot_code = "";
+
+    let regexFuncao = /def\s+\w+\s*\([^)]*\):\s*([\s\S]*?)(?=def|$)/g;
+    // Substituir todas as funções por uma string vazia
+    let textoSemFuncoes = classe.content.replace(regexFuncao, '');
+
+    const regex = /^\s*([a-zA-Z_]\w*)(?:\s*:\s*(list\[)?([a-zA-Z_]\w*)\]?)?(?:\s*=\s*(.*))?\s*$/gm;
+
+    let match;
+    while ((match = regex.exec(textoSemFuncoes)) !== null) {
+      var privacySymbol = "+";
+      var multiplicity = "1";
+      var nome = match[1];
+      if (nome.substring(0, 2) === "__") {
+        nome = nome.replace("__", "");
+        privacySymbol = "-";
+      }
+      const tipo = match[3] || null;
+      if (match[2] == "list[") {
+        multiplicity = "*";
+      }
+      //const atribuicao = match[3] !== undefined ? match[3].trim() : null;
+
+      if (tipo && tipo[0] === tipo[0].toUpperCase()) {
+        dot_code += `${classe.name} -> ${tipo} [arrowhead=vee, dir=forward, label="${privacySymbol} ${nome}", headlabel="${multiplicity}", labeldistance=1.5]\n`;
+        //variaveis.push({ nome, tipo, atribuicao });
+      }
+    }
+    return dot_code;
+  }
+
   function drawClassDiagram(classes: Class[]): string {
     let dot_content = ""
 
@@ -244,10 +276,15 @@ function useTextManipulation(): [string, (newText: string) => void] {
         }
       })
 
+      // desenhas as associações
+
+
       dot_content += `${classe.name} [label="{ {${classe.name}} | {${attrs}} | {${meth}} }", shape=record] \n`;
 
       //desenha o relacionamento de herança
       dot_content += draw_inheritance(classe)
+
+      dot_content += draw_association(classe)
     })
 
     let dot_code = "digraph ClassDiagram {graph[rankdir=\"TB\"] node[shape=record,style=filled,fillcolor=gray95] edge[dir=back, arrowtail=empty]\n" + dot_content + "}\n";
