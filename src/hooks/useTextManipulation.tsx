@@ -228,16 +228,17 @@ function useTextManipulation(): [string, (newText: string) => void] {
         }
       })
 
-      // constroi as variáveis da classe
+      // constroi a classe e seus relacionamentos
       classe.attributes?.forEach((attr) => {
-        // Não adiciona: 1 - sem tipo; 2 - iniciando com letra maiuscula
+        // Adiciona variáveis com tipo iniciando com letra minúscula (variáveis internas ao construtor)
         if (attr.type && (attr.type[0] !== attr.type[0].toUpperCase())) {
           attrs += `${attr.access} ${attr.name}:${attr.type}\\l`;
         } else { // desenha as agregações
-          // Se não tiver atribuições começando com letra maiúscula
+          // Adiciona se não tiver atribuições começando com letra maiúscula
           if (attr.value && attr.value[0] !== attr.value[0].toUpperCase()) {
             dot_content += `${classe.name} -> ${attr.type} [arrowtail=odiamond, dir=back, label="${attr.access} ${attr.name}", labeldistance=2]\n`;
           } else { // desenha as composições
+            // Atribuições iniciadas com letra maiúscula
             dot_content += `${classe.name} -> ${attr.type} [arrowtail=diamond, dir=back, label="${attr.access} ${attr.name}", labeldistance=2]\n`;
           }
         }
