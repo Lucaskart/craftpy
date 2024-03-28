@@ -11,14 +11,14 @@ interface Class {
 }
 
 interface Attribute {
-  access: string,
+  access: string | null,
   name: string,
-  type: string,
-  value?: string
+  type: string | null,
+  value?: string | null
 }
 
 interface Function {
-  access: string,
+  access: string | null,
   name: string;
   decorators: string[] | null;
   params: string;
@@ -29,8 +29,11 @@ interface Function {
 function useTextManipulation(): [string, (newText: string) => void] {
   const [text, setText] = useState<string>('');
 
-  function setTypeElement(name: string): string {
+  function setAccessElement(name: string): string {
     return name.substring(0, 2) === "__" ? "-" : "+"
+  }
+  function setNameElement(name: string): string {
+    return name.replace("__", "")
   }
 
   function removePythonComments(codigoPython: string) {
@@ -79,13 +82,14 @@ function useTextManipulation(): [string, (newText: string) => void] {
 
         //Extração dos decoradores
         const decorators = functionContentWithDecorator.match(/^@.*$/gm)
-        functions.push({
-          access: setTypeElement(functionName),
-          name: functionName == "__init__" ? functionName : functionName.replace("__", ""),
+        const attr: Function = {
+          access: functionName == "__init__" ? null : setAccessElement(functionName),
+          name: functionName == "__init__" ? functionName : setNameElement(functionName),
           decorators: decorators,
           params: functionParams,
           content: functionContent
-        });
+        }
+        functions.push(attr);
       }
 
       // Construindo o objeto da classe
@@ -103,13 +107,96 @@ function useTextManipulation(): [string, (newText: string) => void] {
     return classes;
   }
 
+  function addMoreInfo(classes: Class[]): Class[] {
+    classes.forEach((classe: Class) => {
+      const construtor = classe.functions.find((func) => func.name == '__init__')
+
+      if (construtor) {
+        // extrai as variáveis parâmetros
+        const parametros_match = construtor.params.match(/\b(\w+)\s*:\s*(\w+)\b/g);
+        const parametros: Attribute[] = [];
+        if (parametros_match != null) {
+          for (const param of parametros_match) {
+            const [nome, tipo] = param.split(':').map(item => item.trim());
+            const v: Attribute = {
+              access: setAccessElement(nome),
+              name: setNameElement(nome),
+              type: tipo
+            };
+            parametros.push(v);
+          }
+        }
+
+        // Expressão regular para extrair as variáveis internas do contrutor, seus tipos (se fornecidos) e atribuições
+        const regex = /self\.(\w+)(?::(\w+))?\s*=\s*(.+)$/gm;
+        let match;
+        const internas: Attribute[] = [];
+
+        while ((match = regex.exec(construtor.content)) !== null) {
+          const p: Attribute = {
+            access: setAccessElement(match[1]),
+            name: setNameElement(match[1]),
+            type: match[2] || null,
+            value: match[3].trim() || null,
+          };
+
+          // Caso a variável não tenha tipo definido
+          if (!p.type && p.value) {
+            // verifica se é um inteiro
+            if (!isNaN(parseFloat(p.value))) {
+              p.type = 'int'
+            } else {
+              // Verifica se é um booleano
+              if (p.value === 'True' || p.value === 'False') {
+                p.type = 'bool'
+              } else {
+                // verifica se é uma string
+                if (p.value[0] == '\"') {
+                  p.type = 'str'
+                } else {// um objeto
+                  //Obtem o tipo com base no nome da instância
+                  const regex = /(\w+)\s*\(.*$/gm;
+                  while ((match = regex.exec(p.value)) !== null) {
+                    p.type = match[1]
+                  }
+                }
+              }
+            }
+          }
+          internas.push(p);
+        }
+
+        // atualiza o tipo com base nos parâmetros
+        internas.forEach((v) => {
+          parametros.forEach((p) => {
+            if (v.value == p.name) {
+              v.type = p.type
+            }
+          })
+        })
+
+        classe.attributes = []
+        internas.forEach((_v) => {
+          classe.attributes?.push(_v)
+        })
+
+      }
+    })
+
+    return classes
+
+  }
+
+
   function getClassDataPythonCode(code: string): Class[] {
 
     // Remove todos os tipos de comentários no código
     const codePython = removePythonComments(code)
 
     // Extrai as informações básicas (que originam os relacionamentos)
-    const classes: Class[] = extractPythonCodeInfo(codePython);
+    let classes: Class[] = extractPythonCodeInfo(codePython);
+
+    classes = addMoreInfo(classes)
 
     console.log(classes);
 
@@ -120,20 +207,30 @@ function useTextManipulation(): [string, (newText: string) => void] {
   function drawClassDiagram(classes: Class[]): string {
     let dot_content = ""
 
-
     classes.forEach((classe: Class) => {
       let attrs = "";
       let meth = "";
 
+      // Constroi as funções da classe
       classe.functions.forEach((func) => {
         if (func.name != "__init__") {
           meth += `${func.access} ${func.name}()\\l`;
         }
       })
+
+      // constroi as variáveis da classe
+      classe.attributes?.forEach((attr) => {
+        // Não adiciona: 1 - sem tipo; 2 - iniciando com letra maiuscula
+        if (attr.type && (attr.type[0] !== attr.type[0].toUpperCase())) {
+          attrs += `${attr.access} ${attr.name}:${attr.type}\\l`;
+        }
+      })
+
       dot_content += `${classe.name} [label="{ {${classe.name}} | {${attrs}} | {${meth}} }", shape=record] \n`;
     })
 
     let dot_code = "digraph ClassDiagram {graph[rankdir=\"TB\"] node[shape=record,style=filled,fillcolor=gray95] edge[dir=back, arrowtail=empty]\n" + dot_content + "}\n";
+
     return dot_code
   }
 
