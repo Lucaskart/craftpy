@@ -264,7 +264,15 @@ function useTextManipulation(): [string, (newText: string) => void] {
       classe.attributes?.forEach((attr) => {
         // Adiciona variáveis com tipo iniciando com letra minúscula (variáveis internas ao construtor)
         if (attr.type && (attr.type[0] !== attr.type[0].toUpperCase())) {
-          attrs += `${attr.access} ${attr.name}:${attr.type}\\l`;
+          if (!attr.type.includes('list[')) {
+            attrs += `${attr.access} ${attr.name}:${attr.type}\\l`;
+          } else { // desenha as agregações em lista
+            const padrao = /\[(.*?)\]/;
+            const resultado = padrao.exec(attr.type);
+            if (resultado) {
+              dot_content += `${classe.name} -> ${resultado[1]} [arrowtail=odiamond, dir=back, label="${attr.access} ${attr.name}",taillabel=1,  headlabel="*", labeldistance=1.5]\n`;
+            }
+          }
         } else { // desenha as agregações
           // Adiciona se não tiver atribuições começando com letra maiúscula
           if (attr.value && attr.value[0] !== attr.value[0].toUpperCase()) {

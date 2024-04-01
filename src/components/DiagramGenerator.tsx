@@ -69,10 +69,11 @@ class AnotherClass(MyClass):
   `
   codeText = `
   class Carro(Automovel):
-    def __init__(self, marca:str, cor:str, roda:Roda):
+    __bankacc: list[BankAccount] = list()
+    def __init__(self, marca:str, cor:str, rodas:list[Roda]):
         self.marca = marca
         self.cor:str = cor
-        self.roda:Roda = roda
+        self.roda:list[Roda] = rodas
     
     @usecase
     @namedsadasdsadasdas
@@ -89,7 +90,7 @@ class AnotherClass(MyClass):
 
 class Roda:
     def __init__(self, quantidade:int):
-        self.quantidade: quantidade
+        self.quantidade = quantidade
     
     def desgaste(self):
         pass
