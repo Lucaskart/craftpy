@@ -6,7 +6,7 @@ import Help from './components/Help';
 import Examples from './components/Examples';
 
 function App() {
-
+  document.documentElement.lang = 'pt-BR';
 
   return (
   <Grid columns="1">

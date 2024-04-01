@@ -1,15 +1,16 @@
-import { Box, Card, Flex, Grid, Heading, Kbd, Text } from '@radix-ui/themes';
+import { Box, Card, Flex, Grid, Heading, Kbd, Link, Text } from '@radix-ui/themes';
 
 function Help() {
 
     return (
-        <Grid columns="3" p="3">
-            <Flex gap="3">
-            </Flex>
+        <Grid columns="2" p="3">
             <Flex direction="column" gap="3" justify="center" align="center">
-                <Heading mb="2" size="7">Comandos</Heading>
-                <Text>A seguir temos uma lista de comandos para auxiliar no uso de Py2UML. 
-                    (Os comandos podem ser diferentes dependendo do browser e do sistema operacional.)</Text>
+                <Heading mb="2" size="7">Atalhos</Heading>
+                <Text align="center" as="div">A seguir temos uma lista de atalhos para auxiliar no uso de Py2UML. 
+                    Os atalhos a seguir estão presentes nos navegadores mais comuns, para mais detalhes, acesse esse link: 
+                    <Link href="https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/accesskey">
+                        https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/accesskey</Link>
+                </Text>
                 <Card style={{ maxWidth: 600 }}>
                     <Flex gap="3" align="center">
                         <Box>
@@ -71,7 +72,10 @@ function Help() {
                     </Flex>
                 </Card>
             </Flex>
-            <Flex gap="3">
+            <Flex direction="column" gap="3" justify="center" align="center">
+                <Heading mb="2" size="7">Tutorial</Heading>
+                <Text align="center" as="div">A seguir temos uma lista de comandos para auxiliar no uso de Py2UML. 
+                    (Os comandos podem ser diferentes dependendo do browser e do sistema operacional.)</Text>
             </Flex>
         </Grid>
     );

@@ -239,7 +239,7 @@ function useTextManipulation(): [string, (newText: string) => void] {
       //const atribuicao = match[3] !== undefined ? match[3].trim() : null;
 
       if (tipo && tipo[0] === tipo[0].toUpperCase()) {
-        dot_code += `${classe.name} -> ${tipo} [arrowhead=vee, dir=forward, label="${privacySymbol} ${nome}", headlabel="${multiplicity}", labeldistance=1.5]\n`;
+        dot_code += `${classe.name} -> ${tipo} [arrowhead=vee, dir=forward, headlabel="&nbsp; &nbsp; &nbsp; &nbsp;${multiplicity} &nbsp; ${privacySymbol} ${nome}", headport=n, labeldistance=2]\n`;
         //variaveis.push({ nome, tipo, atribuicao });
       }
     }
@@ -268,10 +268,10 @@ function useTextManipulation(): [string, (newText: string) => void] {
         } else { // desenha as agregações
           // Adiciona se não tiver atribuições começando com letra maiúscula
           if (attr.value && attr.value[0] !== attr.value[0].toUpperCase()) {
-            dot_content += `${classe.name} -> ${attr.type} [arrowtail=odiamond, dir=back, label="${attr.access} ${attr.name}", labeldistance=2]\n`;
+            dot_content += `${classe.name} -> ${attr.type} [arrowtail=odiamond, dir=back, taillabel="${attr.access} ${attr.name}", labeldistance=2]\n`;
           } else { // desenha as composições
             // Atribuições iniciadas com letra maiúscula
-            dot_content += `${classe.name} -> ${attr.type} [arrowtail=diamond, dir=back, label="${attr.access} ${attr.name}", labeldistance=2]\n`;
+            dot_content += `${classe.name} -> ${attr.type} [arrowtail=diamond, dir=back, taillabel="${attr.access} ${attr.name}", labeldistance=2]\n`;
           }
         }
       })
