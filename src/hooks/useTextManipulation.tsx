@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import stick from '/stick.png'
 
 // Definindo interfaces em TypeScript
 interface Class {
@@ -320,10 +321,11 @@ function useTextManipulation(): [string, (newText: string) => void] {
     let dot_content = ""
 
     /* Actor Nodes */
-    dot_content += `node [shape=plaintext, style=invis];\n`
+    
 
     classes.forEach((classe: Class) => {
-      dot_content += `subgraph cluster${classe.name} {label="${classe.name}"; ${classe.name}};\n${classe.name} [shapefile="stick.png"];\n`
+      dot_content += `subgraph cluster${classe.name} {label="${classe.name}";\n
+      ${classe.name}};\n${classe.name} [shape="box3d"];\n`
     })
 
     /* Use Case Nodes */
