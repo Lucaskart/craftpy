@@ -319,43 +319,75 @@ function useTextManipulation(): [string, (newText: string) => void] {
   function drawUseCaseDiagram(classes: Class[]): string {
     let dot_content = ""
 
-    classes.forEach((classe: Class) => {
-      /* Actor Nodes */
-      dot_content += `
-                    subgraph cluster${classe.name} {label="${classe.name}"; ${classe.name}};
-                    ${classe.name} [shapefile="stick.png"];
-                    `
+    /* Actor Nodes */
+    dot_content += `node [shape=plaintext, style=invis];\n`
 
-      /* Use Case Nodes */
+    classes.forEach((classe: Class) => {
+      dot_content += `subgraph cluster${classe.name} {label="${classe.name}"; ${classe.name}};\n${classe.name} [shapefile="stick.png"];\n`
+    })
+
+    /* Use Case Nodes */
+    dot_content += `node [shape=ellipse, style=solid];\n`
+
+    classes.forEach((classe: Class) => {
       classe.functions.forEach((func) => {
         func.decorators?.forEach((decorator) => {
           console.log(decorator);
-
-          /* Use Case Nodes */
-          dot_content += `${func.name} [label="${func.name}"];`
-
-          /* Edges */
-          if (decorator.includes("@usecase")) {
-            dot_content += `${classe.name} -> ${func.name};`
-          } else {
-            if (decorator.includes('@extends')) {
-              dot_content += `${func.name} -> ${decorator.replace(/.*\[(.*?)\].*/, '$1')} [arrowtail="vee", label="<<extend>>", style=dashed];`
-            } else {
-              if (decorator.includes('@include')) {
-                console.log(decorator);
-
-                dot_content += `${func.name} -> ${decorator.replace(/.*\[(.*?)\].*/, '$1')} [arrowtail="vee", label="<<include>>", style=dashed];`
-              }
-            }
-          }
-
-
-        });
-
-      });
-
+          dot_content += `${func.name} [label="${func.name}"];\n`
+        })
+      })
     })
-    let dot_code = `digraph G {rankdir="LR"; labelloc="b"; peripheries=0;  ${dot_content}}`
+
+    /* Edges */
+    dot_content += `edge  [arrowhead="oarrow"];\n`
+
+    classes.forEach((classe: Class) => {
+      if (classe.inheritance) {
+        const superClasses = classe.inheritance.split(',')
+        for (var i = 0; i < superClasses.length; i++) {
+          dot_content += `${superClasses[i].trim()} -> ${classe.name};\n`
+        }
+      }
+    })
+
+    dot_content += `edge [arrowhead=none];\n`
+
+    classes.forEach((classe: Class) => {
+      classe.functions.forEach((func) => {
+        func.decorators?.forEach((decorator) => {
+          if (decorator.includes("@usecase")) {
+            dot_content += `${classe.name} -> ${func.name};\n`
+          }
+        })
+      })
+    })
+
+    dot_content += `edge [arrowtail="vee", label="<<extend>>", style=dashed];\n`
+
+    classes.forEach((classe: Class) => {
+      classe.functions.forEach((func) => {
+        func.decorators?.forEach((decorator) => {
+          if (decorator.includes("@extends")) {
+            dot_content += `${decorator.replace(/.*\[(.*?)\].*/, '$1')} -> ${func.name};\n`
+          }
+        })
+      })
+    })
+
+    dot_content += `edge [arrowtail="vee", label="<<include>>", style=dashed];\n`
+
+    classes.forEach((classe: Class) => {
+      classe.functions.forEach((func) => {
+        func.decorators?.forEach((decorator) => {
+          if (decorator.includes("@include")) {
+            dot_content += `${decorator.replace(/.*\[(.*?)\].*/, '$1')} -> ${func.name};\n`
+          }
+        })
+      })
+    })
+
+
+    let dot_code = `digraph G {rankdir="LR";labelloc="b";peripheries=0;\n\n${dot_content}\n}`
     console.log(dot_code);
 
 

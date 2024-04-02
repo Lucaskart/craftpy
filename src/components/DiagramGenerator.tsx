@@ -149,6 +149,42 @@ class Dependency:
         def pagar_com_boleto(self):
             pass
     `
+
+    codeText = `
+    class User:
+        def __init__(self, nome):
+            self.nome = nome
+
+        @usecase
+        def Log_In(self):
+            pass
+
+        @extends[Log_In]
+        def Log_In_Password(self):
+            pass
+        
+        @extends[Log_In]
+        def Log_In_Certificate(self):
+            pass
+    
+    class Administrator(User):
+        def __init__(self, nome):
+            self.nome = nome
+
+        @usecase
+        @extends[Log_In]
+        def Manage_User(self):
+            pass
+        
+        @extends[Manage_User]
+        def Change_Email(self):
+            pass
+
+        @extends[Manage_User]
+        def Change_Password(self):
+            pass
+
+    `
     const [code, setCode] = React.useState(codeText);
     const [manipulatedText, setManipulatedText] = useTextManipulation();
 
