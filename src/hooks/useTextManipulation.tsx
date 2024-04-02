@@ -239,7 +239,7 @@ function useTextManipulation(): [string, (newText: string) => void] {
       //const atribuicao = match[3] !== undefined ? match[3].trim() : null;
 
       if (tipo && tipo[0] === tipo[0].toUpperCase()) {
-        dot_code += `${classe.name} -> ${tipo} [arrowhead=vee, dir=forward, headlabel="&nbsp; &nbsp; &nbsp; &nbsp;${multiplicity} &nbsp; ${privacySymbol} ${nome}", headport=n, labeldistance=2]\n`;
+        dot_code += `${classe.name} -> ${tipo} [arrowhead=vee, dir=forward, label="${privacySymbol}${nome}", headlabel="${multiplicity}", labeldistance=2]\n`;
         //variaveis.push({ nome, tipo, atribuicao });
       }
     }
