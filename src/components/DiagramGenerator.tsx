@@ -80,11 +80,11 @@ class AnotherClass(MyClass):
     def andar(self):
         self.posicao += 1
     
-    @extends[andar]
-    def desgastarPneu(self):
+    @extends
+    def desgastePneu(self):
         self.posicao += 1
     
-    @include[desgastarPneu]
+    @include
     def aumentarKM(self):
         self.km +=1
 
@@ -149,7 +149,6 @@ class Dependency:
         def pagar_com_boleto(self):
             pass
     `
-
     const [code, setCode] = React.useState(codeText);
     const [manipulatedText, setManipulatedText] = useTextManipulation();
 
@@ -220,22 +219,28 @@ class Dependency:
             <Box p="3" width="100%">
                 <Grid columns="2" gap="5">
                     <Flex direction="column" gap="3">
-                        <Box>
+                        <Box width="100%">
                             <CodeMirror
                                 value={code}
                                 height="520px"
-                                width="10px"
+                                width="100%"
                                 theme="dark"
                                 extensions={[python()]}
                                 onChange={onChange}
                             />
                         </Box>
-
-
+                        <Box width="100%">
+                            <Flex justify="center">
+                                <Heading>Painel de Logs</Heading>
+                            </Flex>
+                        </Box>
+                        <Box width="100%">
+                            <TextArea variant="surface" style={{ height: 150 }} value={logtext} />
+                        </Box>
                     </Flex>
                     <Flex>
                         <Box id="print" width="100%">
-                            {manipulatedText != "" && <Graphviz options={{ height: "100%", width: "100%", zoom: false, onerror: handleError }} dot={manipulatedText} />}
+                            {manipulatedText != "" && <Graphviz options={{ height: 750, width: "100%", zoom: false, onerror: handleError }} dot={manipulatedText} />}
                         </Box>
                     </Flex>
                 </Grid>
