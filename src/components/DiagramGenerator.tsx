@@ -67,7 +67,7 @@ class AnotherClass(MyClass):
     def static_method(z):
         print(z)
   `
-  codeText = `
+    codeText = `
   class Carro(Automovel):
     __bankacc: list[BankAccount] = list()
     def __init__(self, marca:str, cor:str, rodas:list[Roda]):
@@ -80,11 +80,11 @@ class AnotherClass(MyClass):
     def andar(self):
         self.posicao += 1
     
-    @extends
-    def desgastePneu(self):
+    @extends[andar]
+    def desgastarPneu(self):
         self.posicao += 1
     
-    @include
+    @include[desgastarPneu]
     def aumentarKM(self):
         self.km +=1
 
@@ -107,6 +107,49 @@ class Dependency:
         self.car = Carro()
         self.roda = Roda()
 `;
+
+    codeText = `
+    class Leiloeiro:
+        def __init__(self, nome):
+            self.nome = nome
+
+        @usecase
+        def criar_leilao(self):
+            pass
+
+        @usecase
+        def finalizar_leilao(self):
+            pass
+    
+    class Usuario:
+        def __init__(self, nome):
+            self.nome = nome
+
+        @usecase
+        @include[criar_leilao]
+        def dar_lances_no_leilao(self):
+            pass
+
+        @usecase
+        @include[finalizar_leilao]
+        @extends[dar_lances_no_leilao]
+        @extends[pagar_pelo_produto]
+        def ganhar_leilao(self):
+            pass
+
+        @usecase
+        def pagar_pelo_produto(self):
+            pass
+
+        @include[pagar_pelo_produto]
+        def pagar_com_cartao_cred(self):
+            pass
+            
+        @include[pagar_pelo_produto]
+        def pagar_com_boleto(self):
+            pass
+    `
+
     const [code, setCode] = React.useState(codeText);
     const [manipulatedText, setManipulatedText] = useTextManipulation();
 
@@ -177,28 +220,22 @@ class Dependency:
             <Box p="3" width="100%">
                 <Grid columns="2" gap="5">
                     <Flex direction="column" gap="3">
-                        <Box width="100%">
+                        <Box>
                             <CodeMirror
                                 value={code}
                                 height="520px"
-                                width="100%"
+                                width="10px"
                                 theme="dark"
                                 extensions={[python()]}
                                 onChange={onChange}
                             />
                         </Box>
-                        <Box width="100%">
-                            <Flex justify="center">
-                                <Heading>Painel de Logs</Heading>
-                            </Flex>
-                        </Box>
-                        <Box width="100%">
-                            <TextArea variant="surface" style={{ height: 150 }} value={logtext} />
-                        </Box>
+
+
                     </Flex>
                     <Flex>
                         <Box id="print" width="100%">
-                            {manipulatedText != "" && <Graphviz options={{ height: 750, width: "100%", zoom: false, onerror: handleError }} dot={manipulatedText} />}
+                            {manipulatedText != "" && <Graphviz options={{ height: "100%", width: "100%", zoom: false, onerror: handleError }} dot={manipulatedText} />}
                         </Box>
                     </Flex>
                 </Grid>

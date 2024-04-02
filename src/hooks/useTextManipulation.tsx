@@ -269,7 +269,7 @@ function useTextManipulation(): [string, (newText: string) => void] {
               type: match[3].replace(/\([^)]*\)/g, '') || null,
               value: match[3] || null,
             };
-            
+
             dot_content += `${p.type}  ->   ${classe.name} [style=dotted, arrowtail=open, dir=back, label="<<create>>", labeldistance=1.5]\n`;
           }
         }
@@ -315,13 +315,62 @@ function useTextManipulation(): [string, (newText: string) => void] {
     return dot_code
   }
 
+
+  function drawUseCaseDiagram(classes: Class[]): string {
+    let dot_content = ""
+
+    classes.forEach((classe: Class) => {
+      /* Actor Nodes */
+      dot_content += `
+                    subgraph cluster${classe.name} {label="${classe.name}"; ${classe.name}};
+                    ${classe.name} [shapefile="stick.png"];
+                    `
+
+      /* Use Case Nodes */
+      classe.functions.forEach((func) => {
+        func.decorators?.forEach((decorator) => {
+          console.log(decorator);
+
+          /* Use Case Nodes */
+          dot_content += `${func.name} [label="${func.name}"];`
+
+          /* Edges */
+          if (decorator.includes("@usecase")) {
+            dot_content += `${classe.name} -> ${func.name};`
+          } else {
+            if (decorator.includes('@extends')) {
+              dot_content += `${func.name} -> ${decorator.replace(/.*\[(.*?)\].*/, '$1')} [arrowtail="vee", label="<<extend>>", style=dashed];`
+            } else {
+              if (decorator.includes('@include')) {
+                console.log(decorator);
+
+                dot_content += `${func.name} -> ${decorator.replace(/.*\[(.*?)\].*/, '$1')} [arrowtail="vee", label="<<include>>", style=dashed];`
+              }
+            }
+          }
+
+
+        });
+
+      });
+
+    })
+    let dot_code = `digraph G {rankdir="LR"; labelloc="b"; peripheries=0;  ${dot_content}}`
+    console.log(dot_code);
+
+
+    return dot_code
+  }
+
   // Função PRINCIPAL para alterar o texto
   const setTextManipulated = (codePython: string): void => {
 
     // Faz a extração dos dados das classes a partir de um código em Python
     const classes: Class[] = getClassDataPythonCode(codePython);
 
-    let dot_code = drawClassDiagram(classes);
+    //let dot_code = drawClassDiagram(classes);
+
+    let dot_code = drawUseCaseDiagram(classes);
 
     setText(dot_code);
   };
