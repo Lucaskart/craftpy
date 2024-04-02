@@ -239,7 +239,7 @@ function useTextManipulation(): [string, (newText: string) => void] {
       //const atribuicao = match[3] !== undefined ? match[3].trim() : null;
 
       if (tipo && tipo[0] === tipo[0].toUpperCase()) {
-        dot_code += `${classe.name} -> ${tipo} [arrowhead=vee, dir=forward, label="${privacySymbol}${nome}", headlabel="${multiplicity}", labeldistance=2]\n`;
+        dot_code += `${classe.name} -> ${tipo} [arrowhead=vee, dir=forward, open="${privacySymbol}${nome}", headlabel="${multiplicity}", labeldistance=2]\n`;
         //variaveis.push({ nome, tipo, atribuicao });
       }
     }
@@ -257,6 +257,21 @@ function useTextManipulation(): [string, (newText: string) => void] {
       classe.functions.forEach((func) => {
         if (func.name != "__init__") {
           meth += `${func.access} ${func.name}()\\l`;
+
+          // Analisa internamente cada função e cria os relacionamentos de Dependência
+          const regex = /self\.(\w+)(?::(\w+(?:\[\w+\])?))?(?:\s*=\s*(.+))?$/gm;
+          let match;
+          while ((match = regex.exec(func.content)) !== null) {
+
+            const p: Attribute = {
+              access: setAccessElement(match[1]),
+              name: setNameElement(match[1]),
+              type: match[3].replace(/\([^)]*\)/g, '') || null,
+              value: match[3] || null,
+            };
+            
+            dot_content += `${p.type}  ->   ${classe.name} [style=dotted, arrowtail=open, dir=back, label="<<create>>", labeldistance=1.5]\n`;
+          }
         }
       })
 

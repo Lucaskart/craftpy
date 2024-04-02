@@ -98,6 +98,14 @@ class Roda:
 class Automovel:
     def __init__(self):
         pass
+
+class Dependency:
+    def __init__(self):
+        pass
+
+    def my_function(self):
+        self.car = Carro()
+        self.roda = Roda()
 `;
     const [code, setCode] = React.useState(codeText);
     const [manipulatedText, setManipulatedText] = useTextManipulation();
