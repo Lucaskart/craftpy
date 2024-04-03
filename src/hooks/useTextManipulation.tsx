@@ -321,12 +321,18 @@ function useTextManipulation(): [string, (newText: string) => void] {
     let dot_content = ""
 
     /* Actor Nodes */
-    
+     dot_content += `node [shape=plaintext];\n`
 
     classes.forEach((classe: Class) => {
       dot_content += `subgraph cluster${classe.name} {label="${classe.name}";\n
-      ${classe.name}};\n${classe.name} [shape="box3d"];\n`
+      ${classe.name}};\n${classe.name} [label=<<TABLE border="0">
+        <TR><TD>&nbsp;&#9786;&nbsp;</TD></TR>
+         <TR><TD> / | \\ </TD></TR>
+         <TR><TD> /   \\ </TD></TR>
+      </TABLE>>];\n`
     })
+
+    
 
     /* Use Case Nodes */
     dot_content += `node [shape=ellipse, style=solid];\n`
