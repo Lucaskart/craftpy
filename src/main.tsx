@@ -4,11 +4,14 @@ import App from './App.tsx'
 import './index.css'
 import '@radix-ui/themes/styles.css';
 import { Theme } from '@radix-ui/themes';
+import { PythonProvider } from 'react-py'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <Theme scaling="110%">
-      <App />
+      <PythonProvider>
+        <App />
+      </PythonProvider>
     </Theme>
   </React.StrictMode>,
 )
