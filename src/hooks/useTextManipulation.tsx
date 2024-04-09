@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import stick from '/stick.png'
 
 // Definindo interfaces em TypeScript
 interface Class {
@@ -197,13 +198,13 @@ function useTextManipulation(): [string, (newText: string) => void] {
 
     classes = addMoreInfo(classes)
 
-    //console.log(classes);
+    console.log(classes);
 
 
     return classes;
   }
 
-/*   function draw_inheritance(classe: Class): string {
+  function draw_inheritance(classe: Class): string {
     let dot_code = "";
     if (classe.inheritance) {
       const superClasses = classe.inheritance.split(',')
@@ -244,9 +245,9 @@ function useTextManipulation(): [string, (newText: string) => void] {
       }
     }
     return dot_code;
-  } */
+  }
 
- /*  function drawClassDiagram(classes: Class[]): string {
+  function drawClassDiagram(classes: Class[]): string {
     let dot_content = ""
 
     classes.forEach((classe: Class) => {
@@ -314,7 +315,7 @@ function useTextManipulation(): [string, (newText: string) => void] {
 
     return dot_code
   }
- */
+
 
   function drawUseCaseDiagram(classes: Class[]): string {
     let dot_content = ""
@@ -338,8 +339,8 @@ function useTextManipulation(): [string, (newText: string) => void] {
 
     classes.forEach((classe: Class) => {
       classe.functions.forEach((func) => {
-        func.decorators?.forEach(() => {
-          //console.log(decorator);
+        func.decorators?.forEach((decorator) => {
+          console.log(decorator);
           dot_content += `${func.name} [label="${func.name}"];\n`
         })
       })
@@ -395,7 +396,7 @@ function useTextManipulation(): [string, (newText: string) => void] {
 
 
     let dot_code = `digraph G {rankdir="LR";labelloc="b";peripheries=0;\n\n${dot_content}\n}`
-    //console.log(dot_code);
+    console.log(dot_code);
 
 
     return dot_code

@@ -7,27 +7,28 @@ import { Box, Button, Grid, Flex, Heading, TextArea } from '@radix-ui/themes';
 import { CodeIcon, DownloadIcon, GearIcon } from '@radix-ui/react-icons'
 import exampleList from '../utils/examples/code'
 import html2canvas from 'html2canvas';
-import { usePython } from 'react-py'
 
 //Commit for deploy.
 
 function DiagramGenerator() {
     let codeText = exampleList[0].code;
 
-    // Use the usePython hook to run code and access both stdout and stderr
-    const { runPython, stdout, stderr, isLoading, isRunning } = usePython()
-
 
     const [code, setCode] = React.useState(codeText);
     const [manipulatedText, setManipulatedText] = useTextManipulation();
 
+    const [logtext, setLogtext] = React.useState("");
+
+    const handleError = (errorMessage: string) => {
+        //let line = errorMessage.replace(/.*error in line ([0–9]*) .*\n/, '$1');
+        setLogtext(errorMessage);
+    }
 
     const handleButtonClick = () => {
         if (code != "") {
             setManipulatedText(code);
-            runPython(code)
-            console.log(stdout)
-            console.log(stderr);
+        } else {
+            setLogtext("No code identified in the code field.")
         }
     };
 
@@ -64,12 +65,12 @@ function DiagramGenerator() {
             <Box position="static" p="3" width="100%">
                 <Grid columns="3" gap="3">
                     <Flex gap="3" justify="start">
-                        <Button accessKey='1' size="2" onClick={handleDownloadCode}  >
+                        <Button accessKey='1' size="2" onClick={handleDownloadCode}>
                             <CodeIcon width="16" height="16" /> Salvar Código
                         </Button>
                     </Flex>
                     <Flex gap="1" justify="center">
-                        <Button accessKey='2' size="2" onClick={handleButtonClick} disabled={isLoading || isRunning}>
+                        <Button accessKey='2' size="2" onClick={handleButtonClick}>
                             <GearIcon width="16" height="16" /> Compilar
                         </Button>
                     </Flex>
@@ -99,15 +100,12 @@ function DiagramGenerator() {
                             </Flex>
                         </Box>
                         <Box width="100%">
-                            {isLoading ? <p>Loading...</p> : <p>Ready!</p>}
-                            <TextArea variant="surface"
-                                style={{ height: 150 }}
-                                value={stderr} />
+                            <TextArea variant="surface" style={{ height: 150 }} value={logtext} />
                         </Box>
                     </Flex>
                     <Flex>
                         <Box id="print" width="100%">
-                            {manipulatedText != "" && <Graphviz options={{ height: 750, width: "100%", zoom: false}} dot={manipulatedText} />}
+                            {manipulatedText != "" && <Graphviz options={{ height: 750, width: "100%", zoom: false, onerror: handleError }} dot={manipulatedText} />}
                         </Box>
                     </Flex>
                 </Grid>
