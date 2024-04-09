@@ -30,7 +30,7 @@ function NavigationBar() {
                         />
                         <div className='flex flex-row gap-6 lg:gap-12'>
                             {navigation.map((item) => (
-                                <Link id={item.id} accessKey={item.accessKey} to={item.href} className="MenuLink hover:font-bold text-sm lg:text-lg">{item.name}</Link>
+                                <Link key={item.id} id={item.id} accessKey={item.accessKey} to={item.href} className="MenuLink hover:font-bold text-sm lg:text-lg">{item.name}</Link>
                             ))}
                         </div>
                         <Link to="https://github.com/Lucaskart/Py2UML" className="MenuLink hidden lg:flex">

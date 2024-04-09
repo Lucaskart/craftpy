@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import stick from '/stick.png'
 
 // Definindo interfaces em TypeScript
 interface Class {
@@ -408,9 +407,9 @@ function useTextManipulation(): [string, (newText: string) => void] {
     // Faz a extração dos dados das classes a partir de um código em Python
     const classes: Class[] = getClassDataPythonCode(codePython);
 
-    //let dot_code = drawClassDiagram(classes);
+    let dot_code = drawClassDiagram(classes);
 
-    let dot_code = drawUseCaseDiagram(classes);
+    dot_code = drawUseCaseDiagram(classes);
 
     setText(dot_code);
   };

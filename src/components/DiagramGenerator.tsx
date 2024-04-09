@@ -1,5 +1,5 @@
 import React from "react";
-import useTextManipulation from '../hooks/useTextManipulation';
+import usePythonCodeAnalyzer from '../hooks/usePythonCodeAnalyzer';
 import { Graphviz } from 'graphviz-react';
 import CodeMirror from '@uiw/react-codemirror';
 import { python } from '@codemirror/lang-python';
@@ -11,29 +11,30 @@ import html2canvas from 'html2canvas';
 //Commit for deploy.
 
 function DiagramGenerator() {
-    let codeText = exampleList[0].code;
+    let codeTextExample = exampleList[2].code;
 
-
-    const [code, setCode] = React.useState(codeText);
-    const [manipulatedText, setManipulatedText] = useTextManipulation();
+    const [codeText, setCodeText, classDiagram] = usePythonCodeAnalyzer(codeTextExample)
 
     const [logtext, setLogtext] = React.useState("");
 
     const handleError = (errorMessage: string) => {
         //let line = errorMessage.replace(/.*error in line ([0–9]*) .*\n/, '$1');
         setLogtext(errorMessage);
+        console.error(errorMessage)
     }
 
     const handleButtonClick = () => {
-        if (code != "") {
-            setManipulatedText(code);
+        if (codeText != "") {
+            //setManipulatedText(code);
+            setCodeText(codeText)
+
         } else {
             setLogtext("No code identified in the code field.")
         }
     };
 
     const onChange = React.useCallback((val: React.SetStateAction<string>) => {
-        setCode(val);
+        setCodeText(val);
     }, []);
 
     const handleDownloadImage = async () => {
@@ -86,7 +87,7 @@ function DiagramGenerator() {
                     <Flex direction="column" gap="3">
                         <Box width="100%">
                             <CodeMirror
-                                value={code}
+                                value={codeText}
                                 height="520px"
                                 width="100%"
                                 theme="dark"
@@ -105,7 +106,7 @@ function DiagramGenerator() {
                     </Flex>
                     <Flex>
                         <Box id="print" width="100%">
-                            {manipulatedText != "" && <Graphviz options={{ height: 750, width: "100%", zoom: false, onerror: handleError }} dot={manipulatedText} />}
+                            {classDiagram != "" && <Graphviz options={{ height: 750, width: "100%", zoom: false, onerror: handleError }} dot={classDiagram} />}
                         </Box>
                     </Flex>
                 </Grid>
