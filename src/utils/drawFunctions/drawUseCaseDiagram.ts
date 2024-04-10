@@ -16,8 +16,7 @@ function drawUseCaseDiagram(classes: ClassInterface[]): string {
 
     classes.forEach((classe: ClassInterface) => {
         classe.functions.forEach((func) => {
-            func.decorators?.forEach((decorator) => {
-                console.log(decorator);
+            func.decorators?.forEach(() => {
                 dot_content += `${func.name} [label="${func.name}"];\n`
             })
         })
@@ -73,7 +72,6 @@ function drawUseCaseDiagram(classes: ClassInterface[]): string {
 
 
     let dot_code = `digraph G {rankdir="LR";labelloc="b";peripheries=0;\n\n${dot_content}\n}`
-    console.log(dot_code);
 
     return dot_code
 }
