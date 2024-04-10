@@ -21,14 +21,14 @@ export interface ClassInterface {
 
 }
 
-interface AttributeInterface {
+export interface AttributeInterface {
     access: string | null,
     name: string,
     type: string | null,
     value?: string | null
 }
 
-interface FunctionInterface {
+export interface FunctionInterface {
     access: string | null,
     name: string;
     decorators: string[] | null;
@@ -36,17 +36,16 @@ interface FunctionInterface {
     content: string;
 }
 
+export function setAccessElement(name: string): string {
+    return name.substring(0, 2) === "__" ? "-" : "+"
+}
+export function setNameElement(name: string): string {
+    return name.replace("__", "")
+}
 
 export function usePythonCodeAnalyzer(pythonCode: string): [string, React.Dispatch<React.SetStateAction<string>>, ClassInterface[] | any] {
     const [codeText, setCodeText] = useState<string>(pythonCode);
     const [classData, setClassData] = useState<ClassInterface[]>([]);
-
-    function setAccessElement(name: string): string {
-        return name.substring(0, 2) === "__" ? "-" : "+"
-    }
-    function setNameElement(name: string): string {
-        return name.replace("__", "")
-    }
 
     function removePythonComments(codigoPython: string) {
         // Expressão regular para remover comentários de uma linha
