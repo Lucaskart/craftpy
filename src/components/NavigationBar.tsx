@@ -14,41 +14,40 @@ const navigation = [
 function NavigationBar() {
 
     return (
-        <>
-            <div className="min-h-full">
-                <header className="bg-[var(--blue-a2)] shadow">
-                    <div className="flex flex-row justify-between items-center mx-auto max-w-full px-4 py-2 lg:py-4 sm:px-6 lg:px-8">
-                        <img
-                            src="logo.png"
-                            alt="Py2UML Logo"
-                            style={{
-                                objectFit: 'cover',
-                                width: '80px',
-                                height: '42px',
-                                borderRadius: 'var(--radius-2)',
-                            }}
-                        />
-                        <div className='flex flex-row gap-6 lg:gap-12'>
-                            {navigation.map((item) => (
-                                <Link key={item.id} id={item.id} accessKey={item.accessKey} to={item.href} className="MenuLink hover:font-bold text-sm lg:text-lg">{item.name}</Link>
-                            ))}
-                        </div>
-                        <Link to="https://github.com/Lucaskart/Py2UML" className="MenuLink hidden lg:flex">
-                            <IconButton variant="ghost">
-                                <GitHubLogoIcon width="25" height="25" />
-                            </IconButton>
-                        </Link>
+        <div className="min-h-full">
+            <header className="bg-[var(--blue-a2)] shadow">
+                <div className="flex flex-row justify-between items-center mx-auto max-w-full px-4 py-2">
+                    <img
+                        src="logo.png"
+                        alt="Py2UML Logo"
+                        style={{
+                            objectFit: 'cover',
+                            width: '80px',
+                            height: '42px',
+                            borderRadius: 'var(--radius-2)',
+                        }}
+                    />
+                    <div className='flex flex-row gap-6 lg:gap-12'>
+                        {navigation.map((item) => (
+                            <Link key={item.id} id={item.id} accessKey={item.accessKey} to={item.href} className="MenuLink hover:font-bold text-sm lg:text-lg">{item.name}</Link>
+                        ))}
                     </div>
-                </header>
-                <main>
-                    <div className="mx-auto max-w-full py-6 sm:px-6 lg:px-8">{
-                        <Outlet />
-                    }</div>
-                </main>
-            </div>
+                    <Link to="https://github.com/Lucaskart/Py2UML" className="MenuLink hidden lg:flex">
+                        <IconButton variant="ghost">
+                            <GitHubLogoIcon width="25" height="25" />
+                        </IconButton>
+                    </Link>
+                </div>
+            </header>
+            <main>
+                <div className="mx-auto max-w-full">{
+                    <Outlet />
+                }</div>
+            </main>
+        </div>
 
 
-        </>
+
     );
 }
 
