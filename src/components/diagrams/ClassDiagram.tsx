@@ -1,7 +1,6 @@
 import { ClassInterface } from './../../hooks/usePythonCodeAnalyzer';
 import drawClassDiagram from '../../utils/drawFunctions/drawClassDiagram'
-
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { select as d3Select } from 'd3-selection';
 import 'd3-graphviz';
 
