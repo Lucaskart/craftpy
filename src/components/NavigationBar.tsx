@@ -5,9 +5,9 @@ import '../styles/styles.css';
 
 
 const navigation = [
-    { name: 'Início', id: 'home', href: '/py2uml/', accessKey: '4', current: true },
-    { name: 'Exemplos', id: 'example', href: '/py2uml/examples', accessKey: '5', current: false },
-    { name: 'Ajuda', id: 'help', href: '/py2uml/help', accessKey: '6', current: false },
+    { name: 'Início', id: 'home', href: '/py2uml/', accessKey: '5', current: true },
+    { name: 'Exemplos', id: 'example', href: '/py2uml/examples', accessKey: '6', current: false },
+    { name: 'Ajuda', id: 'help', href: '/py2uml/help', accessKey: '7', current: false },
 ]
 
 

@@ -58,18 +58,18 @@ function Home() {
                     <CodeIcon width="16" height="16" /> Salvar Código
                 </Button>
                 <div className="flex flex-row justify-center items-center gap-x-1">
-                    <Button size="2"
+                    <Button accessKey='2' size="2"
                         variant={chooseDiagram == CLASS_DIAGRAM_NAME ? "solid" : "soft"}
                         onClick={() => setChooseDiagram(CLASS_DIAGRAM_NAME)}>
                         {CLASS_DIAGRAM_NAME}
                     </Button>
-                    <Button size="2"
+                    <Button accessKey='3' size="2"
                         variant={chooseDiagram == USE_CASE_NAME ? "solid" : "soft"}
                         onClick={() => setChooseDiagram(USE_CASE_NAME)}>
                         {USE_CASE_NAME}
                     </Button>
                 </div>
-                <Button accessKey='3' size="2" onClick={handleDownloadImage}>
+                <Button accessKey='4' size="2" onClick={handleDownloadImage}>
                     <DownloadIcon width="16" height="16" /> Salvar Diagrama
                 </Button>
             </div>

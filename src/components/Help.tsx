@@ -28,7 +28,7 @@ function Help() {
                         <Box>
                             <Text size="2">Windows: </Text><Kbd>Alt + 2</Kbd> <Text size="2"> Mac: </Text><Kbd>Crtl + Option + 2</Kbd>
                             <Text as="div" size="2" color="gray">
-                                Pressione a tecla Alt e a tecla 2 simultaneamente para compilar o código Python e gerar o diagrama.
+                                Pressione a tecla Alt e a tecla 2 simultaneamente para compilar o código Python e gerar um diagrama de classe.
                             </Text>
                         </Box>
                     </Flex>
@@ -38,7 +38,7 @@ function Help() {
                         <Box>
                             <Text size="2">Windows: </Text><Kbd>Alt + 3</Kbd> <Text size="2"> Mac: </Text><Kbd>Crtl + Option + 3</Kbd>
                             <Text as="div" size="2" color="gray">
-                                Pressione a tecla Alt e a tecla 3 simultaneamente para realizar o download do diagrama em formato de imagem.
+                                Pressione a tecla Alt e a tecla 3 simultaneamente para compilar o código Python e gerar um diagrama de casos de uso.
                             </Text>
                         </Box>
                     </Flex>
@@ -48,7 +48,7 @@ function Help() {
                         <Box>
                             <Text size="2">Windows: </Text><Kbd>Alt + 4</Kbd> <Text size="2"> Mac: </Text><Kbd>Crtl + Option + 4</Kbd>
                             <Text as="div" size="2" color="gray">
-                                Pressione a tecla Alt e a tecla 4 simultaneamente para retornar ao gerador de diagramas.
+                                Pressione a tecla Alt e a tecla 4 simultaneamente para realizar o download do diagrama em formato de imagem.
                             </Text>
                         </Box>
                     </Flex>
@@ -58,7 +58,7 @@ function Help() {
                         <Box>
                             <Text size="2">Windows: </Text><Kbd>Alt + 5</Kbd> <Text size="2"> Mac: </Text><Kbd>Crtl + Option + 5</Kbd>
                             <Text as="div" size="2" color="gray">
-                                Pressione a tecla Alt e a tecla 5 simultaneamente para exibir os exemplos disponiveis na ferramenta.
+                                Pressione a tecla Alt e a tecla 5 simultaneamente para retornar ao gerador de diagramas.
                             </Text>
                         </Box>
                     </Flex>
@@ -68,7 +68,17 @@ function Help() {
                         <Box>
                             <Text size="2">Windows: </Text><Kbd>Alt + 6</Kbd> <Text size="2"> Mac: </Text><Kbd>Crtl + Option + 6</Kbd>
                             <Text as="div" size="2" color="gray">
-                                Pressione a tecla Alt e a tecla 6 simultaneamente para exibir a janela de ajuda com as instruções da ferramenta.
+                                Pressione a tecla Alt e a tecla 6 simultaneamente para exibir os exemplos disponiveis na ferramenta.
+                            </Text>
+                        </Box>
+                    </Flex>
+                </Card>
+                <Card style={{ maxWidth: 600 }}>
+                    <Flex gap="3" align="center">
+                        <Box>
+                            <Text size="2">Windows: </Text><Kbd>Alt + 7</Kbd> <Text size="2"> Mac: </Text><Kbd>Crtl + Option + 7</Kbd>
+                            <Text as="div" size="2" color="gray">
+                                Pressione a tecla Alt e a tecla 7 simultaneamente para exibir a janela de ajuda com as instruções da ferramenta.
                             </Text>
                         </Box>
                     </Flex>
