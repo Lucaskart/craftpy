@@ -1,10 +1,7 @@
 import { ClassInterface } from './../../hooks/usePythonCodeAnalyzer';
 import drawUseCaseDiagram from '../../utils/drawFunctions/drawUseCaseDiagram'
-
 import { useEffect, useState } from "react";
-import { select as d3Select } from 'd3-selection';
-import 'd3-graphviz';
-
+import { graphviz } from "d3-graphviz";
 
 interface IProps {
     classData: ClassInterface[];
@@ -23,8 +20,7 @@ function UseCaseDiagram({ classData }: IProps) {
     }, [dotText, classData]);
 
     const createGraph = () => {
-        d3Select<HTMLElement, any>(`#${ID}`)
-            .graphviz()
+        graphviz(`#${ID}`)
             .zoom(false)
             .addImage("stick.png", "40px", "100px")
             .dot(dotText)

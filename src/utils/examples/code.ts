@@ -12,7 +12,7 @@ exampleList.push({
     desciption: "Leilão",
     code: `
 class Leiloeiro:
-    def __init__(self, nome):
+    def __init__(self, nome:str):
         self.nome = nome
 
     @usecase
@@ -24,7 +24,7 @@ class Leiloeiro:
         pass
 
 class Usuario:
-    def __init__(self, nome):
+    def __init__(self, nome:str):
         self.nome = nome
 
     @usecase
@@ -57,8 +57,8 @@ exampleList.push({
     desciption: "Usuário e Administrador",
     code: `
 class User:
-    def __init__(self, nome):
-        self.nome = "nome"
+    def __init__(self, nome:str):
+        self.nome = nome
 
     @usecase
     def Log_In(self):
@@ -73,8 +73,8 @@ class User:
         pass
 
 class Administrator(User):
-    def __init__(self, nome):
-        self.nome = "nome"
+    def __init__(self, nome:str):
+        self.nome = nome
 
     @usecase
     @extends[Log_In]
