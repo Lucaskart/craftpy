@@ -1,8 +1,8 @@
 import { ClassInterface } from './../../hooks/usePythonCodeAnalyzer';
 import drawClassDiagram from '../../utils/drawFunctions/drawClassDiagram'
 import { useEffect, useState } from "react";
-import { select as d3Select } from 'd3-selection';
-import 'd3-graphviz';
+import { graphviz } from "d3-graphviz";
+
 
 
 interface IProps {
@@ -22,11 +22,10 @@ function ClassDiagram({ classData }: IProps) {
     }, [dotText, classData]);
 
     const createGraph = () => {
-        d3Select<HTMLElement, any>(`#${ID}`)
-            .graphviz()
+        graphviz(`#${ID}`)
             .zoom(false)
             .dot(dotText)
-            .render()
+            .render();
     }
 
     return (<div id={ID}>
