@@ -4,154 +4,130 @@ interface Example {
     code: string
 }
 
-
 const exampleList: Example[] = []
 
-
 exampleList.push({
-    desciption: "Leilão",
+    desciption: "Exemplo 1: Classe",
     code: `
-class Leiloeiro:
-    def __init__(self, nome:str):
-        self.nome = nome
+class Carro:
+  def __init__(self, marca:str, chassi:str):
+    self.marca = marca #Atributo público
+    self.__chassi = marca #Atributo privado
 
-    @usecase
-    def criar_leilao(self):
-        pass
-
-    @usecase
-    def finalizar_leilao(self):
-        pass
-
-class Usuario:
-    def __init__(self, nome:str):
-        self.nome = nome
-
-    @usecase
-    @include[criar_leilao]
-    def dar_lances_no_leilao(self):
-        pass
-
-    @usecase
-    @include[finalizar_leilao]
-    @extends[dar_lances_no_leilao]
-    @extends[pagar_pelo_produto]
-    def ganhar_leilao(self):
-        pass
-
-    @usecase
-    def pagar_pelo_produto(self):
-        pass
-
-    @include[pagar_pelo_produto]
-    def pagar_com_cartao_cred(self):
-        pass
-        
-    @include[pagar_pelo_produto]
-    def pagar_com_boleto(self):
+    def aumentarKM(self):
         pass
 `})
 
+exampleList.push({
+    desciption: "Exemplo 2: Associação",
+    code: `
+class Aluno:
+    def __init__(self, nome:str, idade:int):
+        self.nome = nome
+        self.idade = idade
+
+    def info(self):
+        return f"Aluno: {self.nome}, Idade: {self.idade}"
+
+
+class Turma:
+    alunos:list[Aluno] = list() #Associação Simples
+    def __init__(self, nome_turma:str):
+        self.nome_turma = nome_turma
+
+    def adicionar_aluno(self, aluno):
+        self.alunos.append(aluno)
+
+    @usecase #Define o método como um Use Case para o Diagrama de Casos de Uso
+    def listar_alunos(self):
+        print(f"Alunos da turma {self.nome_turma}:")
+        for aluno in self.alunos:
+            print(aluno.info())
+`})
 
 exampleList.push({
-    desciption: "Usuário e Administrador",
+    desciption: "Exemplo 3: Herança",
     code: `
-class User:
-    def __init__(self, nome:str):
+class Aluno:
+    def __init__(self, nome:str, idade:int):
         self.nome = nome
+        self.idade = idade
 
-    @usecase
-    def Log_In(self):
-        pass
+    def info(self):
+        return f"Aluno: {self.nome}, Idade: {self.idade}"
 
-    @extends[Log_In]
-    def Log_In_Password(self):
-        pass
+
+class AlunoGraduacao(Aluno):
+    def __init__(self, nome:str, idade:str, curso:str):
+        super().__init__(nome, idade)
+        self.curso = curso
+
+    def info(self):
+        return f"Aluno de Graduação: {self.nome}, Idade: {self.idade}, Curso: {self.curso}"
+
+class AlunoMedioTecnico(Aluno):
+    def __init__(self, nome:str, idade:str, curso:str):
+        super().__init__(nome, idade)
+        self.curso = curso
+
+    def info(self):
+        return f"Aluno do Médio Técnico: {self.nome}, Idade: {self.idade}, Curso: {self.curso}"
+
+class Turma:
+    alunos:list[Aluno] = list() #Associação Simples
+    def __init__(self, nome_turma:str):
+        self.nome_turma = nome_turma
     
-    @extends[Log_In]
-    def Log_In_Certificate(self):
-        pass
-
-class Administrator(User):
-    def __init__(self, nome:str):
-        self.nome = nome
-
     @usecase
-    @extends[Log_In]
-    def Manage_User(self):
-        pass
+    def adicionar_aluno(self, aluno):
+        self.alunos.append(aluno)
     
-    @extends[Manage_User]
-    def Change_Email(self):
-        pass
-
-    @extends[Manage_User]
-    def Change_Password(self):
-        pass
-`
-})
-
+    @usecase
+    def listar_alunos(self):
+        print(f"Alunos da turma {self.nome_turma}:")
+        for aluno in self.alunos:
+            print(aluno.info())
+`})
 
 exampleList.push({
-    desciption: "Conta bancária",
+    desciption: "Exemplo 4: Agregação",
     code: `
-class Person:
-    __bankacc: list[BankAccount] = list()
-    address: Address
-    def __init__(self, name: str, age: int, job: Job):
-        self.name: str = name
-        self.age: int = age
-        self.__job: Job = job
-        self.var_const_tipo:int = 10
-        self.var_const_semtipo = 10
-        self.var_string_semtipo = "djafkdsljfdlkdsj"
-        self.var_string_tipo:str = "djafkdsljfdlkdsj"
+class Endereco:
+    def __init__(self, rua:str, numero:str, cidade:str, estado:str, cep:str):
+        self.rua = rua
+        self.numero = numero
+        self.cidade = cidade
+        self.estado = estado
+        self.cep = cep
 
-class BankAccount:
-    def __init__(self, number:int):
-        self.number: int = number
-    
-    @meu_decorator
-    def minha_funcao():
-        print("Minha função está sendo chamada")
+    def info(self):
+        return f"Endereço: {self.numero} {self.rua}, {self.cidade}, {self.estado}, CEP: {self.cep}"
 
-class Address:
-    def __init__(self, street: str, city: str):
-        self.street: str = street
-        self.city: str = city
+class Aluno:
+    #O(s) objeto(s) são passados por parâmetros pelo construtor
+    def __init__(self, nome:str, idade:intl, endereco:Endereco):
+        self.nome = nome
+        self.idade = idade
+        self.endereco = endereco 
 
-class Job:
-    def __init__(self, position: str, salary: float):
-        self.__position: str = position
-        self.salary: float = salary
+    def info(self):
+        return f"Aluno: {self.nome}, Idade: {self.idade}"
 
-# Herança: Student é uma subclasse de Person
-class Student(Person):
-    def __init__(self, name: str, age: int, school: str):
-        super().__init__(name, age)
-        self.school: str = school
 
-class ComposicaoClass:
-    def __init__(self):
-        self.__person = Person("Fulano", 18)
-        self.jobFulano:Job = Job()
-class MyClass:
-    @classmethod
-    def my_method(cls, x):
-        print(x)
+class Turma:
+    def __init__(self, nome_turma:str, alunos:list[Aluno]):
+        self.nome_turma = nome_turma
+        self.alunos = alunos #O(s) objeto(s) são passados por parâmetros pelo construtor
 
-    def __init__(self):
-        pass
+    def adicionar_aluno(self, aluno):
+        self.alunos.append(aluno)
 
-    def my_function(self, y):
-        print(y)
-    
-class AnotherClass(MyClass):
-    @staticmethod
-    def static_method(z):
-        print(z)
-  `})
-
+    @usecase #Define o método como um Use Case para o Diagrama de Casos de Uso
+    def listar_alunos(self):
+        print(f"Alunos da turma {self.nome_turma}:")
+        for aluno in self.alunos:
+            print(aluno.info())
+`})
 
 
 //exampleList.push({desciption:"",code:})
