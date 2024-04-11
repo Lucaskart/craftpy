@@ -58,7 +58,7 @@ exampleList.push({
     code: `
 class User:
     def __init__(self, nome):
-        self.nome = nome
+        self.nome = "nome"
 
     @usecase
     def Log_In(self):
@@ -74,7 +74,7 @@ class User:
 
 class Administrator(User):
     def __init__(self, nome):
-        self.nome = nome
+        self.nome = "nome"
 
     @usecase
     @extends[Log_In]

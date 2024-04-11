@@ -25,6 +25,7 @@ function UseCaseDiagram({ classData }: IProps) {
     const createGraph = () => {
         d3Select<HTMLElement, any>(`#${ID}`)
             .graphviz()
+            .zoom(false)
             .addImage("stick.png", "40px", "100px")
             .dot(dotText)
             .render()
