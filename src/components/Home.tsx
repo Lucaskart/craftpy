@@ -22,7 +22,6 @@ function Home() {
 
     useEffect(() => {
         const code = exampleList.find((c) => c.desciption == valueComboBox)
-        console.log(valueComboBox);
         if (code) {
             setCodeText(code.code)
         }
@@ -80,7 +79,7 @@ function Home() {
                 </Button>
             </div>
             <div className="w-full flex flex-row items-center justify-between">
-                <div className="w-full flex flex-col max-w-2/3 gap-2 justify-center">
+                <div className="w-1/2 flex flex-col max-w-2/3 gap-2 justify-center">
                     <Select.Root value={valueComboBox} onValueChange={setValueComboBox}>
                         <Select.Trigger
                             className="inline-flex items-center justify-center rounded px-[15px] text-[13px] leading-none h-[35px] gap-[5px] bg-white border-blue-200 border-2 text-blue-950 shadow-[0_2px_10px] shadow-black/10 hover:bg-blue-200  focus:border-blue-600 data-[placeholder]:text-red outline-none"
@@ -120,7 +119,7 @@ function Home() {
                     <CodeMirror
                         value={codeText}
                         height="600px"
-                        width="100%"
+                        minWidth="900px"
                         theme="dark"
                         extensions={[python()]}
                         onChange={onChangeCode}
@@ -132,7 +131,7 @@ function Home() {
                     {chooseDiagram == USE_CASE_NAME && <UseCaseDiagram classData={[...classData]} />}
                 </div>
             </div>
-            <TextArea className="w-full h-[150px]" placeholder="Painel de Logs…" variant="surface" disabled={true} />
+            <TextArea className="w-full h-[150px]" placeholder="Painel de Logs…" variant="surface" disabled={true}  />
         </div>
     );
 }
