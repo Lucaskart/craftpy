@@ -287,6 +287,18 @@ class Cliente:
         self.cpf = cpf  # CPF do cliente
         self.email = email  # E-mail do cliente
 
+    @usecase
+    def buscar_livros_por_autor(self, autor: str):
+        return [livro for livro in self.livros if livro.autor == autor]
+
+    @usecase
+    def buscar_livros_por_genero(self, genero: str):
+        return [livro for livro in self.livros if livro.genero == genero]
+
+    @usecase
+    def comprar_livro(self, livro: Livro, quantidade: int):
+        pass
+
 class Venda:
     def __init__(self, livro: Livro, cliente: Cliente, quantidade: int, total: float):
         self.livro = livro  # Livro vendido
@@ -306,15 +318,15 @@ class SistemaVendasLivraria:
     def remover_livro(self, livro: Livro):
         self.livros.remove(livro)
 
-    @usecase[Cliente] #Define que também é um UseCase de 'Cliente'
+    @usecase
     def buscar_livros_por_autor(self, autor: str):
         return [livro for livro in self.livros if livro.autor == autor]
 
-    @usecase[Cliente] #Define que também é um UseCase de 'Cliente'
+    @usecase
     def buscar_livros_por_genero(self, genero: str):
         return [livro for livro in self.livros if livro.genero == genero]
 
-    @usecase[Cliente] #Define que também é um UseCase de 'Cliente'
+    @usecase
     def comprar_livro(self, livro: Livro, cliente: Cliente, quantidade: int):
         pass
 `});function ah(t){return t.substring(0,2)==="__"?"-":"+"}function lh(t){return t.replace("__","")}function xD(t){const[e,r]=C.useState(t),[n,i]=C.useState([]);function A(c){const u=/#.*$/gm,f=/'''[\s\S]*?'''|"""[\s\S]*?"""/gm;return c=c.replace(u,""),c=c.replace(f,""),c}const o=c=>{const u=new RegExp("(?<!\\w)class\\b\\s+(\\w+)\\s*(\\((.*?)\\))?:\\s*(.*?)\\s*(?=class\\b|$)","gs"),f=[...c.matchAll(u)],d=[],p=/.*?def\s+(\w+)\s*\((.*?)\):([\s\S]*?)(?=\s*(?!.*\bclass[\w\d])@|def|\s*$)/gs;for(const g of f){const v=g[1],O=g[3],w=g[4],y=[];let S;for(;(S=p.exec(w))!==null;){const E=S[1],U=S[2].replace(/ /g,""),P=S[3].trim().replace(/ /g,""),W=S[0].trim().replace(/ /g,"").match(/^@.*$/gm),T={access:E=="__init__"?null:ah(E),name:E=="__init__"?E:lh(E),decorators:W,params:U,content:P};y.push(T)}const x={name:v,inheritance:O||null,content:w.trim(),functions:y};d.push(x)}return d};function s(c){return c.forEach(u=>{const f=u.functions.find(d=>d.name=="__init__");if(f){const d=f.params.match(/(\w+):(list\[(\w+)\]|\w+)/g),p=[];if(d!=null)for(const w of d){const[y,S]=w.split(":").map(E=>E.trim()),x={access:ah(y),name:lh(y),type:S};p.push(x)}const g=/self\.(\w+)(?::(\w+(?:\[\w+\])?))?(?:\s*=\s*(.+))?$/gm;let v;const O=[];for(;(v=g.exec(f.content))!==null;){const w={access:ah(v[1]),name:lh(v[1]),type:v[2]||null,value:v[3]||null};if(!w.type&&w.value)if(!isNaN(parseFloat(w.value)))w.type="int";else if(w.value==="True"||w.value==="False")w.type="bool";else if(w.value[0]=='"')w.type="str";else{const y=/(\w+)\s*\(.*$/gm;for(;(v=y.exec(w.value))!==null;)w.type=v[1]}O.push(w)}O.forEach(w=>{p.forEach(y=>{w.value==y.name&&(w.type=y.type)})}),u.attributes=[],O.forEach(w=>{var y;(y=u.attributes)==null||y.push(w)})}}),c}function a(c){const u=A(c);let f=o(u);return f=s(f),f}const l=c=>{const u=a(c);i([...u])};return Zr.useEffect(()=>{l(e)},[e]),[e,r,n]}function SD(t){let e="";return t.forEach(n=>{var o;let i="",A="";n.functions.forEach(s=>{if(s.name!="__init__"){A+=`${s.access} ${s.name}()\\l`;const a=/self\.(\w+)(?::(\w+(?:\[\w+\])?))?(?:\s*=\s*(.+))?$/gm;let l;for(;(l=a.exec(s.content))!==null;){const c={access:ah(l[1]),name:lh(l[1]),type:l[3].replace(/\([^)]*\)/g,"")||null,value:l[3]||null};e+=`${c.type}  ->   ${n.name} [style=dotted, arrowtail=open, dir=back, label="<<create>>", labeldistance=1.5]
