@@ -8,7 +8,8 @@ const exampleList: Example[] = []
 
 exampleList.push({
     desciption: "Exemplos",
-    code: ``})
+    code: ``
+})
 
 exampleList.push({
     desciption: "Exemplo 1: Classe",
@@ -133,6 +134,62 @@ class Turma:
             print(aluno.info())
 `})
 
+exampleList.push({
+    desciption: "Sistema para vendas de ingressos de cinema", code: `class Filme:
+    def __init__(self, titulo: str, duracao: int, genero: str):
+        self.titulo = titulo  # Título do filme
+        self.duracao = duracao  # Duração em minutos
+        self.genero = genero  # Gênero do filme
+
+class Sessao:
+    def __init__(self, filme: Filme, horario: str, sala: str, preco: float, disponivel: int):
+        self.filme = filme  # Filme sendo exibido
+        self.horario = horario  # Horário de início da sessão
+        self.sala = sala  # Sala onde a sessão ocorrerá
+        self.preco = preco  # Preço do ingresso
+        self.disponivel = disponivel  # Quantidade de ingressos disponíveis
+
+class Cliente:
+    def __init__(self, nome: str, cpf: str, idade: int):
+        self.nome = nome  # Nome do cliente
+        self.cpf = cpf  # CPF do cliente
+        self.idade = idade  # Idade do cliente
+    
+    @usecase
+    def comprar_ingresso(self, sessao: Sessao, quantidade: int):
+        pass
+
+class Ingresso:
+    def __init__(self, sessao: Sessao, cliente: Cliente, quantidade: int):
+        self.sessao = sessao  # Sessão para a qual o ingresso foi adquirido
+        self.cliente = cliente  # Cliente que adquiriu o ingresso
+        self.quantidade = quantidade  # Quantidade de ingressos adquiridos
+
+class SistemaVendasIngressosCinema:
+    sessoes:list[Sessao] = []  # Lista de sessões disponíveis
+    def __init__(self):
+        pass
+
+    @usecase
+    def adicionar_sessao(self, sessao: Sessao):
+        self.sessoes.append(sessao)
+
+    @usecase
+    def remover_sessao(self, sessao: Sessao):
+        self.sessoes.remove(sessao)
+
+    @usecase
+    def buscar_sessoes_por_filme(self, filme: Filme):
+        pass
+
+    @usecase
+    def buscar_sessoes_por_horario(self, horario: str):
+        pass
+
+class Cinema:
+    def __init__(self):
+        self.sistema_vendas = SistemaVendasIngressosCinema()
+`})
 
 //exampleList.push({desciption:"",code:})
 export default exampleList
