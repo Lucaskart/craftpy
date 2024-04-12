@@ -5,7 +5,7 @@ import ClassDiagram from './diagrams/ClassDiagram'
 import UseCaseDiagram from './diagrams/UseCaseDiagram'
 import CodeMirror from '@uiw/react-codemirror';
 import { python } from '@codemirror/lang-python';
-import { Button, TextArea } from '@radix-ui/themes';
+import { Button } from '@radix-ui/themes';
 import { CodeIcon, DownloadIcon, CheckIcon, ChevronDownIcon, ChevronUpIcon } from '@radix-ui/react-icons'
 import html2canvas from 'html2canvas';
 import * as Select from '@radix-ui/react-select';
