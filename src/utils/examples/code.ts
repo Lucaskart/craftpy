@@ -205,6 +205,18 @@ class Cliente:
         self.cpf = cpf  # CPF do cliente
         self.email = email  # E-mail do cliente
 
+    @usecase
+    def buscar_livros_por_autor(self, autor: str):
+        return [livro for livro in self.livros if livro.autor == autor]
+
+    @usecase
+    def buscar_livros_por_genero(self, genero: str):
+        return [livro for livro in self.livros if livro.genero == genero]
+
+    @usecase
+    def comprar_livro(self, livro: Livro, quantidade: int):
+        pass
+
 class Venda:
     def __init__(self, livro: Livro, cliente: Cliente, quantidade: int, total: float):
         self.livro = livro  # Livro vendido
@@ -224,15 +236,15 @@ class SistemaVendasLivraria:
     def remover_livro(self, livro: Livro):
         self.livros.remove(livro)
 
-    @usecase[Cliente] #Define que também é um UseCase de 'Cliente'
+    @usecase
     def buscar_livros_por_autor(self, autor: str):
         return [livro for livro in self.livros if livro.autor == autor]
 
-    @usecase[Cliente] #Define que também é um UseCase de 'Cliente'
+    @usecase
     def buscar_livros_por_genero(self, genero: str):
         return [livro for livro in self.livros if livro.genero == genero]
 
-    @usecase[Cliente] #Define que também é um UseCase de 'Cliente'
+    @usecase
     def comprar_livro(self, livro: Livro, cliente: Cliente, quantidade: int):
         pass
 `})
