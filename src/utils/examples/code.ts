@@ -8,7 +8,9 @@ const exampleList: Example[] = []
 
 exampleList.push({
     desciption: "Exemplos",
-    code: ``
+    code: `# Bem-vindo ao PyUML.
+# Escreva seu código em Python 3 ou veja os exemplos disponíveis.
+`
 })
 
 exampleList.push({
@@ -68,7 +70,8 @@ class Cinema:
         self.sistema_vendas = SistemaVendasIngressosCinema()
 `})
 
-exampleList.push({desciption:"Sistema de livraria",code:`class Livro:
+exampleList.push({
+    desciption: "Sistema de livraria", code: `class Livro:
     def __init__(self, titulo: str, autor: str, genero: str, preco: float, estoque: int):
         self.titulo = titulo  # Título do livro
         self.autor = autor  # Autor do livro
@@ -126,7 +129,8 @@ class SistemaVendasLivraria:
         pass
 `})
 
-exampleList.push({desciption:"Uso de Atributos no Py2UML",code:`""" 
+exampleList.push({
+    desciption: "Uso de Atributos no Py2UML", code: `""" 
 Exemplos de criação e atribuição de variáveis no Py2UML 
 """
 
@@ -162,7 +166,8 @@ class D:
         self.g = {} #dict
 `})
 
-exampleList.push({desciption:"Associação simples no Py2UML",code:`""" 
+exampleList.push({
+    desciption: "Associação simples no Py2UML", code: `""" 
 Exemplo de Associação simples entre classes no Py2UML 
 """
 
@@ -186,7 +191,8 @@ class D:
         pass
 `})
 
-exampleList.push({desciption:"Herança no Py2UML",code:`""" 
+exampleList.push({
+    desciption: "Herança no Py2UML", code: `""" 
 Exemplo de Herança entre classes no Py2UML 
 """
 
@@ -207,7 +213,8 @@ class D(A,B): #Herança múltipla
         pass
 `})
 
-exampleList.push({desciption:"Agregação no Py2UML",code:`""" 
+exampleList.push({
+    desciption: "Agregação no Py2UML", code: `""" 
 Exemplo de Agregação entre classes no Py2UML 
 """
 
@@ -229,7 +236,8 @@ class D:
         self.b:list[B] = b #Agregação com multiplicidade
 `})
 
-exampleList.push({desciption:"Composição no Py2UML",code:`""" 
+exampleList.push({
+    desciption: "Composição no Py2UML", code: `""" 
 Exemplo de Composição entre classes no Py2UML 
 """
 
@@ -242,7 +250,8 @@ class B:
         self.a = A() #Composição
 `})
 
-exampleList.push({desciption:"Dependência no Py2UML",code:`""" 
+exampleList.push({
+    desciption: "Dependência no Py2UML", code: `""" 
 Exemplo de Dependência entre classes no Py2UML 
 """
 
