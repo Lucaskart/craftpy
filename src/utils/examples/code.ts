@@ -191,5 +191,51 @@ class Cinema:
         self.sistema_vendas = SistemaVendasIngressosCinema()
 `})
 
+exampleList.push({desciption:"Sistema de livraria",code:`class Livro:
+    def __init__(self, titulo: str, autor: str, genero: str, preco: float, estoque: int):
+        self.titulo = titulo  # Título do livro
+        self.autor = autor  # Autor do livro
+        self.genero = genero  # Gênero do livro
+        self.preco = preco  # Preço do livro
+        self.estoque = estoque  # Quantidade disponível em estoque
+
+class Cliente:
+    def __init__(self, nome: str, cpf: str, email: str):
+        self.nome = nome  # Nome do cliente
+        self.cpf = cpf  # CPF do cliente
+        self.email = email  # E-mail do cliente
+
+class Venda:
+    def __init__(self, livro: Livro, cliente: Cliente, quantidade: int, total: float):
+        self.livro = livro  # Livro vendido
+        self.cliente = cliente  # Cliente que realizou a compra
+        self.quantidade = quantidade  # Quantidade de livros vendidos
+        self.total = total  # Total da compra
+
+class SistemaVendasLivraria:
+    def __init__(self):
+        self.livros:list[Livro] = []  # Lista de livros disponíveis
+
+    @usecase
+    def adicionar_livro(self, livro: Livro):
+        self.livros.append(livro)
+
+    @usecase
+    def remover_livro(self, livro: Livro):
+        self.livros.remove(livro)
+
+    @usecase[Cliente] #Define que também é um UseCase de 'Cliente'
+    def buscar_livros_por_autor(self, autor: str):
+        return [livro for livro in self.livros if livro.autor == autor]
+
+    @usecase[Cliente] #Define que também é um UseCase de 'Cliente'
+    def buscar_livros_por_genero(self, genero: str):
+        return [livro for livro in self.livros if livro.genero == genero]
+
+    @usecase[Cliente] #Define que também é um UseCase de 'Cliente'
+    def comprar_livro(self, livro: Livro, cliente: Cliente, quantidade: int):
+        pass
+`})
+
 //exampleList.push({desciption:"",code:})
 export default exampleList
