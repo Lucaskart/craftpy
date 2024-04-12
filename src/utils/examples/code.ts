@@ -249,5 +249,41 @@ class SistemaVendasLivraria:
         pass
 `})
 
+exampleList.push({desciption:"Uso de Atributos no Py2UML",code:`""" 
+Exemplos de criação e atribuição de variáveis no Py2UML 
+"""
+
+class A:
+    def __init__(self, a:int, b , c):
+        self.a = a #int 
+        self.b:str = b #str
+        self.c = c #null
+        self.d #descartada
+        self.e = #descartada
+
+class B:
+    def __init__(self, a:int, b:str):
+        self.a:bool = a #int
+        self.b:dict = b #str 
+        self.c:int = "novo valor" #int
+        self.d:bool = b #str
+
+class C:
+    def __init__(self):
+        self.a = 10 #int
+        self.b = "exemplo" #str
+        self.c = False #bool
+
+class D:
+    def __init__(self):
+        self.a = [1,2,3] #list
+        self.b = [] #list
+        self.c = list() #list
+        self.d = (4,5,6) #tuple
+        self.e = () #tuple
+        self.f = {'Yan': '1234-5678', 'Pedro': '9999-9999'} #dict
+        self.g = {} #dict
+`})
+
 //exampleList.push({desciption:"",code:})
 export default exampleList
