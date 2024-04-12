@@ -7,6 +7,10 @@ interface Example {
 const exampleList: Example[] = []
 
 exampleList.push({
+    desciption: "Exemplos",
+    code: ``})
+
+exampleList.push({
     desciption: "Exemplo 1: Classe",
     code: `
 class Carro:
