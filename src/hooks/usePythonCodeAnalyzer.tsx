@@ -194,8 +194,12 @@ export function usePythonCodeAnalyzer(pythonCode: string): [string, React.Dispat
                             }
                         }
                     } else { // Variáveis sem tipo e sem atribuição
-                        p.type = 'null'
-                        p.value = 'null'
+                        if(!p.type){
+                            p.type = 'null'
+                        } 
+                        if(!p.value){
+                            p.value = 'null'
+                        } 
                     }
                     
                     // adiciona as variáveis internas ao construtor

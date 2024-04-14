@@ -140,7 +140,9 @@ class A:
         self.b:str = b #str
         self.c = c #null
         self.d #null
-        self.e = #descartada
+        self.e:int #int
+        self.f:str = var_nao_declarada #str
+        self.g = var_nao_declarada #null
 
 class B:
     def __init__(self, a:int, b:str):
