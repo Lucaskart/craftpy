@@ -193,12 +193,13 @@ export function usePythonCodeAnalyzer(pythonCode: string): [string, React.Dispat
                                 }
                             }
                         }
+                    } else { // Variáveis sem tipo e sem atribuição
+                        p.type = 'null'
+                        p.value = 'null'
                     }
-                    // apenas variáveis com valor (atribuição, =)
-                    if (p.value) {
-                        internas.push(p);
-                    }
-
+                    
+                    // adiciona as variáveis internas ao construtor
+                    internas.push(p);
                 }
 
                 // atualiza o tipo com base nos parâmetros

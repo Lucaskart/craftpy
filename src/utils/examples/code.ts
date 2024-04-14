@@ -139,7 +139,7 @@ class A:
         self.a = a #int 
         self.b:str = b #str
         self.c = c #null
-        self.d #descartada
+        self.d #null
         self.e = #descartada
 
 class B:
