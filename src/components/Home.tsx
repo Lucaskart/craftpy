@@ -32,7 +32,7 @@ function Home() {
         const blob = new Blob([codeText], { type: "text/plain" });
         const url = URL.createObjectURL(blob);
         const link = document.createElement("a");
-        link.download = "user-info.txt";
+        link.download = "user-info.py";
         link.href = url;
         link.click();
     };
