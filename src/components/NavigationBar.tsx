@@ -15,7 +15,7 @@ function NavigationBar() {
 
     return (
         <div className="min-h-full">
-            <header className="bg-[var(--blue-a2)] shadow">
+            <header className="bg-[var(--blue-a2)] shadow-md">
                 <div className="flex flex-row justify-between items-center mx-auto max-w-full px-4 py-2">
                     <img
                         src="logo.png"

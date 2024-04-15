@@ -164,16 +164,45 @@ export function usePythonCodeAnalyzer(pythonCode: string): [string, React.Dispat
                                 // verifica se é uma string
                                 if (p.value[0] == '\"') {
                                     p.type = 'str'
-                                } else {// um objeto
-                                    //Obtem o tipo com base no nome da instância
-                                    const regex = /(\w+)\s*\(.*$/gm;
-                                    while ((match = regex.exec(p.value)) !== null) {
-                                        p.type = match[1]
+                                } else {
+                                    if (p.value[0] == "[" || p.value == "list()") {
+                                        p.type = 'list'
+                                    } else {
+                                        if (p.value[0] == "(") {
+                                            p.type = 'tuple'
+                                        } else {
+
+                                            if (p.value[0] == "{") {
+                                                p.type = 'dict'
+                                            } else {
+                                                // um objeto
+                                                if (p.value[0] == p.value[0].toUpperCase()) {
+                                                    //Obtem o tipo com base no nome da instância
+                                                    const regex = /(\w+)\s*\(.*$/gm;
+                                                    while ((match = regex.exec(p.value)) !== null) {
+                                                        p.type = match[1]
+                                                    }
+                                                } else {
+                                                    // variável sem tipo
+                                                    p.type = 'null'
+                                                }
+                                            }
+
+                                        }
                                     }
                                 }
                             }
                         }
+                    } else { // Variáveis sem tipo e sem atribuição
+                        if(!p.type){
+                            p.type = 'null'
+                        } 
+                        if(!p.value){
+                            p.value = 'null'
+                        } 
                     }
+                    
+                    // adiciona as variáveis internas ao construtor
                     internas.push(p);
                 }
 
