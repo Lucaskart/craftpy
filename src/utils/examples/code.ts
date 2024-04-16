@@ -94,6 +94,8 @@ class Cliente:
         return [livro for livro in self.livros if livro.genero == genero]
 
     @usecase
+    @include[buscar_livros_por_autor]
+    @include[buscar_livros_por_genero]
     def comprar_livro(self, livro: Livro, quantidade: int):
         pass
 
@@ -268,6 +270,32 @@ class B:
     def dependency_method(self):
         self.a = A() #Dependência (create)
 `})
+
+exampleList.push({desciption:"Casos de uso no Py2UML",code:`"""
+Exemplo de diagrama de casos de uso no Py2UML 
+"""
+
+class Vendedor:
+    def __init__(self):
+        pass
+    
+    @usecase
+    @extends[consulta_no_SPC] #Pode-se inserir métodos não existêntes
+    @include[verificar_pagamentos_atrasados]
+    def tirar_pedido(self):
+        pass
+
+class Entregador:
+    def __init__(self):
+        pass
+    
+    @usecase
+    @include[verificar_pagamentos_atrasados]
+    def entrega_pedido(self):
+        pass
+    
+`})
+    
 
 //exampleList.push({desciption:"",code:})
 export default exampleList

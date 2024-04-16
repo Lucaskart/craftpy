@@ -46,32 +46,39 @@ function drawUseCaseDiagram(classes: ClassInterface[]): string {
         })
     })
 
-    dot_content += `edge [arrowtail="vee", label="<<extend>>", style=dashed];\n`
+    dot_content += `edge [arrowtail="vee", dir=back, label="<<extend>>", style=dashed];\n`
 
     classes.forEach((classe: ClassInterface) => {
         classe.functions.forEach((func) => {
             func.decorators?.forEach((decorator) => {
                 if (decorator.includes("@extends")) {
-                    dot_content += `${decorator.replace(/.*\[(.*?)\].*/, '$1')} -> ${func.name};\n`
+                    const _f = decorator.replace(/.*\[(.*?)\].*/, '$1')
+                    if (_f) {
+                        dot_content += `${func.name} -> ${_f};\n`
+                    }
                 }
             })
         })
     })
 
-    dot_content += `edge [arrowtail="vee", label="<<include>>", style=dashed];\n`
+    dot_content += `edge [arrowtail="vee",  dir=back, label="<<include>>", style=dashed];\n`
 
     classes.forEach((classe: ClassInterface) => {
         classe.functions.forEach((func) => {
             func.decorators?.forEach((decorator) => {
                 if (decorator.includes("@include")) {
-                    dot_content += `${decorator.replace(/.*\[(.*?)\].*/, '$1')} -> ${func.name};\n`
+                    const _f = decorator.replace(/.*\[(.*?)\].*/, '$1')
+                    if (_f) {
+                        dot_content += `${_f} -> ${func.name};\n`
+                    }
+
                 }
             })
         })
     })
 
 
-    let dot_code = `digraph G {rankdir="LR";labelloc="b";peripheries=0;\n\n${dot_content}\n}`
+    let dot_code = `digraph G {rankdir=LR;labelloc=b;peripheries=0;\n\n${dot_content}\n}`
 
     return dot_code
 }
