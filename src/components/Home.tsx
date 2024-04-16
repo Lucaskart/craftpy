@@ -23,7 +23,19 @@ function Home() {
     useEffect(() => {
         const code = exampleList.find((c) => c.desciption == valueComboBox)
         if (code) {
-            setCodeText(code.code)
+            //setCodeText(code.code)
+
+            // Insere no usePythonCodeAnalyzer um caractere por vez para simular a digitação
+            const text = code.code
+            let textSet = ""
+            for (let i = 0; i < text.length; i++) {
+                const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+                sleep(10000).then(() => {
+                    // Do something after the sleep!
+                    textSet = textSet + text[i]
+                    setCodeText(textSet)
+                });
+            }
         }
 
     }, [valueComboBox]);

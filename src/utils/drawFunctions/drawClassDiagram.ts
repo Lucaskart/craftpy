@@ -21,7 +21,7 @@ function drawClassDiagram(classes: ClassInterface[]): string {
                     const p: AttributeInterface = {
                         access: setAccessElement(match[1]),
                         name: setNameElement(match[1]),
-                        type: match[3].replace(/\([^)]*\)/g, '') || null,
+                        type: match[3] ? match[3].replace(/\([^)]*\)/g, '') || null : null,
                         value: match[3] || null,
                     };
 
