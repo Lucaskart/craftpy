@@ -40,7 +40,7 @@ function drawClassDiagram(classes: ClassInterface[]): string {
                     const padrao = /\[(.*?)\]/;
                     const resultado = padrao.exec(attr.type);
                     if (resultado) {
-                        dot_content += `${classe.name} -> ${resultado[1]} [arrowtail=odiamond, dir=back, label="${attr.access} ${attr.name}",taillabel=1,  headlabel="*", labeldistance=1.5]\n`;
+                        dot_content += `${classe.name} -> ${resultado[1]} [arrowtail=odiamond, dir=back, label=<<table border="0" cellspacing="10"><tr><td></td></tr></table>>, taillabel=1, headlabel=<<TABLE border="0" cellspacing="3"><tr><td>*</td><td>${attr.access} ${attr.name}</td></tr></TABLE>>, labeldistance=1.5]\n`;
                     }
                 }
             } else { // desenha as agregações
