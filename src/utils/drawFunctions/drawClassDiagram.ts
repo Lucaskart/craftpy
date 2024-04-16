@@ -25,7 +25,9 @@ function drawClassDiagram(classes: ClassInterface[]): string {
                         value: match[3] || null,
                     };
 
-                    dot_content += `${p.type}  ->   ${classe.name} [style=dotted, arrowtail=open, dir=back, label="<<create>>", labeldistance=1.5]\n`;
+                    if (p.type) {
+                        dot_content += `${p.type}  ->   ${classe.name} [style=dotted, arrowtail=open, dir=back, label="<<create>>", labeldistance=1.5]\n`;
+                    }
                 }
             }
         })
