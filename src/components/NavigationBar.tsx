@@ -1,7 +1,10 @@
-import { IconButton } from '@radix-ui/themes';
 import { GitHubLogoIcon } from '@radix-ui/react-icons'
 import { Outlet, Link } from "react-router-dom";
 import '../styles/styles.css';
+
+
+import * as Separator from '@radix-ui/react-separator';
+import { Box, Grid, Flex, IconButton } from '@radix-ui/themes';
 
 
 const navigation = [
@@ -14,9 +17,9 @@ const navigation = [
 function NavigationBar() {
 
     return (
-        <div className="min-h-full">
-            <header className="bg-[var(--blue-a2)] shadow-md">
-                <div className="flex flex-row justify-between items-center mx-auto max-w-full px-4 py-2">
+        <Box position="sticky" top="0" width="100%">
+            <Grid style={{ background: 'var(--blue-a2)', borderRadius: 'var(--radius-3)' }} px="3" py="1" columns="3" gap="3">
+                <Flex gap="3" justify="start">
                     <img
                         src="logo.png"
                         alt="Py2UML Logo"
@@ -27,27 +30,26 @@ function NavigationBar() {
                             borderRadius: 'var(--radius-2)',
                         }}
                     />
-                    <div className='flex flex-row gap-6 lg:gap-12'>
-                        {navigation.map((item) => (
-                            <Link key={item.id} id={item.id} accessKey={item.accessKey} to={item.href} className="MenuLink hover:font-bold text-sm lg:text-lg">{item.name}</Link>
-                        ))}
-                    </div>
-                    <Link to="https://github.com/Lucaskart/Py2UML" className="MenuLink hidden lg:flex">
+                </Flex>
+                <Flex gap="9" justify="center" align="center" mr="5">
+                    {navigation.map((item) => (
+                        <Link key={item.id} id={item.id} accessKey={item.accessKey} to={item.href}
+                            className="MenuLink hover:font-semibold">
+                            {item.name}
+                        </Link>
+                    ))}
+                </Flex>
+                <Flex gap="3" justify="end" align="center" mr="5">
+                    <Link to="https://github.com/Lucaskart/Py2UML" className="MenuLink">
                         <IconButton variant="ghost">
                             <GitHubLogoIcon width="25" height="25" />
                         </IconButton>
                     </Link>
-                </div>
-            </header>
-            <main>
-                <div className="mx-auto max-w-full">{
-                    <Outlet />
-                }</div>
-            </main>
-        </div>
-
-
-
+                </Flex>
+            </Grid>
+            <Separator.Root className="SeparatorRoot" style={{ margin: '0' }} />
+            <Outlet />
+        </Box>
     );
 }
 

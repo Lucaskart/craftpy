@@ -76,13 +76,13 @@ function Home() {
     };
 
     return (
-        <Flex direction="column" gap="3">
+        <Flex direction="column" gap="3" >
             <Box position="static" p="3" width="100%">
                 <Grid columns="3" gap="3">
                     <Flex gap="3" justify="start">
                         <Select.Root value={valueComboBox} onValueChange={setValueComboBox}>
                             <Select.Trigger
-                                className="inline-flex items-center justify-center rounded px-[15px] text-[13px] leading-none h-[35px] gap-[5px] bg-white border-blue-200 border-2 text-blue-950 shadow-[0_2px_10px] shadow-black/10 hover:bg-blue-200  focus:border-blue-600 data-[placeholder]:text-red outline-none"
+                                className="min-w-44 inline-flex items-center justify-center rounded px-[15px] text-[13px] leading-none h-[35px] gap-[5px] bg-white border-blue-200 border-2 text-blue-950 shadow-[0_2px_10px] shadow-black/10 hover:bg-blue-200  focus:border-blue-600 data-[placeholder]:text-red outline-none"
                                 aria-label="Examples"
                             >
                                 <Select.Value placeholder="Exemplos" />
@@ -116,27 +116,27 @@ function Home() {
                                 </Select.Content>
                             </Select.Portal>
                         </Select.Root>
-                        <Button accessKey='1' size="2" onClick={handleDownloadCode}>
+                        <Button accessKey='1' size="2" className="w-44" onClick={handleDownloadCode} >
                             <CodeIcon width="16" height="16" /> Salvar Código
                         </Button>
                     </Flex>
                     <Flex gap="1" justify="center">
-                        <Button accessKey='2' size="2"
+                        <Button accessKey='2' size="2" className="w-44"
                             variant={chooseDiagram == CLASS_DIAGRAM_NAME ? "solid" : "soft"}
                             onClick={() => setChooseDiagram(CLASS_DIAGRAM_NAME)}>
                             {CLASS_DIAGRAM_NAME}
                         </Button>
-                        <Button accessKey='3' size="2"
+                        <Button accessKey='3' size="2" className="w-44"
                             variant={chooseDiagram == USE_CASE_NAME ? "solid" : "soft"}
                             onClick={() => setChooseDiagram(USE_CASE_NAME)}>
                             {USE_CASE_NAME}
                         </Button>
                     </Flex>
                     <Flex gap="3" justify="end">
-                        <Button accessKey='' size="2" onClick={handleDownloadDot}>
+                        <Button accessKey='' size="2" className="w-44" onClick={handleDownloadDot}>
                             <DownloadIcon width="16" height="16" /> Salvar .dot
                         </Button>
-                        <Button accessKey='3' size="2" onClick={handleDownloadImage}>
+                        <Button accessKey='3' size="2" className="w-44" onClick={handleDownloadImage}>
                             <DownloadIcon width="16" height="16" /> Salvar Diagrama
                         </Button>
                     </Flex>
