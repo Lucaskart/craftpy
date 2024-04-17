@@ -75,7 +75,9 @@ function draw_inheritance(classe: ClassInterface): string {
     if (classe.inheritance) {
         const superClasses = classe.inheritance.split(',')
         for (var i = 0; i < superClasses.length; i++) {
-            dot_code += `${superClasses[i].trim()} -> ${classe.name} [arrowtail=onormal, dir=back]\n`;
+            if (superClasses[i]) {
+                dot_code += `${superClasses[i].trim()} -> ${classe.name} [arrowtail=onormal, dir=back]\n`;
+            }
         }
     }
     return dot_code;
