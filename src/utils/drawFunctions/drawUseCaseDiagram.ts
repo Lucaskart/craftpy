@@ -8,7 +8,7 @@ function drawUseCaseDiagram(classes: ClassInterface[]): string {
 
     classes.forEach((classe: ClassInterface) => {
         dot_content += `subgraph cluster${classe.name} {label="${classe.name}";\n
-      ${classe.name}};\n${classe.name} [label="", image="stick.png"];\n`
+      ${classe.name}};\n${classe.name} [label="", height=1 image="stick.png"];\n`
     })
 
     /* Use Case Nodes */
@@ -78,7 +78,7 @@ function drawUseCaseDiagram(classes: ClassInterface[]): string {
     })
 
 
-    let dot_code = `digraph G {rankdir=LR;labelloc=b;peripheries=0;\n\n${dot_content}\n}`
+    let dot_code = `digraph G {overlap=prism; layout=neato; labelloc=b;peripheries=0;\n\n${dot_content}\n}`
 
     return dot_code
 }
