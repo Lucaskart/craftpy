@@ -9,6 +9,8 @@ import { Button } from '@radix-ui/themes';
 import { CodeIcon, DownloadIcon, CheckIcon, ChevronDownIcon, ChevronUpIcon } from '@radix-ui/react-icons'
 import html2canvas from 'html2canvas';
 import * as Select from '@radix-ui/react-select';
+import drawClassDiagram from '../utils/drawFunctions/drawClassDiagram'
+import drawUseCaseDiagram from '../utils/drawFunctions/drawUseCaseDiagram'
 
 const CLASS_DIAGRAM_NAME = "Diagrama de Classe"
 const USE_CASE_NAME = "Casos de Uso"
@@ -23,19 +25,7 @@ function Home() {
     useEffect(() => {
         const code = exampleList.find((c) => c.desciption == valueComboBox)
         if (code) {
-            //setCodeText(code.code)
-
-            // Insere no usePythonCodeAnalyzer um caractere por vez para simular a digitação
-            const text = code.code
-            let textSet = ""
-            for (let i = 0; i < text.length; i++) {
-                const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
-                sleep(1000).then(() => {
-                    // Do something after the sleep!
-                    textSet = textSet + text[i]
-                    setCodeText(textSet)
-                });
-            }
+            setCodeText(code.code)
         }
 
     }, [valueComboBox]);
@@ -50,6 +40,22 @@ function Home() {
         const url = URL.createObjectURL(blob);
         const link = document.createElement("a");
         link.download = "user-info.py";
+        link.href = url;
+        link.click();
+    };
+
+    const handleDownloadDot = async () => {
+        var dotCode;
+        if (chooseDiagram == CLASS_DIAGRAM_NAME) {
+            dotCode = drawClassDiagram(classData)
+        } else {
+            dotCode = drawUseCaseDiagram(classData)
+        }
+
+        const blob = new Blob([dotCode], { type: "text/plain" });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.download = `${chooseDiagram}.dot`;
         link.href = url;
         link.click();
     };
@@ -88,6 +94,9 @@ function Home() {
                 </div>
                 <Button accessKey='4' size="2" onClick={handleDownloadImage}>
                     <DownloadIcon width="16" height="16" /> Salvar Diagrama
+                </Button>
+                <Button accessKey='' size="2" onClick={handleDownloadDot}>
+                    <DownloadIcon width="16" height="16" /> Salvar .dot
                 </Button>
             </div>
             <div className="w-full flex flex-row ">
