@@ -3,17 +3,20 @@ import exampleList from '../utils/examples/code'
 import { usePythonCodeAnalyzer } from '../hooks/usePythonCodeAnalyzer';
 import ClassDiagram from './diagrams/ClassDiagram'
 import UseCaseDiagram from './diagrams/UseCaseDiagram'
+import EntityRelationshipDiagram from "./diagrams/EntityRelationshipDiagram";
 import CodeMirror from '@uiw/react-codemirror';
 import { python } from '@codemirror/lang-python';
 import html2canvas from 'html2canvas';
 import * as Select from '@radix-ui/react-select';
 import drawClassDiagram from '../utils/drawFunctions/drawClassDiagram'
 import drawUseCaseDiagram from '../utils/drawFunctions/drawUseCaseDiagram'
+import drawEntityRelationshipDiagram from '../utils/drawFunctions/drawEntityRelationshipDiagram'
 import { Box, Button, Grid, Flex } from '@radix-ui/themes';
 import { CodeIcon, DownloadIcon, ChevronDownIcon, ChevronUpIcon, CheckIcon } from '@radix-ui/react-icons'
 
 const CLASS_DIAGRAM_NAME = "Diagrama de Classe"
 const USE_CASE_NAME = "Casos de Uso"
+const ENTITY_RELATIONSHIP_NAME = "DER"
 
 
 function Home() {
@@ -49,8 +52,10 @@ function Home() {
         var dotCode;
         if (chooseDiagram == CLASS_DIAGRAM_NAME) {
             dotCode = drawClassDiagram(classData)
-        } else {
+        } else if (chooseDiagram == USE_CASE_NAME) {
             dotCode = drawUseCaseDiagram(classData)
+        } else {
+            dotCode = drawEntityRelationshipDiagram(classData)
         }
 
         const blob = new Blob([dotCode], { type: "text/plain" });
@@ -131,6 +136,11 @@ function Home() {
                             onClick={() => setChooseDiagram(USE_CASE_NAME)}>
                             {USE_CASE_NAME}
                         </Button>
+                        <Button size="2" className="w-44"
+                            variant={chooseDiagram == ENTITY_RELATIONSHIP_NAME ? "solid" : "soft"}
+                            onClick={() => setChooseDiagram(ENTITY_RELATIONSHIP_NAME)}>
+                            {ENTITY_RELATIONSHIP_NAME}
+                        </Button>
                     </Flex>
                     <Flex gap="3" justify="end">
                         <Button accessKey='' size="2" className="w-44" onClick={handleDownloadDot}>
@@ -160,6 +170,7 @@ function Home() {
                     <Flex justify="center">
                         {chooseDiagram == CLASS_DIAGRAM_NAME && <ClassDiagram classData={[...classData]} />}
                         {chooseDiagram == USE_CASE_NAME && <UseCaseDiagram classData={[...classData]} />}
+                        {chooseDiagram == ENTITY_RELATIONSHIP_NAME && <EntityRelationshipDiagram classData={[...classData]} />}
                     </Flex>
                 </Grid>
             </Box>

@@ -296,6 +296,27 @@ class Entregador:
     
 `})
     
+exampleList.push({
+    desciption: "Diagrama Entidade-Relacionamento no Py2UML",
+    code: `"""
+Exemplo de diagrama entidade-relacionamento no Py2UML 
+"""
+    
+class Departamento:
+    def __init__(self, nome: str, numero: int, localizacao: str, projeto: Projeto):
+        self.nome = nome
+        self.numero = numero
+        self.localizacao = localizacao
+        self.controla = projeto
+
+class Projeto:
+    def __init__(self, nome: str, numero: int, localizacao: str, departamento: Departamento):
+        self.nome = nome
+        self.numero = numero
+        self.localizacao = localizacao
+        self.controla = departamento
+        
+`})
 
 //exampleList.push({desciption:"",code:})
 export default exampleList
