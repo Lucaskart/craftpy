@@ -2,14 +2,12 @@ import { ClassInterface } from './../../hooks/usePythonCodeAnalyzer';
 import drawClassDiagram from '../../utils/drawFunctions/drawClassDiagram'
 import { useEffect, useState } from "react";
 import { graphviz } from "d3-graphviz";
-
+import { ref_class_diagram } from './_refDiagrams';
 
 
 interface IProps {
     classData: ClassInterface[];
 }
-
-const ID = 'graphClass'
 
 function ClassDiagram({ classData }: IProps) {
 
@@ -22,13 +20,13 @@ function ClassDiagram({ classData }: IProps) {
     }, [dotText, classData]);
 
     const createGraph = () => {
-        graphviz(`#${ID}`)
+        graphviz(`#${ref_class_diagram.id}`)
             .zoom(false)
             .dot(dotText)
             .render();
     }
 
-    return (<div id={ID}>
+    return (<div id={ref_class_diagram.id}>
     </div>);
 }
 

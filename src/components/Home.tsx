@@ -14,15 +14,12 @@ import drawEntityRelationshipDiagram from '../utils/drawFunctions/drawEntityRela
 import { Box, Button, Grid, Flex } from '@radix-ui/themes';
 import { CodeIcon, DownloadIcon, ChevronDownIcon, ChevronUpIcon, CheckIcon } from '@radix-ui/react-icons'
 
-const CLASS_DIAGRAM_NAME = "Diagrama de Classe"
-const USE_CASE_NAME = "Casos de Uso"
-const ENTITY_RELATIONSHIP_NAME = "DER"
-
+import { ref_class_diagram, ref_usecase, ref_der } from './diagrams/_refDiagrams';
 
 function Home() {
 
     const [codeText, setCodeText, classData] = usePythonCodeAnalyzer("")
-    const [chooseDiagram, setChooseDiagram] = useState<string>(CLASS_DIAGRAM_NAME);
+    const [chooseDiagram, setChooseDiagram] = useState<{ name: string, id: string }>(ref_class_diagram);
 
     const [valueComboBox, setValueComboBox] = useState('Exemplos');
 
@@ -43,37 +40,42 @@ function Home() {
         const blob = new Blob([codeText], { type: "text/plain" });
         const url = URL.createObjectURL(blob);
         const link = document.createElement("a");
-        link.download = "user-info.py";
+        link.download = `${valueComboBox.replace(/\s/g, '_')}.py`;
         link.href = url;
         link.click();
     };
 
     const handleDownloadDot = async () => {
         var dotCode;
-        if (chooseDiagram == CLASS_DIAGRAM_NAME) {
-            dotCode = drawClassDiagram(classData)
-        } else if (chooseDiagram == USE_CASE_NAME) {
-            dotCode = drawUseCaseDiagram(classData)
-        } else {
-            dotCode = drawEntityRelationshipDiagram(classData)
+        switch (chooseDiagram.name) {
+            case ref_class_diagram.name:
+                dotCode = drawClassDiagram(classData)
+                break
+            case ref_usecase.name:
+                dotCode = drawUseCaseDiagram(classData)
+                break
+            case ref_der.name:
+                dotCode = drawEntityRelationshipDiagram(classData)
+                break
+            default:
+                dotCode = ""
         }
-
         const blob = new Blob([dotCode], { type: "text/plain" });
         const url = URL.createObjectURL(blob);
         const link = document.createElement("a");
-        link.download = `${chooseDiagram}.dot`;
+        link.download = `${chooseDiagram.name.replace(/\s/g, '_')}.dot`;
         link.href = url;
         link.click();
     };
 
     const handleDownloadImage = async () => {
-        const element = document.getElementById(chooseDiagram == CLASS_DIAGRAM_NAME ? "graphClass" : "graphUseCase")!,
+        const element = document.getElementById(chooseDiagram.id)!,
             canvas = await html2canvas(element),
             data = canvas.toDataURL('image/jpg'),
             link = document.createElement('a');
 
         link.href = data;
-        link.download = 'downloaded-image.jpg';
+        link.download = `downloaded-image-${chooseDiagram.name.replace(/\s/g, '_')}.jpg`;
 
         document.body.appendChild(link);
         link.click();
@@ -127,19 +129,19 @@ function Home() {
                     </Flex>
                     <Flex gap="1" justify="center">
                         <Button accessKey='2' size="2" className="w-44"
-                            variant={chooseDiagram == CLASS_DIAGRAM_NAME ? "solid" : "soft"}
-                            onClick={() => setChooseDiagram(CLASS_DIAGRAM_NAME)}>
-                            {CLASS_DIAGRAM_NAME}
+                            variant={chooseDiagram == ref_class_diagram ? "solid" : "soft"}
+                            onClick={() => setChooseDiagram(ref_class_diagram)}>
+                            {ref_class_diagram.name}
                         </Button>
                         <Button accessKey='3' size="2" className="w-44"
-                            variant={chooseDiagram == USE_CASE_NAME ? "solid" : "soft"}
-                            onClick={() => setChooseDiagram(USE_CASE_NAME)}>
-                            {USE_CASE_NAME}
+                            variant={chooseDiagram == ref_usecase ? "solid" : "soft"}
+                            onClick={() => setChooseDiagram(ref_usecase)}>
+                            {ref_usecase.name}
                         </Button>
                         <Button size="2" className="w-44"
-                            variant={chooseDiagram == ENTITY_RELATIONSHIP_NAME ? "solid" : "soft"}
-                            onClick={() => setChooseDiagram(ENTITY_RELATIONSHIP_NAME)}>
-                            {ENTITY_RELATIONSHIP_NAME}
+                            variant={chooseDiagram == ref_der ? "solid" : "soft"}
+                            onClick={() => setChooseDiagram(ref_der)}>
+                            {ref_der.name}
                         </Button>
                     </Flex>
                     <Flex gap="3" justify="end">
@@ -168,9 +170,9 @@ function Home() {
                         </Box>
                     </Flex>
                     <Flex justify="center">
-                        {chooseDiagram == CLASS_DIAGRAM_NAME && <ClassDiagram classData={[...classData]} />}
-                        {chooseDiagram == USE_CASE_NAME && <UseCaseDiagram classData={[...classData]} />}
-                        {chooseDiagram == ENTITY_RELATIONSHIP_NAME && <EntityRelationshipDiagram classData={[...classData]} />}
+                        {chooseDiagram == ref_class_diagram && <ClassDiagram classData={[...classData]} />}
+                        {chooseDiagram == ref_usecase && <UseCaseDiagram classData={[...classData]} />}
+                        {chooseDiagram == ref_der && <EntityRelationshipDiagram classData={[...classData]} />}
                     </Flex>
                 </Grid>
             </Box>

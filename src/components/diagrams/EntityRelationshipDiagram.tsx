@@ -2,13 +2,11 @@ import { ClassInterface } from './../../hooks/usePythonCodeAnalyzer';
 import drawEntityRelationshipDiagram from '../../utils/drawFunctions/drawEntityRelationshipDiagram'
 import { useEffect, useState } from "react";
 import { graphviz } from "d3-graphviz";
-
+import { ref_der } from './_refDiagrams';
 
 interface IProps {
     classData: ClassInterface[];
 }
-
-const ID = 'graphEntityRelationship'
 
 function EntityRelationshipDiagram({ classData }: IProps) {
 
@@ -21,13 +19,13 @@ function EntityRelationshipDiagram({ classData }: IProps) {
     }, [dotText, classData]);
 
     const createGraph = () => {
-        graphviz(`#${ID}`)
+        graphviz(`#${ref_der.id}`)
             .zoom(false)
             .dot(dotText)
             .render();
     }
 
-    return (<div id={ID}>
+    return (<div id={ref_der.id}>
     </div>);
 }
 
