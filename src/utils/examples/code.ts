@@ -303,6 +303,9 @@ Exemplo de diagrama entidade-relacionamento no Py2UML
 """
     
 class Departamento:
+
+    id: int
+
     def __init__(self, nome: str, numero: int, localizacao: str, projeto: Projeto):
         self.nome = nome
         self.numero = numero
