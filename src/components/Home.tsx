@@ -156,7 +156,7 @@ function Home() {
             </Box>
             <Box p="3" width="100%">
                 <Grid columns="2" gap="5">
-                    <Flex direction="column" gap="3">
+                    <Flex direction="column" gap="1">
                         <Box width="100%">
                             <CodeMirror
                                 value={codeText}
@@ -170,9 +170,11 @@ function Home() {
                         </Box>
                     </Flex>
                     <Flex justify="center">
-                        {chooseDiagram == ref_class_diagram && <ClassDiagram classData={[...classData]} />}
-                        {chooseDiagram == ref_usecase && <UseCaseDiagram classData={[...classData]} />}
-                        {chooseDiagram == ref_der && <EntityRelationshipDiagram classData={[...classData]} />}
+                        <Box width="100%">
+                            {chooseDiagram == ref_class_diagram && <ClassDiagram classData={[...classData]} />}
+                            {chooseDiagram == ref_usecase && <UseCaseDiagram classData={[...classData]} />}
+                            {chooseDiagram == ref_der && <EntityRelationshipDiagram classData={[...classData]} />}
+                        </Box>
                     </Flex>
                 </Grid>
             </Box>

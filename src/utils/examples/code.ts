@@ -304,25 +304,62 @@ Exemplo de diagrama entidade-relacionamento no Py2UML
     
 class Departamento:
 
-    id: int
+  nome: str
+  numero: int
 
-    def __init__(self, nome: str, numero: int, localizacao: str):
-        self.nome = nome
-        self.numero = numero
-        self.localizacao = localizacao
+  def __init__(self, localizacao: str):
+      self.localizacao = localizacao
 
-    @relationship
-    def controla(projeto: Projeto):
-        pass
+  @identifyingrelationship
+  def controla(projeto: Projeto):
+    pass
+
+  @relationship
+  def gerencia(empregado: Empregado):
+    pass
 
 class Projeto:
 
-    _departamentoid:str
-  
-    def __init__(self, nome: str, numero: int, localizacao: str):
-        self.nome = nome
-        self.numero = numero
-        self.localizacao = localizacao
+  _nome: str
+  _numero: int
+
+  def __init__(self, localizacao: str):
+    self.localizacao = localizacao
+
+class Empregado:
+
+  nss: int
+
+  def __init__(self, datanasc: date, sexo: str, endereco: str, salario: int):
+    self.datanasc = datanasc
+    self.sexo = sexo
+    self.endereco = endereco
+    self.salario = salario
+
+  @relationship
+  def supervisiona(empregado: Empregado):
+    pass
+
+  @identifyingrelationship
+  def dependente_de(dependente: Dependente):
+    pass
+
+  @relationship
+  def trabalha_em(projeto: Projeto):
+    pass
+
+  @relationship
+  def trabalha_para(departamento: Departamento):
+    pass
+
+class Dependente:
+
+  _nome: str
+
+  def __init__(self, datanasc: date, sexo: str, relacao: str):
+    self.datanasc = datanasc
+    self.sexo = sexo
+    self.relacao = relacao
 `})
 
 //exampleList.push({desciption:"",code:})

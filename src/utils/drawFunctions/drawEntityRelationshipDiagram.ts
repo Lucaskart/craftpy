@@ -4,8 +4,8 @@ import '../../styles/styles.css';
 function drawEntityRelationshipDiagram(classes: ClassInterface[]): string {
     let dot_content = ""
 
-    dot_content += `ranksep=0.3;\n`
-    dot_content += `nodesep=0.3;\n`
+    dot_content += `ranksep=0.4;\n`
+    dot_content += `nodesep=0.4;\n`
 
     /* Entity and Primary Keys */
     classes.forEach((classe: ClassInterface) => {
@@ -50,7 +50,7 @@ function drawEntityRelationshipDiagram(classes: ClassInterface[]): string {
         classe.attributes?.forEach((attr) => {
             // Adiciona atributos da classe sem relacionamento.
             if (attr.type) {
-                dot_content += createAttribute(classe.name, attr.name, "")
+                dot_content += createAttribute(classe.name, attr.name)
             }
         })
     })
@@ -60,31 +60,37 @@ function drawEntityRelationshipDiagram(classes: ClassInterface[]): string {
         classe.functions.forEach((func) => {
             func.decorators?.forEach((decorator) => {
                 if (decorator.includes("@relationship")) {
-                    dot_content += `${func.name} [shape=diamond, style=solid, height=0.8, label="${func.name.toUpperCase()}"];\n`
-                    dot_content += `${classe.name} -> ${func.name} [arrowhead=none, arrowtail=none]\n`;
+                    dot_content += createRelationship(classe.name, func.name)
 
                     var types = func.params.split(',');
                     types.forEach((type) => {
                         var parts = type.split(':');
-                        dot_content += `${func.name} -> ${parts[1]} [arrowhead=none, arrowtail=none]\n`;
+                        if(parts[1] == classe.name){
+                            dot_content += `${func.name} -> ${parts[1]} [arrowhead=none, arrowtail=none, tailport=w]\n`;
+                        } else {
+                            dot_content += `${func.name} -> ${parts[1]} [arrowhead=none, arrowtail=none]\n`;
+                        }
                     })
+                } else if (decorator.includes("@identifyingrelationship")) {
+                    dot_content += createRelationship(classe.name, func.name, "yes")
 
-
-                    if (classe) {
-                        //dot_content += createRelationship(classe.name, relationshipName)
-                    }
+                    var types = func.params.split(',');
+                    types.forEach((type) => {
+                        var parts = type.split(':');
+                        dot_content += `${func.name} -> ${parts[1]} [color="black:invis:black", arrowhead=none, arrowtail=none, len=2]\n`;
+                    })
                 }
             })
         })
     })
 
-    let dot_code = `digraph G {overlap=prism; layout=neato; labelloc=b; peripheries=0; concentrate="true";\n\n${dot_content}\n}`
+    let dot_code = `digraph G {overlap=prism; layout=neato; labelloc=b; peripheries=0; splines = true;\n\n${dot_content}\n}`
 
     return dot_code
 }
 
 //Metódo de criação de atributos, o contrutor precisa do nome da classe, nome do atributo e da informação se é chave primária.
-function createAttribute(className: string, attrName: string, key: string){
+function createAttribute(className: string, attrName: string, key?: string){
     let dot_code = "";
 
     // Como duas entidades podem ter o mesmo atributo (Nome) o nome do nó se transforma no nome da classe + o nó para evitar conflitos!
@@ -93,16 +99,19 @@ function createAttribute(className: string, attrName: string, key: string){
     } else {
         dot_code += `${className}${attrName} [shape=ellipse, style=solid, label="${attrName}"];\n`
     }
-    dot_code += `${className} -> ${className}${attrName} [arrowhead=none];\n`
+    dot_code += `${className} -> ${className}${attrName} [arrowhead=none, len=0.5];\n`
     return dot_code;
 }
 
-function createRelationship(className: string, relationshipName: string, attrType: string){
+function createRelationship(className: string, relationshipName: string, identifying?: string){
     let dot_code = "";
 
-    dot_code += `${relationshipName} [shape=diamond, style=solid, label="${relationshipName.toUpperCase()}"];\n`
-    dot_code += `${className} -> ${relationshipName} [arrowhead=none, arrowtail=none]\n`;
-    dot_code += `${relationshipName} -> ${attrType} [arrowhead=none, arrowtail=none]\n`;
+    if(identifying === "yes"){
+        dot_code += `${relationshipName} [shape=diamond, style=solid, peripheries=2, height=0.8, label="${relationshipName.toUpperCase()}"];\n`
+    } else {
+        dot_code += `${relationshipName} [shape=diamond, style=solid, height=0.8, label="${relationshipName.toUpperCase()}"];\n`
+    }
+    dot_code += `${className} -> ${relationshipName} [arrowhead=none, arrowtail=none, len=2]\n`;
 
     return dot_code;
 }
