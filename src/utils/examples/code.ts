@@ -306,19 +306,23 @@ class Departamento:
 
     id: int
 
-    def __init__(self, nome: str, numero: int, localizacao: str, projeto: Projeto):
+    def __init__(self, nome: str, numero: int, localizacao: str):
         self.nome = nome
         self.numero = numero
         self.localizacao = localizacao
-        self.controla = projeto
+
+    @relationship
+    def controla(projeto: Projeto):
+        pass
 
 class Projeto:
-    def __init__(self, nome: str, numero: int, localizacao: str, departamento: Departamento):
+
+    _departamentoid:str
+  
+    def __init__(self, nome: str, numero: int, localizacao: str):
         self.nome = nome
         self.numero = numero
         self.localizacao = localizacao
-        self.controla = departamento
-        
 `})
 
 //exampleList.push({desciption:"",code:})
