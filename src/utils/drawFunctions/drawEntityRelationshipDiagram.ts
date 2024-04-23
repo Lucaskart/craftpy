@@ -65,10 +65,13 @@ function drawEntityRelationshipDiagram(classes: ClassInterface[]): string {
                     var types = func.params.split(',');
                     types.forEach((type) => {
                         var parts = type.split(':');
-                        if(parts[1] == classe.name){
-                            dot_content += `${func.name} -> ${parts[1]} [arrowhead=none, arrowtail=none, tailport=w]\n`;
-                        } else {
-                            dot_content += `${func.name} -> ${parts[1]} [arrowhead=none, arrowtail=none]\n`;
+                        var tipo = parts[1] || null;
+                        if (tipo != null){
+                            if(tipo == classe.name){
+                                dot_content += `${func.name} -> ${tipo} [arrowhead=none, arrowtail=none, tailport=w]\n`;
+                            } else {
+                                dot_content += `${func.name} -> ${tipo} [arrowhead=none, arrowtail=none]\n`;
+                            }
                         }
                     })
                 } else if (decorator.includes("@identifyingrelationship")) {
@@ -99,7 +102,7 @@ function createAttribute(className: string, attrName: string, key?: string){
     } else {
         dot_code += `${className}${attrName} [shape=ellipse, style=solid, label="${attrName}"];\n`
     }
-    dot_code += `${className} -> ${className}${attrName} [arrowhead=none, len=0.5];\n`
+    dot_code += `${className} -> ${className}${attrName} [arrowhead=none, len=1.5];\n`
     return dot_code;
 }
 

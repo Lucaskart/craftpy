@@ -3,6 +3,7 @@ import drawEntityRelationshipDiagram from '../../utils/drawFunctions/drawEntityR
 import { useEffect, useState } from "react";
 import { graphviz } from "d3-graphviz";
 import { ref_der } from './_refDiagrams';
+import '../../styles/styles.css';
 
 interface IProps {
     classData: ClassInterface[];
@@ -25,7 +26,7 @@ function EntityRelationshipDiagram({ classData }: IProps) {
             .render();
     }
 
-    return (<div id={ref_der.id}>
+    return (<div className="graphvizElement" id={ref_der.id}>
     </div>);
 }
 

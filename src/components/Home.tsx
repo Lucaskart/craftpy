@@ -155,7 +155,7 @@ function Home() {
                 </Grid>
             </Box>
             <Box p="3" width="100%">
-                <Grid columns="2" gap="5">
+                <Grid columns="2" gap="3">
                     <Flex direction="column" gap="1">
                         <Box width="100%">
                             <CodeMirror

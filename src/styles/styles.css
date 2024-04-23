@@ -17,3 +17,7 @@
     font-size: 15px;
     line-height: 20px;
 }
+
+.graphvizElement{
+    width: fit-content;
+}
