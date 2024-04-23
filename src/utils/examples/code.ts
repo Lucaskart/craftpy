@@ -307,8 +307,8 @@ class Departamento:
   nome: str
   numero: int
 
-  def __init__(self, localizacao: str):
-      self.localizacao = localizacao
+  def __init__(self, localizacao):
+      self.localizacao = [localizacao1, localizacao2]
 
   @identifyingrelationship
   def controla(projeto: Projeto):
@@ -316,6 +316,7 @@ class Departamento:
 
   @relationship
   def gerencia(empregado: Empregado):
+    datainicio: date
     pass
 
 class Projeto:
@@ -346,6 +347,7 @@ class Empregado:
 
   @relationship
   def trabalha_em(projeto: Projeto):
+    horas: int
     pass
 
   @relationship

@@ -4,9 +4,6 @@ import '../../styles/styles.css';
 function drawEntityRelationshipDiagram(classes: ClassInterface[]): string {
     let dot_content = ""
 
-    dot_content += `ranksep=0.4;\n`
-    dot_content += `nodesep=0.4;\n`
-
     /* Entity and Primary Keys */
     classes.forEach((classe: ClassInterface) => {
 
@@ -25,11 +22,11 @@ function drawEntityRelationshipDiagram(classes: ClassInterface[]): string {
                 attName = attName.replace("_", "");
                 keyType = "foreign";
             }
-
             const tipo = match[3] || null;
 
             if (tipo) {
-                dot_content += createAttribute(classe.name, attName, keyType)
+                var attrType = checkMultiValue(tipo);
+                dot_content += createAttribute(classe.name, attName, attrType, keyType)
                 if (keyType === "primary"){
                     weakEntity = false
                 }
@@ -50,7 +47,7 @@ function drawEntityRelationshipDiagram(classes: ClassInterface[]): string {
         classe.attributes?.forEach((attr) => {
             // Adiciona atributos da classe sem relacionamento.
             if (attr.type) {
-                dot_content += createAttribute(classe.name, attr.name)
+                dot_content += createAttribute(classe.name, attr.name, attr.type)
             }
         })
     })
@@ -87,20 +84,47 @@ function drawEntityRelationshipDiagram(classes: ClassInterface[]): string {
         })
     })
 
-    let dot_code = `digraph G {overlap=prism; layout=neato; labelloc=b; peripheries=0; splines = true;\n\n${dot_content}\n}`
+    /* Relationship Attribute Nodes */
+    classes.forEach((classe: ClassInterface) => {
+        classe.functions.forEach((func) => {
+            func.decorators?.forEach((decorator) => {
+                if (decorator.includes("@relationship") || decorator.includes("@identifyingrelationship")) {
+                    var relationshipattr = func.content.split('\n');
+                    relationshipattr.forEach((shipattr) => {
+                        const attrMatch = shipattr.match(/\s*(\w+):(\s)*((\w+){1})/g);
+                        var parts = shipattr.split(':');
+                        var attrName = parts[0] || null;
+                        var attrType = checkMultiValue(parts[1] || "");
+                        console.log(attrType)
+                        if (attrMatch != null && attrName != null){
+                            dot_content += createAttribute(func.name, attrName, attrType)
+                        }
+                    })
+                }
+            })
+        })
+    })
+
+
+    let dot_code = `digraph G {overlap=scalexy; layout=neato; labelloc=b; peripheries=0; splines = true;\n\n${dot_content}\n}`
 
     return dot_code
 }
 
 //Metódo de criação de atributos, o contrutor precisa do nome da classe, nome do atributo e da informação se é chave primária.
-function createAttribute(className: string, attrName: string, key?: string){
+function createAttribute(className: string, attrName: string, attrType: string, key?: string){
+    console.log(attrType)
     let dot_code = "";
+    var extraInfo = "";
+    if (attrType == "list" || attrType == "dict" || attrType == "tuple" || attrType == "multivalue"){
+        var extraInfo = "peripheries=2,";
+    }
 
     // Como duas entidades podem ter o mesmo atributo (Nome) o nome do nó se transforma no nome da classe + o nó para evitar conflitos!
     if(key === "primary" || key === "foreign"){
-        dot_code += `${className}${attrName} [shape=ellipse, style=solid, label=<<u>${attrName}</u>>];\n`
+        dot_code += `${className}${attrName} [shape=ellipse, ${extraInfo} style=solid, label=<<u>${attrName}</u>>];\n`
     } else {
-        dot_code += `${className}${attrName} [shape=ellipse, style=solid, label="${attrName}"];\n`
+        dot_code += `${className}${attrName} [shape=ellipse, ${extraInfo} style=solid, label="${attrName}"];\n`
     }
     dot_code += `${className} -> ${className}${attrName} [arrowhead=none, len=1.5];\n`
     return dot_code;
@@ -117,6 +141,13 @@ function createRelationship(className: string, relationshipName: string, identif
     dot_code += `${className} -> ${relationshipName} [arrowhead=none, arrowtail=none, len=2]\n`;
 
     return dot_code;
+}
+
+function checkMultiValue(value: string){
+    if (value == "[" || value == "list()" || value == "(" || value == "{"){
+        return "multivalue"
+    }
+    return "single"
 }
 
 export default drawEntityRelationshipDiagram;
