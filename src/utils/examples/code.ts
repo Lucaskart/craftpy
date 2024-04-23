@@ -342,16 +342,16 @@ class Empregado:
     pass
 
   @identifyingrelationship
-  def dependente_de(dependente: Dependente):
+  def dependente-de(dependente: Dependente):
     pass
 
   @relationship
-  def trabalha_em(projeto: Projeto):
+  def trabalha-em(projeto: Projeto):
     horas: int
     pass
 
   @relationship
-  def trabalha_para(departamento: Departamento):
+  def trabalha-para(departamento: Departamento):
     pass
 
 class Dependente:

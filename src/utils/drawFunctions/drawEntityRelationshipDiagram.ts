@@ -40,8 +40,6 @@ function drawEntityRelationshipDiagram(classes: ClassInterface[]): string {
         }
     })
 
-    console.log(classes);
-
     /* Attribute Nodes */
     classes.forEach((classe: ClassInterface) => {
         classe.attributes?.forEach((attr) => {
@@ -95,7 +93,6 @@ function drawEntityRelationshipDiagram(classes: ClassInterface[]): string {
                         var parts = shipattr.split(':');
                         var attrName = parts[0] || null;
                         var attrType = checkMultiValue(parts[1] || "");
-                        console.log(attrType)
                         if (attrMatch != null && attrName != null){
                             dot_content += createAttribute(func.name, attrName, attrType)
                         }
@@ -113,7 +110,6 @@ function drawEntityRelationshipDiagram(classes: ClassInterface[]): string {
 
 //Metódo de criação de atributos, o contrutor precisa do nome da classe, nome do atributo e da informação se é chave primária.
 function createAttribute(className: string, attrName: string, attrType: string, key?: string){
-    console.log(attrType)
     let dot_code = "";
     var extraInfo = "";
     if (attrType == "list" || attrType == "dict" || attrType == "tuple" || attrType == "multivalue"){

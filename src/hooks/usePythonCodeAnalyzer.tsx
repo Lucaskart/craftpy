@@ -72,7 +72,7 @@ export function usePythonCodeAnalyzer(pythonCode: string): [string, React.Dispat
         const classes: ClassInterface[] = [];
 
         // Expressão regular para encontrar definições de função dentro do conteúdo da classe
-        const functionPattern = /.*?def\s+(\w+)\s*\((.*?)\):([\s\S]*?)(?=\s*(?!.*\bclass[\w\d])@|def|\s*$)/gs;
+        const functionPattern = /.*?def\s+([\w\-]+)\s*\((.*?)\):([\s\S]*?)(?=\s*(?!.*\bclass[\w\d])@|def|\s*$)/gs;
         //const functionPattern = /.*?(?:@\w+\s*)*def\s+(\w+)\s*\((.*?)\):([\s\S]*?)(?=\s*(?!.*\bclass[\w\d])def|\s*$)/gs
 
 
