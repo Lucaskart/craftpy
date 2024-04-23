@@ -26,7 +26,7 @@ function ClassDiagram({ classData }: IProps) {
             .render();
     }
 
-    return (<div id={ref_class_diagram.id}>
+    return (<div className="graphvizElement" id={ref_class_diagram.id}>
     </div>);
 }
 

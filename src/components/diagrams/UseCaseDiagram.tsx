@@ -26,7 +26,7 @@ function UseCaseDiagram({ classData }: IProps) {
             .render()
     }
 
-    return (<div id={ref_usecase.id}>
+    return (<div className="graphvizElement" id={ref_usecase.id}>
     </div>);
 }
 
