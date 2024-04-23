@@ -477,7 +477,7 @@ ${e}
 `:e+=`${i.name} -> ${c} [arrowhead=none, arrowtail=none]
 `)})}else if(o.includes("@identifyingrelationship")){e+=K1(n.name,i.name,"yes");var s=i.params.split(",");s.forEach(l=>{var c=l.split(":");e+=`${i.name} -> ${c[1]} [color="black:invis:black", arrowhead=none, arrowtail=none, len=2]
 `})}})})}),t.forEach(n=>{n.functions.forEach(i=>{var A;(A=i.decorators)==null||A.forEach(o=>{if(o.includes("@relationship")||o.includes("@identifyingrelationship")){var s=i.content.split(`
-`);s.forEach(a=>{const l=a.match(/\s*(\w+):(\s)*((\w+){1})/g);var c=a.split(":"),u=c[0]||null,f=Y1(c[1]||"");console.log(f),l!=null&&u!=null&&(e+=jg(i.name,u,f))})}})})}),`digraph G {overlap=scalexy; layout=neato; labelloc=b; peripheries=0; splines = true;
+`);s.forEach(a=>{const l=a.match(/\s*(\w+):(\s)*((\w+){1})/g);var c=a.split(":"),u=c[0]||null,f=Y1(c[1]||"");console.log(f),l!=null&&u!=null&&(e+=jg(i.name,u,f))})}})})}),`digraph G {overlap=prism; layout=neato; labelloc=b; peripheries=0; splines = true;
 
 ${e}
 }`}function jg(t,e,r,n){console.log(r);let i="";var A="";if(r=="list"||r=="dict"||r=="tuple"||r=="multivalue")var A="peripheries=2,";return n==="primary"||n==="foreign"?i+=`${t}${e} [shape=ellipse, ${A} style=solid, label=<<u>${e}</u>>];
