@@ -310,13 +310,12 @@ class Departamento:
   def __init__(self, localizacao):
       self.localizacao = [localizacao1, localizacao2]
 
-  @identifyingrelationship
-  def controla(projeto: Projeto):
+  @identifyingrelationship[Projeto]
+  def controla():
     pass
 
-  @relationship
-  def gerencia(empregado: Empregado):
-    datainicio: date
+  @relationship[Empregado]
+  def gerencia(datainicio: date):
     pass
 
 class Projeto:
@@ -337,21 +336,20 @@ class Empregado:
     self.endereco = endereco
     self.salario = salario
 
-  @relationship
-  def supervisiona(empregado: Empregado):
+  @relationship[Empregado]
+  def supervisiona():
     pass
 
-  @identifyingrelationship
-  def dependente_de(dependente: Dependente):
+  @identifyingrelationship[Dependente]
+  def dependente_de():
     pass
 
-  @relationship
-  def trabalha_em(projeto: Projeto):
-    horas: int
+  @relationship[Projeto]
+  def trabalha_em(horas: int):
     pass
 
-  @relationship
-  def trabalha_para(departamento: Departamento):
+  @relationship[Departamento]
+  def trabalha_para():
     pass
 
 class Dependente:

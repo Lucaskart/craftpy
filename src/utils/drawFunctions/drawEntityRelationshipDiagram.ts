@@ -4,9 +4,10 @@ import '../../styles/styles.css';
 function drawEntityRelationshipDiagram(classes: ClassInterface[]): string {
     let dot_content = ""
 
+    console.log(classes);
+
     /* Entity and Primary Keys */
     classes.forEach((classe: ClassInterface) => {
-
         var weakEntity = true
 
         //Capturar o conteúdo das classes sem as funções.
@@ -54,56 +55,25 @@ function drawEntityRelationshipDiagram(classes: ClassInterface[]): string {
     classes.forEach((classe: ClassInterface) => {
         classe.functions.forEach((func) => {
             func.decorators?.forEach((decorator) => {
+                var i = 1;
                 if (decorator.includes("@relationship")) {
-                    dot_content += createRelationship(classe.name, func.name)
-
-                    var types = func.params.split(',');
-                    types.forEach((type) => {
-                        var parts = type.split(':');
-                        var tipo = parts[1] || null;
-                        if (tipo != null){
-                            if(tipo == classe.name){
-                                dot_content += `${func.name} -> ${tipo} [arrowhead=none, arrowtail=none, tailport=w]\n`;
-                            } else {
-                                dot_content += `${func.name} -> ${tipo} [arrowhead=none, arrowtail=none]\n`;
-                            }
-                        }
-                    })
+                    const _f = decorator.replace(/.*\[(.*?)\].*/, '$1')
+                    if (_f) {
+                        dot_content += createRelationship(classe.name, _f, func.name, i, func.params)
+                        i++;
+                    }
                 } else if (decorator.includes("@identifyingrelationship")) {
-                    dot_content += createRelationship(classe.name, func.name, "yes")
-
-                    var types = func.params.split(',');
-                    types.forEach((type) => {
-                        var parts = type.split(':');
-                        dot_content += `${func.name} -> ${parts[1]} [color="black:invis:black", arrowhead=none, arrowtail=none, len=2]\n`;
-                    })
+                    const _f = decorator.replace(/.*\[(.*?)\].*/, '$1')
+                    if (_f) {
+                        dot_content += createRelationship(classe.name, _f, func.name, i, func.params, "yes")
+                        i++;
+                    }
                 }
             })
         })
     })
 
-    /* Relationship Attribute Nodes */
-    classes.forEach((classe: ClassInterface) => {
-        classe.functions.forEach((func) => {
-            func.decorators?.forEach((decorator) => {
-                if (decorator.includes("@relationship") || decorator.includes("@identifyingrelationship")) {
-                    var relationshipattr = func.content.split('\n');
-                    relationshipattr.forEach((shipattr) => {
-                        const attrMatch = shipattr.match(/\s*(\w+):(\s)*((\w+){1})/g);
-                        var parts = shipattr.split(':');
-                        var attrName = parts[0] || null;
-                        var attrType = checkMultiValue(parts[1] || "");
-                        if (attrMatch != null && attrName != null){
-                            dot_content += createAttribute(func.name, attrName, attrType)
-                        }
-                    })
-                }
-            })
-        })
-    })
-
-
-    let dot_code = `digraph G {overlap=prism; layout=neato; labelloc=b; peripheries=0; splines = true;\n\n${dot_content}\n}`
+    let dot_code = `digraph G {overlap=scalexy; layout=neato; labelloc=b; peripheries=0; splines = true;\n\n${dot_content}\n}`
 
     return dot_code
 }
@@ -126,15 +96,41 @@ function createAttribute(className: string, attrName: string, attrType: string, 
     return dot_code;
 }
 
-function createRelationship(className: string, relationshipName: string, identifying?: string){
+function createRelationship(className: string, targetClassName: string, relationshipName: string, number: number, relationshipAttributes: string, identifying?: string){
     let dot_code = "";
+    var classes = [className, targetClassName]
+
+    classes.sort();
+    var relationshipId = `${classes[0]}${classes[1]}${number}`
 
     if(identifying === "yes"){
-        dot_code += `${relationshipName} [shape=diamond, style=solid, peripheries=2, height=0.8, label="${relationshipName.toUpperCase()}"];\n`
+        dot_code += `${relationshipId} [shape=diamond, style=solid, peripheries=2, height=0.8, label="${relationshipName.toUpperCase()}"];\n`
     } else {
-        dot_code += `${relationshipName} [shape=diamond, style=solid, height=0.8, label="${relationshipName.toUpperCase()}"];\n`
+        dot_code += `${relationshipId} [shape=diamond, style=solid, height=0.8, label="${relationshipName.toUpperCase()}"];\n`
     }
-    dot_code += `${className} -> ${relationshipName} [arrowhead=none, arrowtail=none, len=2]\n`;
+
+    if(className === targetClassName){
+        dot_code += `${className} -> ${relationshipId} [arrowhead=none, arrowtail=none, len=2, headport=e]\n`;
+        dot_code += `${targetClassName} -> ${relationshipId} [arrowhead=none, arrowtail=none, len=2, headport=w]\n`;
+    } else{
+        dot_code += `${className} -> ${relationshipId} [arrowhead=none, arrowtail=none, len=2]\n`;
+        if(identifying === "yes"){
+            dot_code += `${targetClassName} -> ${relationshipId} [color="black:invis:black", arrowhead=none, arrowtail=none, len=2]\n`;
+        } else {
+            dot_code += `${targetClassName} -> ${relationshipId} [arrowhead=none, arrowtail=none, len=2]\n`;
+        }
+    }
+
+    var types = relationshipAttributes.split(',');
+    types.forEach((type: string) => {
+        console.log(type)
+        var parts = type.split(':');
+        var attrName = parts[0] || null;
+        var attrType = checkMultiValue(parts[1] || "");
+        if (attrName != null){
+            dot_code += createAttribute(relationshipId, attrName, attrType)
+        }
+    })
 
     return dot_code;
 }
