@@ -53,19 +53,34 @@ function drawEntityRelationshipDiagram(classes: ClassInterface[]): string {
 
     /* Relationship Nodes */
     classes.forEach((classe: ClassInterface) => {
+        var i = 1;
         classe.functions.forEach((func) => {
             func.decorators?.forEach((decorator) => {
-                var i = 1;
+                var _m = null;
+
+                //Tipos de Relacionamento
                 if (decorator.includes("@relationship")) {
-                    const _f = decorator.replace(/.*\[(.*?)\].*/, '$1')
-                    if (_f) {
-                        dot_content += createRelationship(classe.name, _f, func.name, i, func.params)
+                    if (func.decorators != null && func.decorators[1] != undefined && func.decorators[1].includes("@multiplicity")) {
+                        const regex = /.*\[(.*?)\].*/g;
+                        _m = regex.exec(func.decorators[1]);
+                    }
+
+                    const regex = /.*\[(.*?)\].*/g;
+                    const _f = regex.exec(decorator);
+                    if (_f != null && _f[1]) {
+                        dot_content += createRelationship(classe.name, _f[1], func.name, i, func.params, _m)
                         i++;
                     }
                 } else if (decorator.includes("@identifyingrelationship")) {
-                    const _f = decorator.replace(/.*\[(.*?)\].*/, '$1')
-                    if (_f) {
-                        dot_content += createRelationship(classe.name, _f, func.name, i, func.params, "yes")
+                    if (func.decorators != null && func.decorators[1] != undefined && func.decorators[1].includes("@multiplicity")) {
+                        const regex = /.*\[(.*?)\].*/g;
+                        _m = regex.exec(func.decorators[1]);
+                    }
+
+                    const regex = /.*\[(.*?)\].*/g;
+                    const _f = regex.exec(decorator);
+                    if (_f != null && _f[1]) {
+                        dot_content += createRelationship(classe.name, _f[1], func.name, i, func.params, _m, "yes")
                         i++;
                     }
                 }
@@ -96,34 +111,44 @@ function createAttribute(className: string, attrName: string, attrType: string, 
     return dot_code;
 }
 
-function createRelationship(className: string, targetClassName: string, relationshipName: string, number: number, relationshipAttributes: string, identifying?: string){
+function createRelationship(className: string, targetClassName: string, relationshipName: string, number: number, relationshipAttributes: string, multiplicity: any, identifying?: string){
     let dot_code = "";
     var classes = [className, targetClassName]
+    var headpart = ""; var tailpart = "";
 
     classes.sort();
     var relationshipId = `${classes[0]}${classes[1]}${number}`
 
+    if (multiplicity != null && multiplicity[1] != null && multiplicity[1].split(':')){
+        var parts = multiplicity[1].split(':');
+        console.log(parts)
+        var headpart = "label=\"" + parts[0] + "\",";
+        var tailpart = "label=\"" + parts[1] + "\",";
+    }
+
+    //Losango do relacionamento
     if(identifying === "yes"){
         dot_code += `${relationshipId} [shape=diamond, style=solid, peripheries=2, height=0.8, label="${relationshipName.toUpperCase()}"];\n`
     } else {
         dot_code += `${relationshipId} [shape=diamond, style=solid, height=0.8, label="${relationshipName.toUpperCase()}"];\n`
     }
 
+    //Conexões do losango
     if(className === targetClassName){
-        dot_code += `${className} -> ${relationshipId} [arrowhead=none, arrowtail=none, len=2, headport=e]\n`;
-        dot_code += `${targetClassName} -> ${relationshipId} [arrowhead=none, arrowtail=none, len=2, headport=w]\n`;
+        dot_code += `${className} -> ${relationshipId} [${headpart} arrowhead=none, arrowtail=none, len=2, headport=e]\n`;
+        dot_code += `${targetClassName} -> ${relationshipId} [${tailpart} arrowhead=none, arrowtail=none, len=2, headport=w]\n`;
     } else{
-        dot_code += `${className} -> ${relationshipId} [arrowhead=none, arrowtail=none, len=2]\n`;
+        dot_code += `${className} -> ${relationshipId} [${headpart} arrowhead=none, arrowtail=none, len=2]\n`;
         if(identifying === "yes"){
-            dot_code += `${targetClassName} -> ${relationshipId} [color="black:invis:black", arrowhead=none, arrowtail=none, len=2]\n`;
+            dot_code += `${targetClassName} -> ${relationshipId} [${tailpart} color="black:invis:black", arrowhead=none, arrowtail=none, len=2]\n`;
         } else {
-            dot_code += `${targetClassName} -> ${relationshipId} [arrowhead=none, arrowtail=none, len=2]\n`;
+            dot_code += `${targetClassName} -> ${relationshipId} [${tailpart} arrowhead=none, arrowtail=none, len=2]\n`;
         }
     }
 
+    //Atributos do relacionamento
     var types = relationshipAttributes.split(',');
     types.forEach((type: string) => {
-        console.log(type)
         var parts = type.split(':');
         var attrName = parts[0] || null;
         var attrType = checkMultiValue(parts[1] || "");

@@ -311,10 +311,12 @@ class Departamento:
       self.localizacao = [localizacao1, localizacao2]
 
   @identifyingrelationship[Projeto]
+  @multiplicity[1:n]
   def controla():
     pass
 
   @relationship[Empregado]
+  @multiplicity[1:1]
   def gerencia(datainicio: date):
     pass
 
@@ -337,18 +339,22 @@ class Empregado:
     self.salario = salario
 
   @relationship[Empregado]
+  @multiplicity[1:n]
   def supervisiona():
     pass
 
   @identifyingrelationship[Dependente]
+  @multiplicity[1:n]
   def dependente_de():
     pass
 
   @relationship[Projeto]
+  @multiplicity[n:m]
   def trabalha_em(horas: int):
     pass
 
   @relationship[Departamento]
+  @multiplicity[n:1]
   def trabalha_para():
     pass
 
