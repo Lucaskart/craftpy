@@ -165,7 +165,7 @@ function Home() {
                                 theme="dark"
                                 extensions={[python()]}
                                 onChange={onChangeCode}
-                                placeholder="# Bem-vindo ao Py2UML..."
+                                placeholder="# Bem-vindo ao CRAFTPy..."
                             />
                         </Box>
                     </Flex>

@@ -8,8 +8,7 @@ function Help() {
             </Flex>
             <Flex direction="column" gap="3" justify="start" align="center">
                 <Heading mb="2" size="7">Atalhos</Heading>
-                <Text align="center" as="div">A seguir temos uma lista de atalhos para auxiliar no uso de Py2UML. 
-                    Os atalhos a seguir estão presentes nos navegadores mais comuns, para mais detalhes, acesse esse link:<br/>
+                <Text align="center" as="div">A seguir temos uma lista de atalhos para auxiliar no uso de CRAFTPy. Os atalhos a seguir estão presentes nos navegadores mais comuns, para mais detalhes, acesse esse link:<br/>
                     <Link href="https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/accesskey">
                         https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/accesskey</Link>
                 </Text>

@@ -1,2 +1,2 @@
-# py2uml
+# CRAFTPy
 A Tool for Visually Impaired Students to Build UML Diagrams from Python Coding.

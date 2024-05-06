@@ -8,9 +8,9 @@ import { Box, Grid, Flex, IconButton } from '@radix-ui/themes';
 
 
 const navigation = [
-    { name: 'Início', id: 'home', href: '/py2uml/', accessKey: '5', current: true },
-    { name: 'Exemplos', id: 'example', href: '/py2uml/examples', accessKey: '6', current: false },
-    { name: 'Ajuda', id: 'help', href: '/py2uml/help', accessKey: '7', current: false },
+    { name: 'Início', id: 'home', href: '/craftpy/', accessKey: '5', current: true },
+    { name: 'Exemplos', id: 'example', href: '/craftpy/examples', accessKey: '6', current: false },
+    { name: 'Ajuda', id: 'help', href: '/craftpy/help', accessKey: '7', current: false },
 ]
 
 
@@ -22,7 +22,7 @@ function NavigationBar() {
                 <Flex gap="3" justify="start">
                     <img
                         src="logo.png"
-                        alt="Py2UML Logo"
+                        alt="CRAFTPy Logo"
                         style={{
                             objectFit: 'cover',
                             width: '80px',
@@ -40,7 +40,7 @@ function NavigationBar() {
                     ))}
                 </Flex>
                 <Flex gap="3" justify="end" align="center" mr="5">
-                    <Link to="https://github.com/Lucaskart/Py2UML" className="MenuLink">
+                    <Link to="https://github.com/Lucaskart/CRAFTPy" className="MenuLink">
                         <IconButton variant="ghost">
                             <GitHubLogoIcon width="25" height="25" />
                         </IconButton>

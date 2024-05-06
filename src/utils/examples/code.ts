@@ -132,8 +132,8 @@ class SistemaVendasLivraria:
 `})
 
 exampleList.push({
-    desciption: "Uso de Atributos no Py2UML", code: `""" 
-Exemplos de criação e atribuição de variáveis no Py2UML 
+    desciption: "Uso de Atributos no CRAFTPy", code: `""" 
+Exemplos de criação e atribuição de variáveis no CRAFTPy 
 """
 
 class A:
@@ -171,8 +171,8 @@ class D:
 `})
 
 exampleList.push({
-    desciption: "Associação simples no Py2UML", code: `""" 
-Exemplo de Associação simples entre classes no Py2UML 
+    desciption: "Associação simples no CRAFTPy", code: `""" 
+Exemplo de Associação simples entre classes no CRAFTPy 
 """
 
 class A:
@@ -196,8 +196,8 @@ class D:
 `})
 
 exampleList.push({
-    desciption: "Herança no Py2UML", code: `""" 
-Exemplo de Herança entre classes no Py2UML 
+    desciption: "Herança no CRAFTPy", code: `""" 
+Exemplo de Herança entre classes no CRAFTPy 
 """
 
 class A:
@@ -218,8 +218,8 @@ class D(A,B): #Herança múltipla
 `})
 
 exampleList.push({
-    desciption: "Agregação no Py2UML", code: `""" 
-Exemplo de Agregação entre classes no Py2UML 
+    desciption: "Agregação no CRAFTPy", code: `""" 
+Exemplo de Agregação entre classes no CRAFTPy 
 """
 
 class A:
@@ -241,8 +241,8 @@ class D:
 `})
 
 exampleList.push({
-    desciption: "Composição no Py2UML", code: `""" 
-Exemplo de Composição entre classes no Py2UML 
+    desciption: "Composição no CRAFTPy", code: `""" 
+Exemplo de Composição entre classes no CRAFTPy 
 """
 
 class A:
@@ -255,8 +255,8 @@ class B:
 `})
 
 exampleList.push({
-    desciption: "Dependência no Py2UML", code: `""" 
-Exemplo de Dependência entre classes no Py2UML 
+    desciption: "Dependência no CRAFTPy", code: `""" 
+Exemplo de Dependência entre classes no CRAFTPy 
 """
 
 class A:
@@ -271,8 +271,8 @@ class B:
         self.a = A() #Dependência (create)
 `})
 
-exampleList.push({desciption:"Casos de uso no Py2UML",code:`"""
-Exemplo de diagrama de casos de uso no Py2UML 
+exampleList.push({desciption:"Casos de uso no CRAFTPy",code:`"""
+Exemplo de diagrama de casos de uso no CRAFTPy 
 """
 
 class Vendedor:
@@ -297,9 +297,9 @@ class Entregador:
 `})
     
 exampleList.push({
-    desciption: "Diagrama Entidade-Relacionamento no Py2UML",
+    desciption: "Diagrama Entidade-Relacionamento no CRAFTPy",
     code: `"""
-Exemplo de diagrama entidade-relacionamento no Py2UML 
+Exemplo de diagrama entidade-relacionamento no CRAFTPy 
 """
     
 class Departamento:

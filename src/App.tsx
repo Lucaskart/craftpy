@@ -10,10 +10,10 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/py2uml" element={<NavigationBar />}>
+        <Route path="/craftpy" element={<NavigationBar />}>
           <Route index element={<Home />} />
-          <Route path="/py2uml/help" element={<Help />} />
-          <Route path="/py2uml/examples" element={<Examples />} />
+          <Route path="/craftpy/help" element={<Help />} />
+          <Route path="/craftpy/examples" element={<Examples />} />
         </Route>
       </Routes>
     </BrowserRouter>

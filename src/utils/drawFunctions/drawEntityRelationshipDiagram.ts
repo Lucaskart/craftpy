@@ -88,7 +88,7 @@ function drawEntityRelationshipDiagram(classes: ClassInterface[]): string {
         })
     })
 
-    let dot_code = `digraph G {overlap=scalexy; layout=neato; labelloc=b; peripheries=0; splines = true;\n\n${dot_content}\n}`
+    let dot_code = `digraph G {overlap=prism; layout=neato; labelloc=b; peripheries=0; splines = true;\n\n${dot_content}\n}`
 
     return dot_code
 }
