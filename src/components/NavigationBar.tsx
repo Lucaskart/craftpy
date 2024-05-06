@@ -25,8 +25,8 @@ function NavigationBar() {
                         alt="CRAFTPy Logo"
                         style={{
                             objectFit: 'cover',
-                            width: '80px',
-                            height: '42px',
+                            width: '61px',
+                            height: '47px',
                             borderRadius: 'var(--radius-2)',
                         }}
                     />
