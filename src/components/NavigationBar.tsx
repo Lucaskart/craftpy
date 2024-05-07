@@ -8,9 +8,9 @@ import { Box, Grid, Flex, IconButton } from '@radix-ui/themes';
 
 
 const navigation = [
-    { name: 'Início', id: 'home', href: '/craftpy/', accessKey: '5', current: true },
-    { name: 'Exemplos', id: 'example', href: '/craftpy/examples', accessKey: '6', current: false },
-    { name: 'Ajuda', id: 'help', href: '/craftpy/help', accessKey: '7', current: false },
+    { name: 'Início', id: 'home', href: '/craftpy/', accessKey: '7', current: true },
+    { name: 'Exemplos', id: 'example', href: '/craftpy/examples', accessKey: '8', current: false },
+    { name: 'Ajuda', id: 'help', href: '/craftpy/help', accessKey: '9', current: false },
 ]
 
 
@@ -40,8 +40,8 @@ function NavigationBar() {
                     ))}
                 </Flex>
                 <Flex gap="3" justify="end" align="center" mr="5">
-                    <Link to="https://github.com/Lucaskart/CRAFTPy" className="MenuLink">
-                        <IconButton variant="ghost">
+                    <Link to="https://github.com/Lucaskart/craftpy" className="MenuLink" aria-label="Redireciona para o código-fonte no GitHub.">
+                        <IconButton variant="ghost" aria-label="GitHub">
                             <GitHubLogoIcon width="25" height="25" />
                         </IconButton>
                     </Link>

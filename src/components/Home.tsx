@@ -13,6 +13,7 @@ import drawUseCaseDiagram from '../utils/drawFunctions/drawUseCaseDiagram'
 import drawEntityRelationshipDiagram from '../utils/drawFunctions/drawEntityRelationshipDiagram'
 import { Box, Button, Grid, Flex } from '@radix-ui/themes';
 import { CodeIcon, DownloadIcon, ChevronDownIcon, ChevronUpIcon, CheckIcon } from '@radix-ui/react-icons'
+import { darcula } from '@uiw/codemirror-theme-darcula';
 
 import { ref_class_diagram, ref_usecase, ref_der } from './diagrams/_refDiagrams';
 
@@ -138,17 +139,17 @@ function Home() {
                             onClick={() => setChooseDiagram(ref_usecase)}>
                             {ref_usecase.name}
                         </Button>
-                        <Button size="2" className="w-44"
+                        <Button accessKey='4' size="2" className="w-44"
                             variant={chooseDiagram == ref_der ? "solid" : "soft"}
                             onClick={() => setChooseDiagram(ref_der)}>
                             {ref_der.name}
                         </Button>
                     </Flex>
                     <Flex gap="3" justify="end">
-                        <Button accessKey='' size="2" className="w-44" onClick={handleDownloadDot}>
+                        <Button accessKey='5' size="2" className="w-44" onClick={handleDownloadDot}>
                             <DownloadIcon width="16" height="16" /> Salvar .dot
                         </Button>
-                        <Button accessKey='3' size="2" className="w-44" onClick={handleDownloadImage}>
+                        <Button accessKey='6' size="2" className="w-44" onClick={handleDownloadImage}>
                             <DownloadIcon width="16" height="16" /> Salvar Diagrama
                         </Button>
                     </Flex>
@@ -162,7 +163,8 @@ function Home() {
                                 value={codeText}
                                 height="750px"
                                 width="100%"
-                                theme="dark"
+                                theme={darcula}
+                                aria-label="Campo do Código Python"
                                 extensions={[python()]}
                                 onChange={onChangeCode}
                                 placeholder="# Bem-vindo ao CRAFTPy..."
