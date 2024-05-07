@@ -14,6 +14,161 @@ exampleList.push({
 })
 
 exampleList.push({
+    desciption: "Código 1: Diagrama de classes", code: `class Pessoa:
+  def __init__(self, nomePessoa: str, rendaPessoa: int, contaPessoa:list[ContaComum]):
+    self.__nomePessoa = nomePessoa
+    self.__rendaPessoa = rendaPessoa
+    self.__contaPessoa = contaPessoa
+
+class PessoaFisica(Pessoa):
+  
+  def __init__(self, cpfPessoa: int):
+    self.__cpfPessoa = cpfPessoa
+
+  def validarCPF():
+    return int
+
+class PessoaJuridica(Pessoa):
+  def __init__(self, cnpjPessoa: int):
+    self.__cnpjPessoa = cnpjPessoa
+
+  def validarCNPJ():
+    return int
+
+class ContaComum():
+  def __init__(self, numeroConta: int, senhaConta:int, movimentoConta:list[Movimento]):
+    self.__numeroConta = numeroConta
+    self.__senhaConta = senhaConta
+    self.__movimentoConta = movimentoConta
+
+  def depositarValor():
+    pass
+
+  def validarSenha():
+    pass
+
+  def sacarValor():
+    pass
+
+class Movimento():
+  def __init__(self, tipoMovimento: int, valorMovimento:double):
+    self.__tipoMovimento = tipoMovimento
+    self.__valorMovimento = valorMovimento
+`})
+
+exampleList.push({
+  desciption: "Código 2: Diagrama de casos de uso", code: `class Pessoa:
+  def __init__(self, nomePessoa: str, rendaPessoa: int, contaPessoa:list[ContaComum]):
+    self.__nomePessoa = nomePessoa
+    self.__rendaPessoa = rendaPessoa
+    self.__contaPessoa = contaPessoa
+
+class PessoaFisica(Pessoa):
+  
+  def __init__(self, cpfPessoa: int):
+    self.__cpfPessoa = cpfPessoa
+
+  @usecase
+  def validarCPF():
+    return int
+
+  @usecase
+  def consultarCPF():
+    pass
+
+class PessoaJuridica(Pessoa):
+  def __init__(self, cnpjPessoa: int):
+    self.__cnpjPessoa = cnpjPessoa
+
+  @usecase
+  def validarCNPJ():
+    return int
+
+  @usecase
+  def consultarCNPJ():
+    pass
+
+class ContaComum():
+  def __init__(self, numeroConta: int, senhaConta:int, movimentoConta:list[Movimento]):
+    self.__numeroConta = numeroConta
+    self.__senhaConta = senhaConta
+    self.__movimentoConta = movimentoConta
+
+  def depositarValor():
+    pass
+
+  def validarSenha():
+    pass
+
+  def sacarValor():
+    pass
+
+class Movimento():
+  def __init__(self, tipoMovimento: int, valorMovimento:double):
+    self.__tipoMovimento = tipoMovimento
+    self.__valorMovimento = valorMovimento
+`})
+
+exampleList.push({
+  desciption: "Código 3: Diagrama de entidade-relacionamento", code: `class Pessoa:
+  idPessoa:int
+  
+  def __init__(self, nomePessoa: str, rendaPessoa: int, contaPessoa:list[ContaComum]):
+    self.__nomePessoa = nomePessoa
+    self.__rendaPessoa = rendaPessoa
+    self.__contaPessoa = contaPessoa
+
+class PessoaFisica(Pessoa):
+  
+  def __init__(self, cpfPessoa: int):
+    self.__cpfPessoa = cpfPessoa
+
+  @usecase
+  def validarCPF():
+    return int
+
+  @usecase
+  def consultarCPF():
+    pass
+
+class PessoaJuridica(Pessoa):
+  def __init__(self, cnpjPessoa: int):
+    self.__cnpjPessoa = cnpjPessoa
+
+  @usecase
+  def validarCNPJ():
+    return int
+
+  @usecase
+  def consultarCNPJ():
+    pass
+
+class ContaComum():
+  idConta:int
+  
+  def __init__(self, numeroConta: int, senhaConta:int, movimentoConta:list[Movimento]):
+    self.__numeroConta = numeroConta
+    self.__senhaConta = senhaConta
+    self.__movimentoConta = movimentoConta
+
+  @relationship[Movimento]
+  def depositarValor():
+    pass
+
+  def validarSenha():
+    pass
+
+  @relationship[Movimento]
+  def sacarValor():
+    pass
+
+class Movimento():
+  def __init__(self, tipoMovimento: int, valorMovimento:double):
+    self.__tipoMovimento = tipoMovimento
+    self.__valorMovimento = valorMovimento
+`})
+
+exampleList.push({
     desciption: "Sistema para vendas de ingressos de cinema", code: `class Filme:
     def __init__(self, titulo: str, duracao: int, genero: str):
         self.titulo = titulo  # Título do filme

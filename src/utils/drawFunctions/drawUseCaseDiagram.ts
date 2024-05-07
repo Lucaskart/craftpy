@@ -30,7 +30,7 @@ function drawUseCaseDiagram(classes: ClassInterface[]): string {
             const superClasses = classe.inheritance.split(',')
             for (var i = 0; i < superClasses.length; i++) {
                 if (superClasses[i]) {
-                    dot_content += `${superClasses[i].trim()} -> ${classe.name};\n`
+                    dot_content += `${classe.name} -> ${superClasses[i].trim()};\n`
                 }
             }
         }
