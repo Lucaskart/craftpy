@@ -1,113 +1,12 @@
 import { Box, Card, Code, Flex, Grid, Heading, Text } from '@radix-ui/themes';
-import CodeMirror from '@uiw/react-codemirror';
-import { javascript } from '@codemirror/lang-javascript';
 
 function Examples() {
 
-    const example1 = `class Patient:
-    def __init__(self, id:int, examRequest:ExamRequest, name:str, sex:str, birth:date):
-        self.id: int = id
-        self.name: str = name
-        self.sex: str = sex
-        self.birth: date = birth
-        self.exameRequest: ExamRequest = examRequest
-        
-    def calculateAge(void):
-        return void
-    
-    def keep(void):
-        return void
-
-    def select(void):
-        return void
-
-class Exam:
-    def __init__(self, examName:str, examRequestList:ExamRequest, recommendation:str):
-        self.examName: str = examName
-        self.recommendation: str = recommendation
-        self.examRequestList: ExamRequest = examRequestList
-    
-    def keep(void):
-        return void
-
-    def select(void):
-        return void
-    
-class ExamRequest:
-    def __init__(self, issueDateTime:date, dateRealization:date, dateTimeCancellation:date, orderStatus:str, pfdFile:str):
-        self.issueDateTime: date = issueDateTime
-        self.dateRealization: date = dateRealization
-        self.dateTimeCancellation: date = dateTimeCancellation
-        self.orderStatus: str = orderStatus
-        self.pfdFile: str = pfdFile
-        self.doctor: Doctor = Doctor(name = "Joao", numberCRM = "1234")
-        
-    def issue(void):
-        return void
-
-    def select(void):
-        return void
-
-    def registerExam(void):
-        return void
-
-    def cancelOrder(void):
-        return void
-
-    def viewPDF(void):
-        return void
-    
-class ExamReport:
-    def __init__(self, description:str, issueDate:str, examRequest:ExamRequest, statusReport:str):
-        self.description: str = description
-        self.issueDate: str = issueDate
-        self.statusReport: str = statusReport
-        self.examRequest: ExamRequest = examRequest
-        self.doctor: Doctor = Doctor(name = "Joao", numberCRM = "1234")
-
-    def issue(void):
-        return void
-
-    def select(void):
-        return void
-
-    def review(void):
-        return void
-
-class Doctor:
-    address: Address = Address(street = "Main", number = 32)
-            
-    def __init__(self, name:str, numberCRM:str):
-        self.name: str = name
-        self.numberCRM: str = numberCRM
-    
-    def issue(void):
-        return void
-
-    def select(void):
-        return void
-    
-class Resident(Doctor):
-    def __init__(self, yearResidence:str):
-        self.yearResidence: str = yearResidence
-
-class Teacher(Doctor):
-    def __init__(self, academicTitle:str):
-        self.academicTitle: str = academicTitle
-
-class Address():
-    def __init__(self, street:str, number:int):
-        self.street: str = street
-        self.number: int = number
-`;
-
     return (
-        <Grid columns="3" p="3">
-            <Flex gap="3">
-            </Flex>
-            <Flex direction="column" gap="3" justify="center" align="center">
-                <Heading mb="2" size="7">Exemplos</Heading>
-                <Text align="center" as="div">A seguir temos uma lista de intruções em código Python para gerar certos componentes em diagramas.</Text>
+        <Grid columns="3" gap="5" p="3">
+            <Flex direction="column" gap="3" align="center">
+                <Heading mb="2" size="7">Exemplos para Diagrama de Classes</Heading>
+                <Text align="center" as="div">A seguir temos uma lista de intruções em código Python para gerar classes, atributos, funções e relacionamentos em diagramas de classe.</Text>
                 <Card style={{ maxWidth: 600 }}>
                     <Flex gap="3" align="center">
                         <Box>
@@ -119,7 +18,7 @@ class Address():
                                 Para adicionar atributos a classe, é necessário criar um construtor para a classe através do método '__init__'.
                             </Text>
                             <Text as="div" size="2" color="gray">
-                                Para adicionar funções a classe, é necesário definir as funções dentro do escopo da classe.
+                                Para adicionar funções a classe, é necessário definir as funções dentro do escopo da classe.
                             </Text>
                             <Text as="div" size="2" color="gray">
                                 É possível criar atributos e métodos privados atráves de subtraços.
@@ -154,7 +53,7 @@ class Address():
                             </Text>
                             <Code size="2">
                             class Carro:<br/>
-                            &nbsp; __bankacc: list[BankAccount] = list()<br/>
+                            &nbsp; __pneu: list[Pneu] = list()<br/>
                             </Code>
                         </Box>
                     </Flex>
@@ -187,10 +86,10 @@ class Address():
                             </Text>
                             <Code size="2">
                             class Carro(Automovel):<br/>
-                            &nbsp; def __init__(self, marca:str, cor:str, rodas:list[Roda]):<br/>
+                            &nbsp; def __init__(self, marca:str, cor:str, janelas:list[Janela]):<br/>
                             &nbsp;&nbsp; self.marca = marca<br/>
                             &nbsp;&nbsp; self.cor:str = cor<br/>
-                            &nbsp;&nbsp; self.roda:list[Roda] = rodas<br/>
+                            &nbsp;&nbsp; self.janelas:list[Janela] = janelas<br/>
                             </Code>
                         </Box>
                     </Flex>
@@ -210,7 +109,27 @@ class Address():
                             &nbsp; def __init__(self, marca:str, cor:str):<br/>
                             &nbsp;&nbsp; self.marca = marca<br/>
                             &nbsp;&nbsp; self.cor:str = cor<br/>
-                            &nbsp;&nbsp; self.propietario: Propietario = Propietario(name = "Joao")<br/>
+                            &nbsp;&nbsp; self.propietario: Propietario = Propietario(name = "Marcos")<br/>
+                            </Code>
+                        </Box>
+                    </Flex>
+                </Card>
+            </Flex>
+            <Flex direction="column" gap="3" align="center">
+                <Heading mb="2" size="7" align="center">Exemplos para Diagrama de Casos de Uso</Heading>
+                <Text align="center" as="div">A seguir temos uma lista de intruções em código Python para gerar atores, casos de uso e relacionamentos em diagramas de caso de uso.</Text>
+                <Card style={{ maxWidth: 600 }}>
+                    <Flex gap="3" align="center">
+                        <Box>
+                            <Text size="2">Ator: </Text>
+                            <Text as="div" size="2" color="gray">
+                                Para a criação de um ator no diagrama, é necessário iniciar uma classe Python.
+                            </Text>
+                            <Text as="div" mt="2" size="2" color="gray">
+                                Exemplo:
+                            </Text>
+                            <Code size="2">
+                            class Carro:<br/>
                             </Code>
                         </Box>
                     </Flex>
@@ -218,27 +137,154 @@ class Address():
                 <Card style={{ maxWidth: 600 }}>
                     <Flex gap="3" align="center">
                         <Box>
-                            <Text size="2">Exemplos Completos: </Text>
+                            <Text size="2">Herança: </Text>
                             <Text as="div" size="2" color="gray">
-                                A seguir temos alguns exemplos de códigos completos em Python prontos para demostrar como ocorre o processo de geração de diagramas.
+                                É possível que uma classe herde de outra atráves do uso de parenteses quando ela é iniciada.
                             </Text>
                             <Text as="div" mt="2" size="2" color="gray">
-                                Exemplo 1: Realizar Exame
+                                Exemplo:
                             </Text>
-                            <Card style={{ maxWidth: 580 }}>
-                                <CodeMirror
-                                    value={example1}
-                                    height="520px"
-                                    theme="dark"
-                                    readOnly
-                                    extensions={[javascript({ jsx: true })]}
-                                />
-                            </Card>
+                            <Code size="2">
+                            class Carro(Automovel):<br/>
+                            </Code>
+                        </Box>
+                    </Flex>
+                </Card>
+                <Card style={{ maxWidth: 600 }}>
+                    <Flex gap="3" align="center">
+                        <Box>
+                            <Text size="2">Caso de Uso: </Text>
+                            <Text as="div" size="2" color="gray">
+                                Para a criação de um caso de uso no diagrama, é necessário definir uma função com o decorador @usecase antes da função ser declarada.
+                            </Text>
+                            <Text as="div" mt="2" size="2" color="gray">
+                                Exemplo:
+                            </Text>
+                            <Code size="2">
+                            @usecase<br/>
+                            def aumentarKM(self):<br/>
+                            &nbsp; pass<br/>
+                            </Code>
+                        </Box>
+                    </Flex>
+                </Card>
+                <Card style={{ maxWidth: 600 }}>
+                    <Flex gap="3" align="center">
+                        <Box>
+                            <Text size="2">Função 'Include': </Text>
+                            <Text as="div" size="2" color="gray">
+                                Para a criação de um relacionamento 'include' entre dois casos de uso no diagrama, é necessário definir um decorador adicional @include contendo o nome do caso de uso que será relacionado entre colchetes.
+                            </Text>
+                            <Text as="div" mt="2" size="2" color="gray">
+                                Exemplo:
+                            </Text>
+                            <Code size="2">
+                            @usecase<br/>
+                            @include[aumentarKM]<br/>
+                            def acelerar(self):<br/>
+                            &nbsp; pass<br/>
+                            </Code>
+                        </Box>
+                    </Flex>
+                </Card>
+                <Card style={{ maxWidth: 600 }}>
+                    <Flex gap="3" align="center">
+                        <Box>
+                            <Text size="2">Função 'Extend': </Text>
+                            <Text as="div" size="2" color="gray">
+                                Para a criação de um relacionamento 'extend' entre dois casos de uso no diagrama, é necessário definir um decorador adicional @extends contendo o nome do caso de uso que será relacionado entre colchetes.
+                            </Text>
+                            <Text as="div" mt="2" size="2" color="gray">
+                                Exemplo:
+                            </Text>
+                            <Code size="2">
+                            @usecase<br/>
+                            @extends[acelerar]<br/>
+                            def dirigir(self):<br/>
+                            &nbsp; pass<br/>
+                            </Code>
                         </Box>
                     </Flex>
                 </Card>
             </Flex>
-            <Flex gap="3">
+            <Flex direction="column" gap="3" align="center">
+                <Heading mb="2" size="7" align="center">Exemplos para Diagrama de Entidade-Relacionamento</Heading>
+                <Text align="center" as="div">A seguir temos uma lista de intruções em código Python para gerar entidades, atributos e relacionamentos em DERs.</Text>
+                <Card style={{ maxWidth: 600 }}>
+                    <Flex gap="3" align="center">
+                        <Box>
+                            <Text size="2">Entidade: </Text>
+                            <Text as="div" size="2" color="gray">
+                                Para a criação de uma entidade no diagrama, é necessário iniciar uma classe Python.
+                            </Text>
+                            <Text as="div" size="2" color="gray">
+                                Para adicionar atributos a entidade, é necessário criar um construtor para a classe através do método '__init__'.
+                            </Text>
+                            <Text as="div" size="2" color="gray">
+                                Atributos que são listas, tuplas e dicionários são automaticamente classificados como atributos multivalor.
+                            </Text>
+                            <Text as="div" size="2" color="gray">
+                                Para a criação de chaves primárias, é necessário iniciar um objeto fora do construtor. Para chaves estrangeiras, é necessário que sua variavél começe com um subtraço.
+                            </Text>
+                            <Text as="div" size="2" color="gray">
+                                Uma entidade é definida como uma entidade fraca automaticamente caso ela não possua uma chave primária.
+                            </Text>
+                            <Text as="div" mt="2" size="2" color="gray">
+                                Exemplo:
+                            </Text>
+                            <Code size="2">
+                            class Carro:<br/>
+                            &nbsp; _chave:str<br/>
+                            &nbsp; def __init__(self, marca:str):<br/>
+                            &nbsp;&nbsp; self.marca = marca<br/>
+                            </Code>
+                        </Box>
+                    </Flex>
+                </Card>
+                <Card style={{ maxWidth: 600 }}>
+                    <Flex gap="3" align="center">
+                        <Box>
+                            <Text size="2">Relacionamento: </Text>
+                            <Text as="div" size="2" color="gray">
+                                Para a criação de um relacionamento entre duas entidades no diagrama, é necessário definir um decorador @relationship contendo o nome da entidade que será relacionada entre colchetes.
+                            </Text>
+                            <Text as="div" size="2" color="gray">
+                                Para definir a multiplicidade do relacionamento, é necessário definir um decorador @multiplicity contendo a multiplicidade das duas partes do relacionamento separadas por dois pontos.
+                            </Text>
+                            <Text as="div" mt="2" size="2" color="gray">
+                                Exemplo:
+                            </Text>
+                            <Code size="2">
+                            @relationship[Pneu]<br/>
+                            @multiplicity[1:4]<br/>
+                            def contem():<br/>
+                            &nbsp; pass<br/>
+                            </Code>
+                        </Box>
+                    </Flex>
+                </Card>
+                <Card style={{ maxWidth: 600 }}>
+                    <Flex gap="3" align="center">
+                        <Box>
+                            <Text size="2">Relacionamento Indentificador: </Text>
+                            <Text as="div" size="2" color="gray">
+                                Para a criação de um relacionamento indentificador entre duas entidades no diagrama, é necessário definir um decorador @identifyingrelationship contendo o nome da entidade que será relacionada entre colchetes.
+                            </Text>
+                            <Text as="div" size="2" color="gray">
+                                Para definir a multiplicidade do relacionamento, é necessário definir um decorador @multiplicity contendo a multiplicidade das duas partes do relacionamento separadas por dois pontos.
+                            </Text>
+                            <Text as="div" mt="2" size="2" color="gray">
+                                Exemplo:
+                            </Text>
+                            <Code size="2">
+                            @identifyingrelationship[Janela]<br/>
+                            @multiplicity[1:n]<br/>
+                            def contem():<br/>
+                            &nbsp; pass<br/>
+                            </Code>
+                        </Box>
+                    </Flex>
+                </Card>
             </Flex>
         </Grid>
     );
