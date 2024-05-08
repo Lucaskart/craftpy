@@ -1,11 +1,9 @@
-import React, { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import exampleList from '../utils/examples/code'
 import { usePythonCodeAnalyzer } from '../hooks/usePythonCodeAnalyzer';
 import ClassDiagram from './diagrams/ClassDiagram'
 import UseCaseDiagram from './diagrams/UseCaseDiagram'
 import EntityRelationshipDiagram from "./diagrams/EntityRelationshipDiagram";
-import CodeMirror from '@uiw/react-codemirror';
-import { python } from '@codemirror/lang-python';
 import html2canvas from 'html2canvas';
 import * as Select from '@radix-ui/react-select';
 import drawClassDiagram from '../utils/drawFunctions/drawClassDiagram'
@@ -13,7 +11,6 @@ import drawUseCaseDiagram from '../utils/drawFunctions/drawUseCaseDiagram'
 import drawEntityRelationshipDiagram from '../utils/drawFunctions/drawEntityRelationshipDiagram'
 import { Box, Button, Grid, Flex } from '@radix-ui/themes';
 import { CodeIcon, DownloadIcon, ChevronDownIcon, ChevronUpIcon, CheckIcon } from '@radix-ui/react-icons'
-import { darcula } from '@uiw/codemirror-theme-darcula';
 
 import { ref_class_diagram, ref_usecase, ref_der } from './diagrams/_refDiagrams';
 
@@ -31,10 +28,6 @@ function Home() {
         }
 
     }, [valueComboBox]);
-
-    const onChangeCode = useCallback((newCode: React.SetStateAction<string>) => {
-        setCodeText(newCode);
-    }, []);
 
     const handleDownloadCode = async () => {
         //const fileData = JSON.stringify(codeText);
@@ -159,16 +152,7 @@ function Home() {
                 <Grid columns="2" gap="3">
                     <Flex direction="column" gap="1">
                         <Box width="100%">
-                            <CodeMirror
-                                value={codeText}
-                                height="750px"
-                                width="100%"
-                                theme={darcula}
-                                aria-label="Campo do Código Python"
-                                extensions={[python()]}
-                                onChange={onChangeCode}
-                                placeholder="# Bem-vindo ao CRAFTPy..."
-                            />
+                            {"Code editor!"}
                         </Box>
                     </Flex>
                     <Flex justify="center">
