@@ -14,6 +14,8 @@ import { CodeIcon, DownloadIcon, ChevronDownIcon, ChevronUpIcon, CheckIcon } fro
 
 import { ref_class_diagram, ref_usecase, ref_der } from './diagrams/_refDiagrams';
 
+import Editor from '@monaco-editor/react';
+
 function Home() {
 
     const [codeText, setCodeText, classData] = usePythonCodeAnalyzer("")
@@ -28,6 +30,10 @@ function Home() {
         }
 
     }, [valueComboBox]);
+
+    function handleEditorChange(value: any) {
+        setCodeText(value);
+    }
 
     const handleDownloadCode = async () => {
         //const fileData = JSON.stringify(codeText);
@@ -152,7 +158,17 @@ function Home() {
                 <Grid columns="2" gap="3">
                     <Flex direction="column" gap="1">
                         <Box width="100%">
-                            {"Code editor!"}
+                            <Editor
+                                value={codeText}
+                                height="750px"
+                                width="100%"
+                                defaultLanguage="python"
+                                defaultValue="# Bem-vindo ao CRAFTPy..."
+                                options={{
+                                    ariaLabel: "Campo do Código Python"
+                                }}
+                                onChange={handleEditorChange}
+                            />
                         </Box>
                     </Flex>
                     <Flex justify="center">
