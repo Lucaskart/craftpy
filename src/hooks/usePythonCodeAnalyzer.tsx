@@ -65,7 +65,7 @@ export function usePythonCodeAnalyzer(pythonCode: string): [string, React.Dispat
 
     const extractPythonCodeInfo = (code: string): ClassInterface[] => {
         // Usando regex para encontrar as definições de classe com ou sem herança
-        const classPattern = /(?<!\w)class\b\s+(\w+)\s*(\((.*?)\))?:\s*(.*?)\s*(?=class\b|$)/gs;
+        const classPattern = /(?<!\w)class\b\s+(\w+)\s*(\((\w*?)\))?:\s*(.*?)\s*(?=class\b|$)/gs;
         const classMatches = [...code.matchAll(classPattern)];
 
         // Array para armazenar os objetos de classe
