@@ -4,6 +4,8 @@
   <br>
   CRAFTPy
   <br>
+  Allowing people with visual impairments to create diagrams
+  <br>
 </h1>
 
 <h4 align="center">A Tool for Visually Impaired Students to Build UML Diagrams from Python Coding.</h4>
@@ -68,16 +70,16 @@ npm run dev
 yarn dev
 ```
 
-## Learn More
+#### Learn More
 - [https://vitejs.dev/guide/](https://vitejs.dev/guide/)
 
  
 ## Team
 <table align="center">
     <tbody>
-        <td align="center" valign="top" width="14.28%"><a href=""><img src="https://avatars.githubusercontent.com/u/3542264?v=4" width="100px;" alt="Larissa Rocha"/><br /><sub><b>Larissa Rocha</b></sub></a></td>
-        <td align="center" valign="top" width="14.28%"><a href=""><img src="https://avatars.githubusercontent.com/u/48340825?v=4" width="100px;" alt="Donavon West"/><br /><sub><b>Lucas Lopes</b></sub></a></td>
-        <td align="center" valign="top" width="14.28%"><a href="https://rtosta.com"><img src="https://avatars.githubusercontent.com/u/18619894?v=4" width="100px;" alt="Rafael Tosta"/><br /><sub><b>Rafael Tosta</b></sub></a></td>
+        <td align="center" valign="top" width="14.28%"><a href="https://github.com/larirsoares"><img src="https://avatars.githubusercontent.com/u/3542264?v=4" width="100px;" alt="Larissa Rocha"/><br /><sub><b>Larissa Rocha</b></sub></a></td>
+        <td align="center" valign="top" width="14.28%"><a href="https://github.com/Lucaskart"><img src="https://avatars.githubusercontent.com/u/48340825?v=4" width="100px;" alt="Donavon West"/><br /><sub><b>Lucas Lopes</b></sub></a></td>
+        <td align="center" valign="top" width="14.28%"><a href="https://github.com/rafatosta/"><img src="https://avatars.githubusercontent.com/u/18619894?v=4" width="100px;" alt="Rafael Tosta"/><br /><sub><b>Rafael Tosta</b></sub></a></td>
     </tbody>
 </table>
 
