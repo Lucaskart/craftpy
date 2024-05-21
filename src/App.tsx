@@ -8,7 +8,8 @@ function App() {
   document.documentElement.lang = 'pt-BR';
 
   return (
-    <div className="h-screen flex flex-col overflow-hidden">
+    /*  <div className="max-h-screen p-4  bg-red-800 flex flex-col"> */
+    <div className="h-screen flex flex-col overflow-hidden p-4 bg-black ">
       <BrowserRouter>
         <NavigationBar />
         <Routes>

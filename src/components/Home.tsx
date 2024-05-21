@@ -18,6 +18,8 @@ import { ref_class_diagram, ref_usecase, ref_der } from './diagrams/_refDiagrams
 
 import Editor from '@monaco-editor/react';
 
+import RenderDiagram from './RenderDiagram'
+
 function Home() {
 
     const [codeText, setCodeText, classData] = usePythonCodeAnalyzer("")
@@ -184,29 +186,22 @@ function Home() {
         <div className="flex flex-col h-full">
             <ActionBar />
             <div className="flex flex-col md:flex-row flex-1 overflow-hidden">
-                <div className="flex-1 flex flex-col">
-                    {/* Esquerda */}
-                    <div className="flex-1 p-4 overflow-auto">
-                        <Editor
-                            value={codeText}
-                            height="100%"
-                            width="100%"
-                            defaultLanguage="python"
-                            defaultValue="# Bem-vindo ao CRAFTPy..."
-                            options={{
-                                ariaLabel: "Campo do Código Python"
-                            }}
-                            onChange={handleEditorChange}
-                        />
-                    </div>
+                <div className="flex-1 flex flex-col bg-blue-500 p-2">
+                    <Editor
+                        className="overflow-auto"
+                        value={codeText}
+                        height="100%"
+                        width="100%"
+                        defaultLanguage="python"
+                        defaultValue="# Bem-vindo ao CRAFTPy..."
+                        options={{
+                            ariaLabel: "Campo do Código Python"
+                        }}
+                        onChange={handleEditorChange}
+                    />
                 </div>
-                <div className="flex-1 p-4 overflow-y-auto overflow-x-auto">
-                    {/* Direita */}
-                    <div className="flex-1 p-4 overflow-auto">
-                        {chooseDiagram == ref_class_diagram && <ClassDiagram classData={[...classData]} />}
-                        {chooseDiagram == ref_usecase && <UseCaseDiagram classData={[...classData]} />}
-                        {chooseDiagram == ref_der && <EntityRelationshipDiagram classData={[...classData]} />}
-                    </div>
+                <div className="flex-1 bg-red-500 p-2">
+                    <RenderDiagram classData={[...classData]} diagram={chooseDiagram.name} />
                 </div>
             </div>
         </div>
