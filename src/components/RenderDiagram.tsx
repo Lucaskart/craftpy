@@ -18,6 +18,9 @@ function RenderDiagram({ classData, diagram }: IProps) {
 
     const [dotText, setDotText] = useState<string>('digraph {}');
 
+    const [dimensoes, setDimensoes] = useState({ width: 0, height: 0 });
+    const refComponente = useRef<HTMLDivElement | null>(null);
+
     useEffect(() => {
         getExtractDotCode();
         createGraph();
@@ -51,9 +54,6 @@ function RenderDiagram({ classData, diagram }: IProps) {
             .render();
     }
 
-    const [dimensoes, setDimensoes] = useState({ width: 0, height: 0 });
-    const refComponente = useRef(null);
-
     const atualizarDimensoes = () => {
         if (refComponente.current) {
             const { width, height } = refComponente.current.getBoundingClientRect();
@@ -71,8 +71,7 @@ function RenderDiagram({ classData, diagram }: IProps) {
     }, []);
 
     return (
-
-        <div ref={refComponente} className="flex-1 w-[200px] overflow-auto" >
+        <div ref={refComponente} className="flex-1 overflow-auto" >
             <div id={ID}>
             </div>
         </div >);
