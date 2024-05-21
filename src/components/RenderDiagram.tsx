@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { graphviz } from "d3-graphviz";
 import { ClassInterface } from '../hooks/usePythonCodeAnalyzer'
 import { ref_class_diagram, ref_usecase, ref_der } from './diagrams/_refDiagrams';
@@ -19,9 +19,6 @@ function RenderDiagram({ classData, diagram }: IProps) {
     const [dotText, setDotText] = useState<string>('digraph {}');
 
     useEffect(() => {
-        /* const dot = drawEntityRelationshipDiagram(classData)
-        setDotText(dot)
-        createGraph(); */
         getExtractDotCode();
         createGraph();
     }, [dotText, classData]);
@@ -48,15 +45,37 @@ function RenderDiagram({ classData, diagram }: IProps) {
         graphviz(`#${ID}`)
             .zoom(false)
             .fit(true)
+            .width(dimensoes.width)
+            .height(dimensoes.height)
             .dot(dotText)
             .render();
     }
 
+    const [dimensoes, setDimensoes] = useState({ width: 0, height: 0 });
+    const refComponente = useRef(null);
+
+    const atualizarDimensoes = () => {
+        if (refComponente.current) {
+            const { width, height } = refComponente.current.getBoundingClientRect();
+            setDimensoes({ width, height });
+        }
+    };
+
+    useEffect(() => {
+        atualizarDimensoes();
+        window.addEventListener('resize', atualizarDimensoes);
+
+        return () => {
+            window.removeEventListener('resize', atualizarDimensoes);
+        };
+    }, []);
+
     return (
-        <div className="overflow-auto" >
-            <div  id={ID}>
+
+        <div ref={refComponente} className="flex-1 w-[200px] overflow-auto" >
+            <div id={ID}>
             </div>
-        </div>);
+        </div >);
 }
 
 export default RenderDiagram;

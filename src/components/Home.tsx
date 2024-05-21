@@ -1,9 +1,6 @@
 import { useEffect, useState } from "react";
 import exampleList from '../utils/examples/code'
 import { usePythonCodeAnalyzer } from '../hooks/usePythonCodeAnalyzer';
-import ClassDiagram from './diagrams/ClassDiagram'
-import UseCaseDiagram from './diagrams/UseCaseDiagram'
-import EntityRelationshipDiagram from "./diagrams/EntityRelationshipDiagram";
 import html2canvas from 'html2canvas';
 import * as Select from '@radix-ui/react-select';
 import drawClassDiagram from '../utils/drawFunctions/drawClassDiagram'
@@ -182,11 +179,12 @@ function Home() {
         </div>
     )
 
+
     return (
         <div className="flex flex-col h-full">
             <ActionBar />
             <div className="flex flex-col md:flex-row flex-1 overflow-hidden">
-                <div className="flex-1 flex flex-col bg-blue-500 p-2">
+                <div className="flex-1 flex flex-col">
                     <Editor
                         className="overflow-auto"
                         value={codeText}
@@ -200,9 +198,9 @@ function Home() {
                         onChange={handleEditorChange}
                     />
                 </div>
-                <div className="flex-1 bg-red-500 p-2">
-                    <RenderDiagram classData={[...classData]} diagram={chooseDiagram.name} />
-                </div>
+
+                <RenderDiagram classData={[...classData]} diagram={chooseDiagram.name} />
+
             </div>
         </div>
     );

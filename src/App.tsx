@@ -9,7 +9,7 @@ function App() {
 
   return (
     /*  <div className="max-h-screen p-4  bg-red-800 flex flex-col"> */
-    <div className="h-screen flex flex-col overflow-hidden p-4 bg-black ">
+    <div className="h-screen flex flex-col overflow-hidden">
       <BrowserRouter>
         <NavigationBar />
         <Routes>
