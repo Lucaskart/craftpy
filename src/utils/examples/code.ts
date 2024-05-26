@@ -7,7 +7,7 @@ interface Example {
 const exampleList: Example[] = []
 
 exampleList.push({
-    desciption: "Exemplos",
+    desciption: "Exemplos de Códigos",
     code: `# Bem-vindo ao PyUML.
 # Escreva seu código em Python 3 ou veja os exemplos disponíveis.
 `
