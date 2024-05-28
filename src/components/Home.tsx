@@ -23,7 +23,7 @@ function Home() {
     const [codeText, setCodeText, classData] = usePythonCodeAnalyzer("")
     const [chooseDiagram, setChooseDiagram] = useState<{ name: string, id: string }>(ref_class_diagram);
 
-    const [valueComboBox, setValueComboBox] = useState('Exemplos');
+    const [valueComboBox, setValueComboBox] = useState('Exemplos de Códigos');
 
     useEffect(() => {
         const code = exampleList.find((c) => c.desciption == valueComboBox)
@@ -93,10 +93,10 @@ function Home() {
                         <Select.Trigger
                             className="w-12 xl:w-56 inline-flex items-center justify-center rounded px-[15px] text-[13px] leading-none h-[35px] gap-[5px] bg-white border-blue-200 border-2 text-blue-950 shadow-[0_2px_10px] shadow-black/10 hover:bg-blue-200  focus:border-blue-600 data-[placeholder]:text-red outline-none"
                             aria-label="Examples"
-                            title="Exemplos"
+                            title="Exemplos de Códigos"
                         >
                             <div className="hidden xl:flex">
-                                <Select.Value placeholder="Exemplos" />
+                                <Select.Value placeholder="Exemplos de Códigos" />
                             </div>
 
                             <Select.Icon className="">
