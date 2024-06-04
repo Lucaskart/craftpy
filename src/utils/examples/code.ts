@@ -14,7 +14,7 @@ exampleList.push({
 })
 
 exampleList.push({
-    desciption: "Código 1: Diagrama de classes", code: `class Pessoa:
+    desciption: "Exemplo de Diagrama de Classes", code: `class Pessoa:
   def __init__(self, nomePessoa: str, rendaPessoa: int, contaPessoa:list[ContaComum]):
     self.__nomePessoa = nomePessoa
     self.__rendaPessoa = rendaPessoa
@@ -57,7 +57,7 @@ class Movimento():
 `})
 
 exampleList.push({
-  desciption: "Código 2: Diagrama de casos de uso", code: `class Pessoa:
+  desciption: "Exemplo de Diagrama de Casos de Uso", code: `class Pessoa:
   def __init__(self, nomePessoa: str, rendaPessoa: int, contaPessoa:list[ContaComum]):
     self.__nomePessoa = nomePessoa
     self.__rendaPessoa = rendaPessoa
@@ -110,7 +110,7 @@ class Movimento():
 `})
 
 exampleList.push({
-  desciption: "Código 3: Diagrama de entidade-relacionamento", code: `class Pessoa:
+  desciption: "Exemplo de Diagrama de Entidade-Relacionamento", code: `class Pessoa:
   idPessoa:int
   
   def __init__(self, nomePessoa: str, rendaPessoa: int, contaPessoa:list[ContaComum]):
