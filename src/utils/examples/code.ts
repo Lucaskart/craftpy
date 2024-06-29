@@ -8,7 +8,7 @@ const exampleList: Example[] = []
 
 exampleList.push({
     desciption: "Exemplos de Códigos",
-    code: `# Bem-vindo ao PyUML.
+    code: `# Bem-vindo ao CraftPy.
 # Escreva seu código em Python 3 ou veja os exemplos disponíveis.
 `
 })
