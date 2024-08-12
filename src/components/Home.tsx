@@ -137,7 +137,7 @@ function Home() {
                     </Button>
                 </div>
                 <div className="flex flex-row gap-1 justify-center items-center">
-                    <Button title={ref_class_diagram.name} accessKey='2' size="2" className="w-12 xl:w-48"
+                    <Button color="mint" title={ref_class_diagram.name} accessKey='2' size="2" className="w-12 xl:w-48"
                         variant={chooseDiagram == ref_class_diagram ? "solid" : "soft"}
                         onClick={() => setChooseDiagram(ref_class_diagram)}
                     >
@@ -147,7 +147,7 @@ function Home() {
                         </span>
 
                     </Button>
-                    <Button title={ref_usecase.name} accessKey='3' size="2" className="w-12 xl:w-48"
+                    <Button color="mint" title={ref_usecase.name} accessKey='3' size="2" className="w-12 xl:w-48"
                         variant={chooseDiagram == ref_usecase ? "solid" : "soft"}
                         onClick={() => setChooseDiagram(ref_usecase)}>
                         <SiActigraph width="16" height="16" />
@@ -155,7 +155,7 @@ function Home() {
                             {ref_usecase.name}
                         </span>
                     </Button>
-                    <Button title={ref_der.name} accessKey='4' size="2" className="w-12 xl:w-48"
+                    <Button color="mint" title={ref_der.name} accessKey='4' size="2" className="w-12 xl:w-48"
                         variant={chooseDiagram == ref_der ? "solid" : "soft"}
                         onClick={() => setChooseDiagram(ref_der)}>
                         <BsDiagram3 width="16" height="16" />
