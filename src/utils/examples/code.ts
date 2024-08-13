@@ -14,6 +14,33 @@ exampleList.push({
 })
 
 exampleList.push({
+  desciption: "Exemplo Simples", code: `""" 
+Exemplo de Diagrama de Classe Simples
+"""
+
+class Pessoa:
+  def __init__(self, nomePessoa: str, contaPessoa:list[ContaBancaria]):
+    self.nomePessoa = nomePessoa
+    self.__contaPessoa = contaPessoa
+
+class PessoaFisica(Pessoa):
+  def __init__(self, cpfPessoa: int):
+    self.__cpfPessoa = cpfPessoa
+
+class PessoaJuridica(Pessoa):
+  def __init__(self, cnpjPessoa: int):
+    self.__cnpjPessoa = cnpjPessoa
+
+class ContaBancaria():
+  def __init__(self, numeroConta: int, senhaConta:int):
+    self.numeroConta = numeroConta
+    self.__senhaConta = senhaConta
+
+  def depositarValor():
+    pass
+`})
+
+exampleList.push({
     desciption: "Código 1: Exemplo de Diagrama de Classes", code: `class Pessoa:
   def __init__(self, nomePessoa: str, rendaPessoa: int, contaPessoa:list[ContaComum]):
     self.__nomePessoa = nomePessoa
@@ -284,68 +311,6 @@ class SistemaVendasLivraria:
     @usecase
     def comprar_livro(self, livro: Livro, cliente: Cliente, quantidade: int):
         pass
-`})
-
-exampleList.push({
-  desciption: "Libary System", code: `class Book:
-  def __init__(self, title: str, author: str, genre: str, price: float, quantity: int):
-      self.title = title
-      self.author = author
-      self.genre = genre
-      self.price = price
-      self.quantity = quantity
-
-class Client:
-  def __init__(self, name: str, id: str, email: str):
-      self.name = name
-      self.id = id
-      self.email = email
-
-  @usecase
-  def filter_books_author(self, author: str):
-      return [book for books in self.books if book.author == author]
-
-  @usecase
-  def filter_books_genre(self, genre: str):
-      return [book for books in self.books if book.genre == genre]
-
-  @usecase
-  @include[filter_books_author]
-  @include[filter_books_genre]
-  def buy_book(self, book: Book, quantity: int):
-      pass
-
-class Purchase:
-  def __init__(self, book: Book, client: Client, quantity: int, total: float):
-      self.book = book
-      self.client = client
-      self.quantity = quantity
-      self.total = total
-
-class BookshopSystem:
-  def __init__(self):
-      self.books:list[Book] = []
-
-  @relationship[Book]
-  @usecase
-  def add_book(book: Book):
-      self.books.append(book)
-
-  @usecase
-  def remove_book(self, book: Book):
-      self.books.remove(book)
-
-  @usecase
-  def filter_books_author(self, author: str):
-      return [book for books in self.books if book.author == author]
-
-  @usecase
-  def filter_books_genre(self, genre: str):
-      return [book for books in self.books if book.genre == genre]
-
-  @usecase
-  def buy_book(self, book: Book, client: Client, quantity: int):
-      pass
 `})
 
 exampleList.push({
