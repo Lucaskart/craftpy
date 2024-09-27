@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import exampleList from '../utils/examples/code'
 import { usePythonCodeAnalyzer } from '../hooks/usePythonCodeAnalyzer';
-import html2canvas from 'html2canvas';
 import * as Select from '@radix-ui/react-select';
 import drawClassDiagram from '../utils/drawFunctions/drawClassDiagram'
 import drawUseCaseDiagram from '../utils/drawFunctions/drawUseCaseDiagram'
@@ -70,17 +69,25 @@ function Home() {
     };
 
     const handleDownloadImage = async () => {
-        const element = document.getElementById(ID)!,
-            canvas = await html2canvas(element),
-            data = canvas.toDataURL('image/jpg'),
-            link = document.createElement('a');
+        // Seleciona o elemento SVG dentro da div
+        const svgElement = document.querySelector(`#${ID} svg`); // div que contém o SVG
+        if (svgElement) {
+            const svgContent = svgElement.outerHTML; // Captura apenas o conteúdo do <svg>...</svg>
 
-        link.href = data;
-        link.download = `downloaded-image-${chooseDiagram.name.replace(/\s/g, '_')}.jpg`;
+            // Cria um Blob com o conteúdo do SVG
+            const blob = new Blob([svgContent], { type: 'image/svg+xml' });
 
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+            // Cria um link para download
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `downloaded-image-${chooseDiagram.name.replace(/\s/g, '_')}.jpg`; // Nome do arquivo SVG que será baixado
+            
+            document.body.appendChild(link); 
+            link.click();
+            document.body.removeChild(link);
+        } else {
+            console.log('Elemento SVG não encontrado');
+        }
     };
 
 

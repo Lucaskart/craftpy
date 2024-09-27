@@ -16,8 +16,6 @@ export const ID = 'graphvizID'
 
 function RenderDiagram({ classData, diagram }: IProps) {
 
-    
-
     const [dotText, setDotText] = useState<string>('digraph {}');
 
     const [dimensoes, setDimensoes] = useState({ width: 0, height: 0 });
