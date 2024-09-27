@@ -8,15 +8,17 @@ function App() {
   document.documentElement.lang = 'pt-BR';
 
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/craftpy" element={<NavigationBar />}>
-          <Route index element={<Home />} />
+    /*  <div className="max-h-screen p-4  bg-red-800 flex flex-col"> */
+    <div className="h-screen flex flex-col overflow-hidden">
+      <BrowserRouter>
+        <NavigationBar />
+        <Routes>
+          <Route index path="/craftpy" element={<Home />} />
           <Route path="/craftpy/help" element={<Help />} />
           <Route path="/craftpy/examples" element={<Examples />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
+        </Routes>
+      </BrowserRouter>
+    </div>
   );
 }
 
