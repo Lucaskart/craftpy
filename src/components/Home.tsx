@@ -83,6 +83,7 @@ function Home() {
         document.body.removeChild(link);
     };
 
+
     const ActionBar = () => (
         <div className="flex flex-row justify-around items-center py-4">
             <div className="flex flex-row gap-1 justify-center items-center">
@@ -160,8 +161,8 @@ function Home() {
                         {ref_der.name}
                     </span>
                 </Button>
-            </div>
 
+            </div>
             {/* Salvar arquivos */}
             <div className="flex flex-row gap-1 justify-center items-center">
                 <Button title="Salvar .dot" accessKey='5' size="2" className="w-12 xl:w-48" onClick={handleDownloadDot}>
@@ -179,6 +180,7 @@ function Home() {
             </div>
         </div>
     )
+
 
     return (
         <div className="flex flex-col h-full">
