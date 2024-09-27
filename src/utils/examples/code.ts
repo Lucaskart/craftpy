@@ -7,14 +7,41 @@ interface Example {
 const exampleList: Example[] = []
 
 exampleList.push({
-    desciption: "Exemplos",
-    code: `# Bem-vindo ao PyUML.
+    desciption: "Exemplos de Códigos",
+    code: `# Bem-vindo ao CraftPy.
 # Escreva seu código em Python 3 ou veja os exemplos disponíveis.
 `
 })
 
 exampleList.push({
-    desciption: "Código 1: Diagrama de classes", code: `class Pessoa:
+  desciption: "Exemplo Simples", code: `""" 
+Exemplo de Diagrama de Classe Simples
+"""
+
+class Pessoa:
+  def __init__(self, nomePessoa: str, contaPessoa:list[ContaBancaria]):
+    self.nomePessoa = nomePessoa
+    self.__contaPessoa = contaPessoa
+
+class PessoaFisica(Pessoa):
+  def __init__(self, cpfPessoa: int):
+    self.__cpfPessoa = cpfPessoa
+
+class PessoaJuridica(Pessoa):
+  def __init__(self, cnpjPessoa: int):
+    self.__cnpjPessoa = cnpjPessoa
+
+class ContaBancaria():
+  def __init__(self, numeroConta: int, senhaConta:int):
+    self.numeroConta = numeroConta
+    self.__senhaConta = senhaConta
+
+  def depositarValor():
+    pass
+`})
+
+exampleList.push({
+    desciption: "Código 1: Exemplo de Diagrama de Classes", code: `class Pessoa:
   def __init__(self, nomePessoa: str, rendaPessoa: int, contaPessoa:list[ContaComum]):
     self.__nomePessoa = nomePessoa
     self.__rendaPessoa = rendaPessoa
@@ -57,7 +84,7 @@ class Movimento():
 `})
 
 exampleList.push({
-  desciption: "Código 2: Diagrama de casos de uso", code: `class Pessoa:
+  desciption: "Código 2: Exemplo de Diagrama de Casos de Uso", code: `class Pessoa:
   def __init__(self, nomePessoa: str, rendaPessoa: int, contaPessoa:list[ContaComum]):
     self.__nomePessoa = nomePessoa
     self.__rendaPessoa = rendaPessoa
@@ -110,7 +137,7 @@ class Movimento():
 `})
 
 exampleList.push({
-  desciption: "Código 3: Diagrama de entidade-relacionamento", code: `class Pessoa:
+  desciption: "Código 3: Exemplo de Diagrama de Entidade-Relacionamento", code: `class Pessoa:
   idPessoa:int
   
   def __init__(self, nomePessoa: str, rendaPessoa: int, contaPessoa:list[ContaComum]):
