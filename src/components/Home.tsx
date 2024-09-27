@@ -15,7 +15,7 @@ import { ref_class_diagram, ref_usecase, ref_der } from './diagrams/_refDiagrams
 
 import Editor from '@monaco-editor/react';
 
-import RenderDiagram from './RenderDiagram'
+import RenderDiagram, { ID } from './RenderDiagram'
 
 function Home() {
 
@@ -70,7 +70,7 @@ function Home() {
     };
 
     const handleDownloadImage = async () => {
-        const element = document.getElementById(chooseDiagram.id)!,
+        const element = document.getElementById(ID)!,
             canvas = await html2canvas(element),
             data = canvas.toDataURL('image/jpg'),
             link = document.createElement('a');

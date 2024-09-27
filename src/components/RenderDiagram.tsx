@@ -12,9 +12,11 @@ interface IProps {
     diagram: string;
 }
 
+export const ID = 'graphvizID'
+
 function RenderDiagram({ classData, diagram }: IProps) {
 
-    const ID = 'graphvizID'
+    
 
     const [dotText, setDotText] = useState<string>('digraph {}');
 
