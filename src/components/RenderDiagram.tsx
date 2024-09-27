@@ -47,6 +47,7 @@ function RenderDiagram({ classData, diagram }: IProps) {
     const createGraph = () => {
         graphviz(`#${ID}`)
             .zoom(false)
+            .addImage("stick.png", "40px", "100px")
             .fit(true)
             .width(dimensoes.width)
             .height(dimensoes.height)
