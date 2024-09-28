@@ -18,6 +18,8 @@ import RenderDiagram, { ID } from './RenderDiagram'
 
 function Home() {
 
+    const IMG_Agent = `xlink:href="data:image/png;charset=utf-8;base64,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"`
+
     const [codeText, setCodeText, classData] = usePythonCodeAnalyzer("")
     const [chooseDiagram, setChooseDiagram] = useState<{ name: string, id: string }>(ref_class_diagram);
 
@@ -72,15 +74,17 @@ function Home() {
         // Seleciona o elemento SVG dentro da div
         const svgElement = document.querySelector(`#${ID} svg`); // div que contém o SVG
         if (svgElement) {
-            const svgContent = svgElement.outerHTML; // Captura apenas o conteúdo do <svg>...</svg>
+            var svgContent = svgElement.outerHTML; // Captura apenas o conteúdo do <svg>...</svg>
 
+            svgContent = svgContent.replace(/xlink:href="stick.png"/g, IMG_Agent);
+            
             // Cria um Blob com o conteúdo do SVG
             const blob = new Blob([svgContent], { type: 'image/svg+xml' });
 
             // Cria um link para download
             const link = document.createElement('a');
             link.href = URL.createObjectURL(blob);
-            link.download = `downloaded-image-${chooseDiagram.name.replace(/\s/g, '_')}.jpg`; // Nome do arquivo SVG que será baixado
+            link.download = `downloaded-image-${chooseDiagram.name.replace(/\s/g, '_')}`; // Nome do arquivo SVG que será baixado
             
             document.body.appendChild(link); 
             link.click();
